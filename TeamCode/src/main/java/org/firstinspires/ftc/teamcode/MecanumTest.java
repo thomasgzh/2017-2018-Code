@@ -1,30 +1,30 @@
 package org.firstinspires.ftc.teamcode;
-//10/21/17 working and good
+/* version history 2.0
+     -10/21/17 (1.0) working and good
+     -10/23/17 (1.3) adding speed changing by lbumper/ltrigger
+     -10/30/17 (1.5) dpad control
+ */
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.robotcontroller.external.samples.HardwareK9bot;
-import org.firstinspires.ftc.teamcode.RobotConfig;
 
 //naming the teleop thing
-@TeleOp(name="Drive: MecanumTest", group="Drive")
+@TeleOp(name="Drive: org.firstinspires.ftc.teamcode.DriveCode.MecanumTest", group="Drive")
 public class MecanumTest extends LinearOpMode {
 
     RobotConfig robot  = new RobotConfig();
 
     @Override
     public void runOpMode() throws InterruptedException {
-        //declares double values for the variables the joysticks will change and the motors will use
-        double front_right = 0.0;
-        double front_left = 0.0;
-        double back_left = 0.0;
-        double back_right = 0.0;
+        //declaring all my variables in one place for my sake
+        double front_right;
+        double front_left;
+        double back_left;
+        double back_right;
+        double speed = 1.5;
+
 
         /* Initialize the hardware variables.
          * The init() method of the hardware class does all the work here
@@ -38,9 +38,29 @@ public class MecanumTest extends LinearOpMode {
         while (opModeIsActive()) {
             //and now, the fun stuff
 
+            boolean ltrigger = gamepad1.left_trigger > 0.7;
+            boolean rtrigger = gamepad1.right_trigger > 0.7;
+            boolean updpad = gamepad1.dpad_up;
+            boolean downdpad = gamepad1.dpad_down;
+            boolean leftdpad = gamepad1.dpad_left;
+            boolean rightdpad = gamepad1.dpad_right;
+            boolean abutton = gamepad1.a;
+            double reverse = 1;
+
             //adds a lil' version thing to the telemetry so you know you're using the right version
-            telemetry.addData("Version","2");
+            telemetry.addData("Version", "1.5, The Dpad Update");
+            telemetry.addData("Speed", speed);
+            telemetry.addData("x", "d");
+            telemetry.addData("ltriggervar", ltrigger);
+            telemetry.addData("rtriggervar", rtrigger);
+            telemetry.addData("ltrigger", gamepad1.left_trigger);
+            telemetry.addData("rtrigger", gamepad1.right_trigger);
             telemetry.update();
+
+            if (abutton){
+             reverse *= -1;
+            }
+
 
             // using the right joystick's x axis to rotate left and right
             front_right = -gamepad1.right_stick_x;
@@ -50,22 +70,65 @@ public class MecanumTest extends LinearOpMode {
 
             // using the left joystick's y axis to move forward and backwards
             front_right += -gamepad1.left_stick_y;
-            front_left  += -gamepad1.left_stick_y;
-            back_left   += -gamepad1.left_stick_y;
-            back_right  += -gamepad1.left_stick_y;
+            front_left += -gamepad1.left_stick_y;
+            back_left += -gamepad1.left_stick_y;
+            back_right += -gamepad1.left_stick_y;
 
             // using the left joystick's x axis to strafe left and right
             front_right += gamepad1.left_stick_x;
-            front_left  += -gamepad1.left_stick_x;
-            back_left   += gamepad1.left_stick_x;
-            back_right  += -gamepad1.left_stick_x;
+            front_left += -gamepad1.left_stick_x;
+            back_left += gamepad1.left_stick_x;
+            back_right += -gamepad1.left_stick_x;
 
             //takes all those values, divides by three, and tells the motors to use that power
-            robot.FR.setPower( front_right /3);
-            robot.FL.setPower( front_left /3);
-            robot.BL.setPower( back_left /3);
-            robot.BR.setPower( back_right /3);
+            robot.FR.setPower(front_right / 3 * speed * reverse);
+            robot.FL.setPower(front_left / 3 * speed * reverse);
+            robot.BL.setPower(back_left / 3 * speed * reverse);
+            robot.BR.setPower(back_right / 3 * speed * reverse);
 
+            if (updpad) {
+                robot.FR.setPower(speed);
+                robot.FL.setPower(speed);
+                robot.BL.setPower(speed);
+                robot.BR.setPower(speed);
+
+            }
+            if (downdpad) {
+                robot.FR.setPower(-speed);
+                robot.FL.setPower(-speed);
+                robot.BL.setPower(-speed);
+                robot.BR.setPower(-speed);
+
+            }
+            if (rightdpad) {
+                robot.FR.setPower(speed);
+                robot.FL.setPower(-speed);
+                robot.BL.setPower(speed);
+                robot.BR.setPower(-speed);
+
+            }
+            if (leftdpad) {
+                robot.FR.setPower(-speed);
+                robot.FL.setPower(speed);
+                robot.BL.setPower(-speed);
+                robot.BR.setPower(speed);
+
+            }
+            //change that speed by those bumpers
+
+
+            if (ltrigger) {
+                speed += 0.25;
+            }
+            if (speed < 0) {
+                speed = 0;
+            }
+            if (rtrigger) {
+                speed -= 0.25;
+            }
+            if (speed > 5){
+                speed = 5;
+        }
             //let the robot have a little rest, sleep is healthy
             sleep(40);
         }

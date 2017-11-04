@@ -29,6 +29,8 @@ public class RobotConfig
     public DcMotor  BL   = null;
     public DcMotor  BR = null;
 
+    public ColorSensor color_sensor = null;
+
     /* Local OpMode members. */
     HardwareMap hwMap  = null;
     private ElapsedTime period  = new ElapsedTime();
@@ -63,6 +65,8 @@ public class RobotConfig
         FR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         BR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         BL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        color_sensor = hwMap.colorSensor.get("color");
     }
 
     /***

@@ -16,6 +16,11 @@ public class MecanumTest extends LinearOpMode {
 
     RobotConfig robot  = new RobotConfig();
 
+    /* Declare extended gamepad */
+    GamepadEdge egamepad1;
+    GamepadEdge egamepad2;
+
+
     @Override
     public void runOpMode() throws InterruptedException {
         //declaring all my variables in one place for my sake
@@ -31,6 +36,21 @@ public class MecanumTest extends LinearOpMode {
          */
 
         robot.init(hardwareMap);
+
+        /* Instantiate extended gamepad */
+        egamepad1 = new GamepadEdge(gamepad1);
+        egamepad2 = new GamepadEdge(gamepad2);
+
+        boolean ltrigger;
+        boolean rtrigger;
+        boolean updpad;
+        boolean downdpad;
+        boolean leftdpad;
+        boolean rightdpad;
+        boolean abutton;
+        double reverse = 1;
+
+
         //waits for that giant PLAY button to be pressed on RC
         waitForStart();
 
@@ -38,14 +58,17 @@ public class MecanumTest extends LinearOpMode {
         while (opModeIsActive()) {
             //and now, the fun stuff
 
-            boolean ltrigger = gamepad1.left_trigger > 0.7;
-            boolean rtrigger = gamepad1.right_trigger > 0.7;
-            boolean updpad = gamepad1.dpad_up;
-            boolean downdpad = gamepad1.dpad_down;
-            boolean leftdpad = gamepad1.dpad_left;
-            boolean rightdpad = gamepad1.dpad_right;
-            boolean abutton = gamepad1.a;
-            double reverse = 1;
+            ltrigger = gamepad1.left_trigger > 0.7;
+            rtrigger = gamepad1.right_trigger > 0.7;
+            updpad = gamepad1.dpad_up;
+            downdpad = gamepad1.dpad_down;
+            leftdpad = gamepad1.dpad_left;
+            rightdpad = gamepad1.dpad_right;
+            abutton = egamepad1.a.released;
+
+            /* Update extended gamepad */
+            egamepad1.UpdateEdge();
+            egamepad2.UpdateEdge();
 
             //adds a lil' version thing to the telemetry so you know you're using the right version
             telemetry.addData("Version", "1.5, The Dpad Update");

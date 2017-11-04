@@ -78,6 +78,7 @@ public class ConceptVuMarkIdentification extends LinearOpMode {
      * localization engine.
      */
     VuforiaLocalizer vuforia;
+    RobotConfig robot  = new RobotConfig();
 
     @Override public void runOpMode() {
 
@@ -110,7 +111,7 @@ public class ConceptVuMarkIdentification extends LinearOpMode {
          * Here we chose the back (HiRes) camera (for greater range), but
          * for a competition robot, the front camera might be more convenient.
          */
-        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.FRONT  ;
+        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK  ;
         this.vuforia = ClassFactory.createVuforiaLocalizer(parameters);
 
         /**
@@ -173,6 +174,18 @@ public class ConceptVuMarkIdentification extends LinearOpMode {
             }
 
             telemetry.update();
+            if (vuMark == RelicRecoveryVuMark.LEFT){
+                robot.FL.setPower(0.5);
+            }
+            telemetry.update();
+            if (vuMark == RelicRecoveryVuMark.RIGHT){
+                robot.FR.setPower(0.5);
+            }
+            telemetry.update();
+            if (vuMark == RelicRecoveryVuMark.CENTER){
+                robot.FR.setPower(0.5);
+                robot.FL.setPower(0.5);
+            }
         }
     }
 

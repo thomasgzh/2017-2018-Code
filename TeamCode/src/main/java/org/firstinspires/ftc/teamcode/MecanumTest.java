@@ -9,7 +9,6 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-
 //naming the teleop thing
 @TeleOp(name="Drive: org.firstinspires.ftc.teamcode.DriveCode.MecanumTest", group="Drive")
 public class MecanumTest extends LinearOpMode {
@@ -19,7 +18,6 @@ public class MecanumTest extends LinearOpMode {
     /* Declare extended gamepad */
     GamepadEdge egamepad1;
     GamepadEdge egamepad2;
-
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -78,6 +76,14 @@ public class MecanumTest extends LinearOpMode {
             telemetry.addData("rtriggervar", rtrigger);
             telemetry.addData("ltrigger", gamepad1.left_trigger);
             telemetry.addData("rtrigger", gamepad1.right_trigger);
+            telemetry.addLine("color |")
+                    .addData("r", robot.color_sensor.red())
+                    .addData("g", robot.color_sensor.green())
+                    .addData("b", robot.color_sensor.blue());
+            if (robot.color_sensor.red() > robot.color_sensor.blue())
+                telemetry.addLine("RED");
+            else
+                telemetry.addLine("BLUE");
             telemetry.update();
 
             if (abutton){

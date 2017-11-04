@@ -30,6 +30,7 @@ public class RobotConfig
     public DcMotor  BR = null;
 
     public ColorSensor color_sensor = null;
+    public Servo ball_servo = null;
 
     /* Local OpMode members. */
     HardwareMap hwMap  = null;
@@ -67,6 +68,9 @@ public class RobotConfig
         BL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         color_sensor = hwMap.colorSensor.get("color");
+        ball_servo = hwMap.servo.get("ball_servo");
+
+        ball_servo.setPosition(0.0);
     }
 
     /***

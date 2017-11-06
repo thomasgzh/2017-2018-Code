@@ -1,44 +1,108 @@
 package org.firstinspires.ftc.teamcode;
 /* version history 2.0
-     -10/21/17 (1.0) working and good
-     -10/23/17 (1.3) adding speed changing by lbumper/ltrigger
-     -10/30/17 (1.5) dpad control
+     -11/06/17 created autonomous practice
+               add methods for basic movement (forward/backward, left/right, rotate left/right)
  */
 
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 
 //naming the teleop thing
-@Autonomous(name="AutoTest", group ="aaaaAAAAAAAAAAAAA")
+@Autonomous(name="AutoTest", group ="Practice")
 public class AutoTest extends LinearOpMode {
 
     RobotConfig robot = new RobotConfig();
+    private ElapsedTime runtime = new ElapsedTime();
+
 
     @Override
     public void runOpMode() throws InterruptedException {
         //declaring all my variables in one place for my sake
-        double front_right;
-        double front_left;
-        double back_left;
-        double back_right;
-        double speed = 1.5;
+        final double     MOVE_SPEED = 0.5;
+        final double     ROTATE_SPEED = 0.3;
+        final double     TEST_TIME = 2.0;
 
 
         /* Initialize the hardware variables.
          * The init() method of the hardware class does all the work here
          */
-
         robot.init(hardwareMap);
+
+        // Send telemetry message to signify robot waiting;
+        telemetry.addData("Status", "Wait for start");    //
+        telemetry.update();
+
         //waits for that giant PLAY button to be pressed on RC
         waitForStart();
 
-        //telling the code to run until you press that giant STOP button on RC
+        // telling the code to run until you press that giant STOP button on RC
+        // include opModeIsActive in all while loops so that STOP button terminates all actions
         while (opModeIsActive()) {
             //and now, the fun stuff
-            //HERE ANDREW PUT YOUR CODE
+
+            // Test forward
+            robot.MoveForward(MOVE_SPEED);
+            runtime.reset();
+            while (opModeIsActive() && (runtime.seconds() < TEST_TIME)) {
+                telemetry.addData("Move Forward", "Leg 1: %2.5f S Elapsed", runtime.seconds());
+                telemetry.update();
+            }
+            robot.MoveStop();
+
+            // Test backward
+            robot.MoveBackward(MOVE_SPEED);
+            runtime.reset();
+            while (opModeIsActive() && (runtime.seconds() < TEST_TIME)) {
+                telemetry.addData("Move Backward", "Leg 1: %2.5f S Elapsed", runtime.seconds());
+                telemetry.update();
+            }
+            robot.MoveStop();
+
+            // Test left
+            robot.MoveLeft(MOVE_SPEED);
+            runtime.reset();
+            while (opModeIsActive() && (runtime.seconds() < TEST_TIME)) {
+                telemetry.addData("Move Left", "Leg 1: %2.5f S Elapsed", runtime.seconds());
+                telemetry.update();
+            }
+            robot.MoveStop();
+
+            // Test right
+            robot.MoveRight(MOVE_SPEED);
+            runtime.reset();
+            while (opModeIsActive() && (runtime.seconds() < TEST_TIME)) {
+                telemetry.addData("Move Right", "Leg 1: %2.5f S Elapsed", runtime.seconds());
+                telemetry.update();
+            }
+            robot.MoveStop();
+
+            // Test rotate left
+            robot.RotateLeft(ROTATE_SPEED);
+            runtime.reset();
+            while (opModeIsActive() && (runtime.seconds() < TEST_TIME)) {
+                telemetry.addData("Rotate Left", "Leg 1: %2.5f S Elapsed", runtime.seconds());
+                telemetry.update();
+            }
+            robot.MoveStop();
+
+            // Test rotate right
+            robot.RotateRight(ROTATE_SPEED);
+            runtime.reset();
+            while (opModeIsActive() && (runtime.seconds() < TEST_TIME)) {
+                telemetry.addData("Rotate Right", "Leg 1: %2.5f S Elapsed", runtime.seconds());
+                telemetry.update();
+            }
+            robot.MoveStop();
+
+            // Send telemetry message to signify robot waiting;
+            telemetry.addData("Status", "Wait for end of autonomous");    //
+            telemetry.update();
+            while (opModeIsActive()) {
+            }
 
         }
     }

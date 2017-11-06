@@ -18,11 +18,25 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class RobotConfig
 {
-    /* Public OpMode members.
-     * FL- Front left
-     * FR- Front right
-     * BL- Back left
-     * BR- Back right */
+    /* Public members
+    * Devices
+    * -------
+    * FL - front left DC motor
+    * FR - front right DC motor
+    * BL - back left DC motor
+    * BR - back right DC motor
+    * ColorSensor - color sensor
+    *
+    * Methods
+    * -------
+    * MoveStop()
+    * MoveForward(speed)
+    * MoveBackward(speed)
+    * MoveLeft(speed)
+    * MoveRight(speed)
+    * RotateLeft(speed)
+    * RotateRight(speed)
+    */
 
     public DcMotor  FL   = null;
     public DcMotor  FR  = null;
@@ -68,6 +82,52 @@ public class RobotConfig
 
         color_sensor = hwMap.colorSensor.get("color");
     }
+
+    /* forward is positive speed, backward is negative speed */
+    public void MoveForwardBackward(double speed) {
+        FR.setPower(speed);
+        FL.setPower(speed);
+        BL.setPower(speed);
+        BR.setPower(speed);
+    }
+    /* left is positive speed, right is negative speed */
+    public void MoveLeftRight(double speed) {
+        FR.setPower(-speed);
+        FL.setPower(speed);
+        BL.setPower(-speed);
+        BR.setPower(speed);
+    }
+    /* rotate left is positive speed, rotate right is negative speed */
+    public void RotateLeftRight(double speed) {
+        FR.setPower(speed);
+        FL.setPower(-speed);
+        BL.setPower(-speed);
+        BR.setPower(speed);
+    }
+
+    /* Short hand movement methods */
+    public void MoveStop() {
+        MoveForwardBackward(0.0);
+    }
+    public void MoveForward(double speed) {
+        MoveForwardBackward(speed);
+    }
+    public void MoveBackward(double speed) {
+        MoveForwardBackward(-speed);
+    }
+    public void MoveLeft(double speed) {
+        MoveLeftRight(speed);
+    }
+    public void MoveRight(double speed) {
+        MoveLeftRight(-speed);
+    }
+    public void RotateLeft(double speed) {
+        RotateLeftRight(speed);
+    }
+    public void RotateRight(double speed) {
+        RotateLeftRight(-speed);
+    }
+
 
     /***
      *

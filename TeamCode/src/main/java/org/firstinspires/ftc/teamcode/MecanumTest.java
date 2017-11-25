@@ -14,6 +14,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 public class MecanumTest extends LinearOpMode {
 
     RobotConfig robot  = new RobotConfig();
+    RobotConfig robot = new RobotConfig();
 
     /* Declare extended gamepad */
     GamepadEdge egamepad1;
@@ -81,9 +82,12 @@ public class MecanumTest extends LinearOpMode {
                     .addData("g", robot.color_sensor.green())
                     .addData("b", robot.color_sensor.blue());
             telemetry.update();
+<<<<<<< HEAD
             //when a button is just released, multiply the speed by -1 so it's reverse
             if (abutton){
              reverse *= -1;
+=======
+>>>>>>> c19847ac957cb4d747399ace2e061a8ceb6ab00a
             }
 
             if (egamepad1.x.pressed) {
@@ -125,26 +129,6 @@ public class MecanumTest extends LinearOpMode {
                 robot.BR.setPower(speed);
 
             }
-            if (downdpad) {
-                robot.FR.setPower(-speed);
-                robot.FL.setPower(-speed);
-                robot.BL.setPower(-speed);
-                robot.BR.setPower(-speed);
-
-            }
-            if (rightdpad) {
-                robot.FR.setPower(speed);
-                robot.FL.setPower(-speed);
-                robot.BL.setPower(speed);
-                robot.BR.setPower(-speed);
-
-            }
-            if (leftdpad) {
-                robot.FR.setPower(-speed);
-                robot.FL.setPower(speed);
-                robot.BL.setPower(-speed);
-                robot.BR.setPower(speed);
-
             }
             //change that speed by those bumpers
 

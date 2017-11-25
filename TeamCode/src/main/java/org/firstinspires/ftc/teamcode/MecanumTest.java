@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 @TeleOp(name="Drive: org.firstinspires.ftc.teamcode.DriveCode.MecanumTest", group="Drive")
 public class MecanumTest extends LinearOpMode {
 
-    RobotConfig robot  = new RobotConfig();
+    RobotConfig robot = new RobotConfig();
 
     /* Declare extended gamepad */
     GamepadEdge egamepad1;
@@ -39,8 +39,6 @@ public class MecanumTest extends LinearOpMode {
         egamepad1 = new GamepadEdge(gamepad1);
         egamepad2 = new GamepadEdge(gamepad2);
 
-        boolean ltrigger;
-        boolean rtrigger;
         boolean updpad;
         boolean downdpad;
         boolean leftdpad;
@@ -56,8 +54,7 @@ public class MecanumTest extends LinearOpMode {
         while (opModeIsActive()) {
             //and now, the fun stuff
 
-            ltrigger = gamepad1.left_trigger > 0.7;
-            rtrigger = gamepad1.right_trigger > 0.7;
+
             updpad = gamepad1.dpad_up;
             downdpad = gamepad1.dpad_down;
             leftdpad = gamepad1.dpad_left;
@@ -69,11 +66,9 @@ public class MecanumTest extends LinearOpMode {
             egamepad2.UpdateEdge();
 
             //adds a lil' version thing to the telemetry so you know you're using the right version
-            telemetry.addData("Version", "1.5, The Dpad Update");
+            telemetry.addData("Version", "2.0, aaaaaaaaaa");
             telemetry.addData("Speed", speed);
             telemetry.addData("x", "d");
-            telemetry.addData("ltriggervar", ltrigger);
-            telemetry.addData("rtriggervar", rtrigger);
             telemetry.addData("ltrigger", gamepad1.left_trigger);
             telemetry.addData("rtrigger", gamepad1.right_trigger);
             telemetry.addLine("color |")
@@ -82,8 +77,8 @@ public class MecanumTest extends LinearOpMode {
                     .addData("b", robot.color_sensor.blue());
             telemetry.update();
 
-            if (abutton){
-             reverse *= -1;
+            if (abutton) {
+                reverse *= -1;
             }
 
             if (egamepad1.x.pressed) {
@@ -91,6 +86,14 @@ public class MecanumTest extends LinearOpMode {
                     robot.ball_servo.setPosition(0.3);
             }
             if (egamepad1.x.released) {
+                robot.ball_servo.setPosition(0.0);
+            }
+
+            if (egamepad1.y.pressed) {
+                if (robot.color_sensor.red() > robot.color_sensor.blue())
+                    robot.ball_servo.setPosition(0.3);
+            }
+            if (egamepad1.y.released) {
                 robot.ball_servo.setPosition(0.0);
             }
 
@@ -118,6 +121,17 @@ public class MecanumTest extends LinearOpMode {
             robot.BL.setPower(back_left / 3 * speed * reverse);
             robot.BR.setPower(back_right / 3 * speed * reverse);
 
+            /*for later- joysticks have a max input of 1 or -1. divide it by 3,
+              which leaves us with a max input of 0.333333. motors have a max input
+               of one. i'm not quite sure if this is perfectly true because i havent tested,
+               but that should allow us to have a max speed var of 3. if you were to
+               have max inputs on everything, you'd have 1 / 3 * 1 * 1, which
+               equals 0.33. so the max speed should be set to 3, leaving us with
+               1 / 3 * 3 * 1, equaling out to 1, our max value.
+            */
+
+
+            //directional input with the dpad.
             if (updpad) {
                 robot.FR.setPower(speed);
                 robot.FL.setPower(speed);
@@ -125,48 +139,47 @@ public class MecanumTest extends LinearOpMode {
                 robot.BR.setPower(speed);
 
             }
-            if (downdpad) {
-                robot.FR.setPower(-speed);
-                robot.FL.setPower(-speed);
-                robot.BL.setPower(-speed);
-                robot.BR.setPower(-speed);
+                else if (downdpad) {
+                    robot.FR.setPower(-speed);
+                    robot.FL.setPower(-speed);
+                    robot.BL.setPower(-speed);
+                    robot.BR.setPower(-speed);
 
-            }
-            if (rightdpad) {
-                robot.FR.setPower(speed);
-                robot.FL.setPower(-speed);
-                robot.BL.setPower(speed);
-                robot.BR.setPower(-speed);
+                }
+                else if (rightdpad) {
+                    robot.FR.setPower(speed);
+                    robot.FL.setPower(-speed);
+                    robot.BL.setPower(speed);
+                    robot.BR.setPower(-speed);
 
-            }
-            if (leftdpad) {
-                robot.FR.setPower(-speed);
-                robot.FL.setPower(speed);
-                robot.BL.setPower(-speed);
-                robot.BR.setPower(speed);
+                }
+                else if (leftdpad) {
+                    robot.FR.setPower(-speed);
+                    robot.FL.setPower(speed);
+                    robot.BL.setPower(-speed);
+                    robot.BR.setPower(speed);
 
+                }
             }
             //change that speed by those bumpers
 
 
-            if (ltrigger) {
+            if (egamepad1.right_bumper.pressed) {
                 speed += 0.25;
             }
-            if (speed < 0) {
-                speed = 0;
-            }
-            if (rtrigger) {
+            if (egamepad1.left_bumper.pressed) {
                 speed -= 0.25;
             }
-            if (speed > 5){
-                speed = 5;
-        }
+            if (speed == 0) {
+                speed -= 0.25;
+            }
+            if (speed > 1) {
+                speed = 1;
+            }
             //let the robot have a little rest, sleep is healthy
             sleep(40);
         }
     }
 
-
-}
 
 

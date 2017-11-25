@@ -80,16 +80,19 @@ public class MecanumTest extends LinearOpMode {
                     .addData("r", robot.color_sensor.red())
                     .addData("g", robot.color_sensor.green())
                     .addData("b", robot.color_sensor.blue());
-            if (robot.color_sensor.red() > robot.color_sensor.blue())
-                telemetry.addLine("RED");
-            else
-                telemetry.addLine("BLUE");
             telemetry.update();
 
             if (abutton){
              reverse *= -1;
             }
 
+            if (egamepad1.x.pressed) {
+                if (robot.color_sensor.blue() > robot.color_sensor.red())
+                    robot.ball_servo.setPosition(0.3);
+            }
+            if (egamepad1.x.released) {
+                robot.ball_servo.setPosition(0.0);
+            }
 
             // using the right joystick's x axis to rotate left and right
             front_right = -gamepad1.right_stick_x;

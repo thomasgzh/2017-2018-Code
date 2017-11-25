@@ -81,7 +81,7 @@ public class MecanumTest extends LinearOpMode {
                     .addData("g", robot.color_sensor.green())
                     .addData("b", robot.color_sensor.blue());
             telemetry.update();
-
+            //when a button is just released, multiply the speed by -1 so it's reverse
             if (abutton){
              reverse *= -1;
             }

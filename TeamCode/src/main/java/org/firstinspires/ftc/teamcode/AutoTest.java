@@ -44,7 +44,7 @@ public class AutoTest extends LinearOpMode {
         while (opModeIsActive()) {
             //and now, the fun stuff
 
-            // Test forward
+            // Test forwards movement
             robot.MoveForward(MOVE_SPEED);
             runtime.reset();
             while (opModeIsActive() && (runtime.seconds() < TEST_TIME)) {
@@ -53,7 +53,7 @@ public class AutoTest extends LinearOpMode {
             }
             robot.MoveStop();
 
-            // Test backward
+            // Test backwards movement
             robot.MoveBackward(MOVE_SPEED);
             runtime.reset();
             while (opModeIsActive() && (runtime.seconds() < TEST_TIME)) {
@@ -62,7 +62,7 @@ public class AutoTest extends LinearOpMode {
             }
             robot.MoveStop();
 
-            // Test left
+            // Test left movement
             robot.MoveLeft(MOVE_SPEED);
             runtime.reset();
             while (opModeIsActive() && (runtime.seconds() < TEST_TIME)) {
@@ -71,7 +71,7 @@ public class AutoTest extends LinearOpMode {
             }
             robot.MoveStop();
 
-            // Test right
+            // Test right movement
             robot.MoveRight(MOVE_SPEED);
             runtime.reset();
             while (opModeIsActive() && (runtime.seconds() < TEST_TIME)) {

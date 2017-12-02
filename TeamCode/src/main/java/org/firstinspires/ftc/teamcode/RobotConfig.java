@@ -83,8 +83,6 @@ public class RobotConfig
 
         color_sensor = hwMap.colorSensor.get("color");
         ball_servo = hwMap.servo.get("ball_servo");
-        fake_servo = hwMap.servo.get("fakeservo");
-        fake_servo.setPosition(0.0);
         ball_servo.setPosition(0.0);
     }
 

@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="false"
+        jar="C:\Users\speer\OneDrive\Documents\2017-2018-Code\openCVLibrary320\build\intermediates\bundles\default\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="038e8806866760ccd8568b401b8052e937e4be1a">
+        <dex dex="C:\Users\speer\OneDrive\Documents\2017-2018-Code\TeamCode\build\intermediates\pre-dexed\debug\classes_8fcb86394ba05a4d1b6f9887d47ae7af2c210c76.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\speer\.android\build-cache\1ebf301bcc51dbb0f65ae1b8de915c4692a1550a\output\jars\libs\Vuforia.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="91b46366eb9f8203073ee2935087c097c888c0ed">
+        <dex dex="C:\Users\speer\OneDrive\Documents\2017-2018-Code\TeamCode\build\intermediates\pre-dexed\debug\Vuforia_3598308b9e6e782a631654effd5bb47461988ea3.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\speer\.android\build-cache\1d881f0b72ecf100294abae91ed224998990140a\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="9dafed45e330aec14abcce05bdb7bbdb2a2d7092">
+        <dex dex="C:\Users\speer\OneDrive\Documents\2017-2018-Code\TeamCode\build\intermediates\pre-dexed\debug\classes_9f8ae7dbd5bbfb646d5ea0e2d88c2d1231e7bdf1.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\speer\.android\build-cache\1ebf301bcc51dbb0f65ae1b8de915c4692a1550a\output\jars\libs\javac.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="c576121aac49e547b39aedfb1daa29782db4166c">
+        <dex dex="C:\Users\speer\OneDrive\Documents\2017-2018-Code\TeamCode\build\intermediates\pre-dexed\debug\javac_e4c8e855e9c091431cf56cb666520bce462ae242.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\speer\.android\build-cache\3adf0976c8b03077f9c7f4d5bb9d8e972f65cd21\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="6c6d1584a392ebfee01efd98e6caaf6a9e5ac51d">
+        <dex dex="C:\Users\speer\OneDrive\Documents\2017-2018-Code\TeamCode\build\intermediates\pre-dexed\debug\classes_27964b577581eb9830a0fd8ce70af5501ad6af20.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\speer\.android\build-cache\1ebf301bcc51dbb0f65ae1b8de915c4692a1550a\output\jars\libs\support-annotations-23.4.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="5a214d3b1b12e72f4fb0d5d5d8d0ec43c96de2b5">
+        <dex dex="C:\Users\speer\OneDrive\Documents\2017-2018-Code\TeamCode\build\intermediates\pre-dexed\debug\support-annotations-23.4.0_a1b7d17d3c36d75a83b4cfed92d130f14d268bd7.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\speer\.android\build-cache\1ebf301bcc51dbb0f65ae1b8de915c4692a1550a\output\jars\libs\gson-2.8.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="e118dd0900e4a18fb928ebb8df2d9fbda78f2b5d">
+        <dex dex="C:\Users\speer\OneDrive\Documents\2017-2018-Code\TeamCode\build\intermediates\pre-dexed\debug\gson-2.8.0_8eb9c4cb644f5018a285780df1c1de799622b4c4.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\speer\OneDrive\Documents\2017-2018-Code\FtcRobotController\build\intermediates\bundles\default\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="d0c919e219a954111faa31c905d63e0e30c88b6b">
+        <dex dex="C:\Users\speer\OneDrive\Documents\2017-2018-Code\TeamCode\build\intermediates\pre-dexed\debug\classes_727671309a7f589a630a1fd6f3a50d22356cac2b.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\speer\.android\build-cache\44785114bd70789e0902ae8eabc9456cb36249f1\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="e444b561b0feba789cac93c5db61f08ef8c25ee6">
+        <dex dex="C:\Users\speer\OneDrive\Documents\2017-2018-Code\TeamCode\build\intermediates\pre-dexed\debug\classes_3b783e1bd2969060f81f203bf9829f3289b9cb84.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\speer\.android\build-cache\1ebf301bcc51dbb0f65ae1b8de915c4692a1550a\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="5d8f95b7b91c8a132c514f5dbe75340305e6883b">
+        <dex dex="C:\Users\speer\OneDrive\Documents\2017-2018-Code\TeamCode\build\intermediates\pre-dexed\debug\classes_dcf1b2a5035901f63e50afd531913c0700d6b265.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\speer\.android\build-cache\c186e68a2728cc571b393ca77f935cfe9f387d37\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="9403be210676ed196cdcc64c7391b9ae2361c174">
+        <dex dex="C:\Users\speer\OneDrive\Documents\2017-2018-Code\TeamCode\build\intermediates\pre-dexed\debug\classes_e68bc233606b4fa2bd1943dfffae816ae58f18d1.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\speer\.android\build-cache\d8c5e1fe58e06430b89de28527f23045812124f7\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="7558c70f3b0b473ca494059b37f16ca880ac43fd">
+        <dex dex="C:\Users\speer\OneDrive\Documents\2017-2018-Code\TeamCode\build\intermediates\pre-dexed\debug\classes_58f819b8c0d8137c189e8992315b66216f5a6f06.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\speer\.android\build-cache\1ebf301bcc51dbb0f65ae1b8de915c4692a1550a\output\jars\libs\gson-extras-0.2.1.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="b30c2655badcc7ce97f84e49f777b7dd154bad57">
+        <dex dex="C:\Users\speer\OneDrive\Documents\2017-2018-Code\TeamCode\build\intermediates\pre-dexed\debug\gson-extras-0.2.1_94504241ea56f2e6829c18e45826d74c23d98372.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\speer\OneDrive\Documents\2017-2018-Code\DogeCV\build\intermediates\bundles\default\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="cf03e2fad003585c407dac09c27c1174aae0e718">
+        <dex dex="C:\Users\speer\OneDrive\Documents\2017-2018-Code\TeamCode\build\intermediates\pre-dexed\debug\classes_cee636732d358c98ba5ad32d72f3695e84b6a782.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\speer\.android\build-cache\e9609cc4169aff0d8cc5c76128a76a86ea3c4e58\output\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.3"
+        sha1="1ce86a6340781abf3d876eba190efa34ae92d2f9">
+        <dex dex="C:\Users\speer\OneDrive\Documents\2017-2018-Code\TeamCode\build\intermediates\pre-dexed\debug\classes_b8de1872edf155d194f7faa4e81b06afe166e4ec.jar" />
+    </item>
+
+</items>

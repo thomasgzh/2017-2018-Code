@@ -1,0 +1,26 @@
+[
+    {
+        "outputFile": "C:\\Users\\speer\\OneDrive\\Documents\\2017-2018-Code\\DogeCV\\build\\intermediates\\incremental\\mergeReleaseResources\\merged.dir\\values\\values.xml",
+        "map": [
+            {
+                "to": {
+                    "startLine": 7,
+                    "startColumn": 4,
+                    "startOffset": 345,
+                    "endColumn": 42,
+                    "endOffset": 383
+                },
+                "from": {
+                    "file": "C:\\Users\\speer\\OneDrive\\Documents\\2017-2018-Code\\DogeCV\\src\\main\\res\\values\\strings.xml",
+                    "position": {
+                        "startLine": 1,
+                        "startColumn": 4,
+                        "startOffset": 16,
+                        "endColumn": 42,
+                        "endOffset": 54
+                    }
+                }
+            }
+        ]
+    }
+]

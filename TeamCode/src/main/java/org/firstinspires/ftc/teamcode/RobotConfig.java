@@ -5,6 +5,7 @@ import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.CompassSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.I2cAddr;
@@ -42,9 +43,15 @@ public class RobotConfig
     public DcMotor  FR  = null;
     public DcMotor  BL   = null;
     public DcMotor  BR = null;
+    public DcMotor  LR   = null;
+    public DcMotor  LL  = null;
+    public DcMotor  UR   = null;
+    public DcMotor  UL = null;
 
-    public ColorSensor color_sensor = null;
-    public Servo ball_servo = null;
+
+    public Servo GGR = null;
+    public Servo GGL = null;
+
 
     /* Local OpMode members. */
     HardwareMap hwMap  = null;
@@ -64,10 +71,20 @@ public class RobotConfig
         FR  = hwMap.dcMotor.get("FR");
         BL   = hwMap.dcMotor.get("BL");
         BR   = hwMap.dcMotor.get("BR");
-        // reverse those motors
-        BL.setDirection(DcMotor.Direction.REVERSE);
-        FL.setDirection(DcMotor.Direction.REVERSE);
+        UL   = hwMap.dcMotor.get("UL");
+        UR  = hwMap.dcMotor.get("UR");
+        LL   = hwMap.dcMotor.get("LL");
+        LR   = hwMap.dcMotor.get("LR");
+        GGR = hwMap.servo.get("GGR");
 
+        // reverse those motors
+
+        FL.setDirection(DcMotor.Direction.REVERSE);
+        BL.setDirection(DcMotor.Direction.REVERSE);
+        LL.setDirection(DcMotor.Direction.REVERSE);
+        UL.setDirection(DcMotor.Direction.REVERSE);
+        UR.setDirection(DcMotor.Direction.REVERSE);
+        GGR.setDirection(Servo.Direction.REVERSE);
         // Set all motors to zero power
         FL.setPower(0);
         FR.setPower(0);
@@ -76,14 +93,22 @@ public class RobotConfig
 
         // Set all motors to run without encoders.
         // May want to use RUN_USING_ENCODERS if encoders are installed.
-        FL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        FR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        BR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        BL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        FL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        FR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        BR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        BL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        LR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        LL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        UR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        UL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        color_sensor = hwMap.colorSensor.get("color");
-        ball_servo = hwMap.servo.get("ball_servo");
-        ball_servo.setPosition(0.0);
+
+
+        GGR = hwMap.servo.get("GGR");
+
+        GGL = hwMap.servo.get("GGL");
+
+
     }
 
     /* forward is positive speed, backward is negative speed */

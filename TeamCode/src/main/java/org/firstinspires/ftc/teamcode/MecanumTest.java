@@ -9,11 +9,11 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-//naming the teleop thing
-@TeleOp(name="Drive: org.firstinspires.ftc.teamcode.DriveCode.MecanumTest", group="Drive")
-public class MecanumTest extends LinearOpMode {
+    //naming the teleop thing
+    @TeleOp(name="Drive: org.firstinspires.ftc.teamcode.DriveCode.MecanumTest", group="Drive")
+    public class MecanumTest extends LinearOpMode {
 
-    RobotConfig robot = new RobotConfig();
+        RobotConfig robot = new RobotConfig();
 
     /* Declare extended gamepad */
     GamepadEdge egamepad1;
@@ -26,7 +26,7 @@ public class MecanumTest extends LinearOpMode {
         double front_left;
         double back_left;
         double back_right;
-        double speed = 1.5;
+        double speed = 1;
 
 
         /* Initialize the hardware variables.
@@ -68,12 +68,14 @@ public class MecanumTest extends LinearOpMode {
             telemetry.addData("Version", "2.0, aaaaaaaaaa");
             telemetry.addData("Speed", speed);
             telemetry.addData("x", "d");
-            telemetry.addData("ltrigger", gamepad1.left_trigger);
-            telemetry.addData("rtrigger", gamepad1.right_trigger);
-            telemetry.addLine("color |")
-                    .addData("r", robot.color_sensor.red())
-                    .addData("g", robot.color_sensor.green())
-                    .addData("b", robot.color_sensor.blue());
+            telemetry.addData("ltrigger", egamepad1.left_bumper.pressed);
+            telemetry.addData("rtrigger", egamepad1.right_bumper.pressed);
+            telemetry.addData("BRmotor", robot.BR.getPower());
+            telemetry.addData("BLmotor", robot.BL.getPower());
+            telemetry.addData("FLmotor", robot.FL.getPower());
+            telemetry.addData("FRmotor", robot.FR.getPower());
+            telemetry.addData("lbumper", gamepad1.left_bumper);
+            telemetry.addData("rbumper", gamepad1.right_bumper);
             telemetry.update();
 
             //when a button is just released, multiply the speed by -1 so it's reverse
@@ -82,39 +84,25 @@ public class MecanumTest extends LinearOpMode {
             }
 
 
-                if (egamepad1.x.pressed) {
-                    if (robot.color_sensor.blue() > robot.color_sensor.red())
-                        robot.ball_servo.setPosition(0.3);
-                }
-                if (egamepad1.x.released) {
-                    robot.ball_servo.setPosition(0.0);
-                }
 
-                if (egamepad1.y.pressed) {
-                    if (robot.color_sensor.red() > robot.color_sensor.blue())
-                        robot.ball_servo.setPosition(0.3);
-                }
-                if (egamepad1.y.released) {
-                    robot.ball_servo.setPosition(0.0);
-                }
 
                 // using the right joystick's x axis to rotate left and right
-                front_right = -gamepad1.right_stick_x;
-                front_left = gamepad1.right_stick_x;
-                back_left = gamepad1.right_stick_x;
-                back_right = -gamepad1.right_stick_x;
+                front_right = gamepad1.right_stick_x *2;
+                front_left = -gamepad1.right_stick_x *2;
+                back_left = -gamepad1.right_stick_x *2;
+                back_right = gamepad1.right_stick_x *2;
 
                 // using the left joystick's y axis to move forward and backwards
-                front_right += -gamepad1.left_stick_y;
-                front_left += -gamepad1.left_stick_y;
-                back_left += -gamepad1.left_stick_y;
-                back_right += -gamepad1.left_stick_y;
+                front_right += gamepad1.left_stick_y;
+                front_left += gamepad1.left_stick_y;
+                back_left += gamepad1.left_stick_y;
+                back_right += gamepad1.left_stick_y;
 
                 // using the left joystick's x axis to strafe left and right
-                front_right += gamepad1.left_stick_x;
-                front_left += -gamepad1.left_stick_x;
-                back_left += gamepad1.left_stick_x;
-                back_right += -gamepad1.left_stick_x;
+                front_right += -gamepad1.left_stick_x *2;
+                front_left += gamepad1.left_stick_x *2;
+                back_left += -gamepad1.left_stick_x *2;
+                back_right += gamepad1.left_stick_x *2;
 
                 //takes all those values, divides by three, and tells the motors to use that power
                 robot.FR.setPower(front_right / 3 * speed * reverse);
@@ -134,27 +122,27 @@ public class MecanumTest extends LinearOpMode {
 
                 //directional input with the dpad.
                 if (updpad) {
+                    robot.FR.setPower(-speed);
+                    robot.FL.setPower(-speed);
+                    robot.BL.setPower(-speed);
+                    robot.BR.setPower(-speed);
+
+                } else if (downdpad) {
                     robot.FR.setPower(speed);
                     robot.FL.setPower(speed);
                     robot.BL.setPower(speed);
                     robot.BR.setPower(speed);
 
-                } else if (downdpad) {
-                    robot.FR.setPower(-speed);
-                    robot.FL.setPower(-speed);
-                    robot.BL.setPower(-speed);
-                    robot.BR.setPower(-speed);
-
                 } else if (rightdpad) {
-                    robot.FR.setPower(speed);
-                    robot.FL.setPower(-speed);
-                    robot.BL.setPower(speed);
-                    robot.BR.setPower(-speed);
-
-                } else if (leftdpad) {
                     robot.FR.setPower(-speed);
                     robot.FL.setPower(speed);
                     robot.BL.setPower(-speed);
+                    robot.BR.setPower(speed);
+
+                } else if (leftdpad) {
+                    robot.FR.setPower(-speed);
+                    robot.FL.setPower(-speed);
+                    robot.BL.setPower(speed);
                     robot.BR.setPower(speed);
 
                 }
@@ -162,18 +150,34 @@ public class MecanumTest extends LinearOpMode {
             //change that speed by those bumpers
 
 
-            if (egamepad1.right_bumper.pressed) {
+            if (gamepad1.right_bumper) {
                 speed += 0.25;
             }
-            if (egamepad1.left_bumper.pressed) {
+            if (gamepad1.left_bumper) {
                 speed -= 0.25;
             }
             //if the speed is at the min/max value set it to NOT min/max so boom it cant go over
-            if (speed == 0) {
-                speed -= 0.25;
+            if (speed < 0) {
+                speed = 0;
             }
-            if (speed > 1) {
-                speed = 1;
+            if (speed > 3) {
+                speed = 3;
+            }
+            telemetry.addData("GGR", robot.GGR.getPosition());
+            telemetry.addData("GGL", robot.GGL.getPosition());
+            telemetry.update();
+                    /* Update extended gamepad */
+         egamepad1.UpdateEdge();
+            egamepad2.UpdateEdge();
+
+            if (egamepad1.x.released){
+            robot.GGL.setPosition(.4);
+            robot.GGR.setPosition(.4);
+            }
+            if (egamepad1.y.released){
+            robot.GGL.setPosition(.112);
+            robot.GGR.setPosition(.078
+            );
             }
             //let the robot have a little rest, sleep is healthy
             sleep(40);

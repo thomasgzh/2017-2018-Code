@@ -45,7 +45,9 @@ public class aaaaarm extends LinearOpMode {
             if (currentpos != wantedpos) {
                 //every 1 sec
                 //add the slowness1 var to the current position and set the servo position to that
-                robot.ball_servo.setPosition(currentpos + slowness1);
+
+
+
                 //wait for 1sec
                 TimeUnit.SECONDS.sleep(1);
                 //decrease movement time var by 1 !!!

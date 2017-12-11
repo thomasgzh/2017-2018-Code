@@ -26,7 +26,15 @@ public class RobotConfig
     * FR - front right DC motor
     * BL - back left DC motor
     * BR - back right DC motor
-    * ColorSensor - color sensor
+    *
+    * The arm motors are private - can only be controlled by Arm methods
+    * LR - lower right arm DC motor
+    * LL - lower left arm DC motor (must be reverse of LR)
+    * UR - upper right arm DC motor
+    * UL - upper left arm DC motor (must be same of UR)
+    *
+    * GGR - gripper grabber right servo motor
+    * GGL - gripper grabber right servo motor
     *
     * Methods
     * -------
@@ -43,11 +51,15 @@ public class RobotConfig
     public DcMotor  FR  = null;
     public DcMotor  BL   = null;
     public DcMotor  BR = null;
+
+//    private DcMotor  LR   = null;
+//    private DcMotor  LL  = null;
+//    private DcMotor  UR   = null;
+//    private DcMotor  UL = null;
     public DcMotor  LR   = null;
     public DcMotor  LL  = null;
     public DcMotor  UR   = null;
     public DcMotor  UL = null;
-
 
     public Servo GGR = null;
     public Servo GGL = null;
@@ -71,25 +83,34 @@ public class RobotConfig
         FR  = hwMap.dcMotor.get("FR");
         BL   = hwMap.dcMotor.get("BL");
         BR   = hwMap.dcMotor.get("BR");
+
         UL   = hwMap.dcMotor.get("UL");
         UR  = hwMap.dcMotor.get("UR");
         LL   = hwMap.dcMotor.get("LL");
         LR   = hwMap.dcMotor.get("LR");
+
         GGR = hwMap.servo.get("GGR");
+        GGL = hwMap.servo.get("GGL");
 
         // reverse those motors
-
         FL.setDirection(DcMotor.Direction.REVERSE);
         BL.setDirection(DcMotor.Direction.REVERSE);
-        LL.setDirection(DcMotor.Direction.REVERSE);
-        UL.setDirection(DcMotor.Direction.REVERSE);
+
+        LR.setDirection(DcMotor.Direction.REVERSE);
         UR.setDirection(DcMotor.Direction.REVERSE);
+
         GGR.setDirection(Servo.Direction.REVERSE);
+
         // Set all motors to zero power
         FL.setPower(0);
         FR.setPower(0);
         BL.setPower(0);
         BR.setPower(0);
+
+        LL.setPower(0);
+        LR.setPower(0);
+        UL.setPower(0);
+        UR.setPower(0);
 
         // Set all motors to run without encoders.
         // May want to use RUN_USING_ENCODERS if encoders are installed.
@@ -97,18 +118,11 @@ public class RobotConfig
         FR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         BR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         BL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
         LR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         LL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         UR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         UL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-
-
-        GGR = hwMap.servo.get("GGR");
-
-        GGL = hwMap.servo.get("GGL");
-
-
     }
 
     /* forward is positive speed, backward is negative speed */

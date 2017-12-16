@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import static java.lang.Math.atan;
+
 @TeleOp(name="MecanumTest2", group= "Drive")
 
 
@@ -26,7 +28,7 @@ public class Equation extends LinearOpMode {
 
         double Vx;
         double Vy;
-        double W;
+        Math W = atan (Vy / Vx);
         double O;
 
         front_left = 0;
@@ -73,7 +75,7 @@ public class Equation extends LinearOpMode {
             telemetry.addData("rbumper", gamepad1.right_bumper);
             telemetry.update();
 
-//W == invtan(gamepad1.y/gamepad1.x);
+            W = atan(Vy / Vx);
 
 //gamepad1.x == Vx - W(8.49*gamepad1.y);
 //gamepad1.y == Vy - W(8.49*gamepad1.x);

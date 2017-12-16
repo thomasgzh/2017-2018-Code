@@ -8,12 +8,12 @@
         "source": "C:\\Users\\Bear\\.gradle\\caches\\transforms-1\\files-1.1\\Blocks-release.aar\\bcc19ded7f5943c66efab185b28aa0bd\\res\\menu\\menu_server.xml"
     },
     {
-        "merged": "C:\\Users\\Bear\\Documents\\GitHub\\2017-2018-Code\\FtcRobotController\\build\\intermediates\\res\\merged\\androidTest\\debug\\xml_maxmodules.xml.flat",
-        "source": "C:\\Users\\Bear\\.gradle\\caches\\transforms-1\\files-1.1\\FtcCommon-release.aar\\93efcaab51727b3013bb6551234a19df\\res\\xml\\maxmodules.xml"
-    },
-    {
         "merged": "C:\\Users\\Bear\\Documents\\GitHub\\2017-2018-Code\\FtcRobotController\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout_activity_config_wifi_direct.xml.flat",
         "source": "C:\\Users\\Bear\\.gradle\\caches\\transforms-1\\files-1.1\\FtcCommon-release.aar\\93efcaab51727b3013bb6551234a19df\\res\\layout\\activity_config_wifi_direct.xml"
+    },
+    {
+        "merged": "C:\\Users\\Bear\\Documents\\GitHub\\2017-2018-Code\\FtcRobotController\\build\\intermediates\\res\\merged\\androidTest\\debug\\xml_maxmodules.xml.flat",
+        "source": "C:\\Users\\Bear\\.gradle\\caches\\transforms-1\\files-1.1\\FtcCommon-release.aar\\93efcaab51727b3013bb6551234a19df\\res\\xml\\maxmodules.xml"
     },
     {
         "merged": "C:\\Users\\Bear\\Documents\\GitHub\\2017-2018-Code\\FtcRobotController\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout_i2c_device.xml.flat",

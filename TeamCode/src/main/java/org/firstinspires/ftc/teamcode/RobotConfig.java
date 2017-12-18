@@ -93,8 +93,8 @@ public class RobotConfig
         GGL = hwMap.servo.get("GGL");
 
         // reverse those motors
-        FL.setDirection(DcMotor.Direction.REVERSE);
-        BL.setDirection(DcMotor.Direction.REVERSE);
+        FR.setDirection(DcMotor.Direction.REVERSE);
+        BR.setDirection(DcMotor.Direction.REVERSE);
 
         LR.setDirection(DcMotor.Direction.REVERSE);
         UR.setDirection(DcMotor.Direction.REVERSE);

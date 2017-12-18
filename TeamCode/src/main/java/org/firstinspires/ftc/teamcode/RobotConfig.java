@@ -137,10 +137,10 @@ public class RobotConfig
     }
     /* left is positive speed, right is negative speed */
     public void MoveLeftRight(double speed) {
-        FR.setPower(-speed);
-        FL.setPower(speed);
-        BL.setPower(-speed);
-        BR.setPower(speed);
+        FR.setPower(speed);
+        FL.setPower(-speed);
+        BL.setPower(speed);
+        BR.setPower(-speed);
     }
     /* rotate left is positive speed, rotate right is negative speed */
     public void RotateLeftRight(double speed) {

@@ -17,6 +17,22 @@
             ]
         },
         {
+            "outputFile": "C:\\Users\\ablauch\\Documents\\GitHub\\2017-2018-Code\\TeamCode\\build\\intermediates\\incremental\\mergeDebugAndroidTestResources\\merged.dir\\values-v14\\values-v14.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\ablauch\\.gradle\\caches\\transforms-1\\files-1.1\\RobotCore-release.aar\\30904b44240d384669fe6bde35f0d644\\res\\values-v14\\values-v14.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endLines": "4",
+                        "endColumns": "12",
+                        "endOffsets": "201"
+                    }
+                }
+            ]
+        },
+        {
             "outputFile": "C:\\Users\\Andrew\\Documents\\GitHub\\ftc_app\\2017-2018-Code\\TeamCode\\build\\intermediates\\incremental\\mergeDebugAndroidTestResources\\merged.dir\\values-v14\\values-v14.xml",
             "map": [
                 {

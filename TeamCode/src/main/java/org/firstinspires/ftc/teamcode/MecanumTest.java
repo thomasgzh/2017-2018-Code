@@ -144,61 +144,21 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
                     robot.BR.setPower(speed);
 
                 }
-            }
-            //change that speed by those bumpers
 
-
-            if (gamepad1.right_bumper) {
-                speed += 0.25;
-            }
-            if (gamepad1.left_bumper) {
-                speed -= 0.25;
-            }
-            //if the speed is at the min/max value set it to NOT min/max so boom it cant go over
-            if (speed < 0) {
-                speed = 0;
-            }
-            if (speed > 3) {
-                speed = 3;
-            }
-            while (opModeIsActive()) {
-                telemetry.addData("GGR", robot.GGR.getPosition());
-                telemetry.addData("GGL", robot.GGL.getPosition());
-                telemetry.update();
-
-                    /* Update extended gamepad */
-                egamepad1.UpdateEdge();
-                egamepad2.UpdateEdge();
-
-                // andrew and braden changed this:
-
-                double servoval1 = 0.4;
-                if (gamepad1.x)
-                    servoval1 = 0.112;
-                robot.GGL.setPosition(servoval1);
-
-
-
-/*
-                if (gamepad1.x) {
-                    robot.GGL.setPosition(0.4);
-                    robot.GGR.setPosition(0.4);
+                //change that speed by those bumpers
+                if (gamepad1.right_bumper) {
+                    speed += 0.25;
                 }
-                if (gamepad1.y) {
-                    robot.GGL.setPosition(.112);
-                    robot.GGR.setPosition(.078);
+                if (gamepad1.left_bumper) {
+                    speed -= 0.25;
                 }
-            }
-
-             if (egamepad1.x.released){
-            robot.GGL.setPosition(.4);
-            robot.GGR.setPosition(.4);
-            }
-            if (egamepad1.y.released){
-            robot.GGL.setPosition(.112);
-            robot.GGR.setPosition(.078);
-            } */
-
+                //if the speed is at the min/max value set it to NOT min/max so boom it cant go over
+                if (speed < 0) {
+                    speed = 0;
+                }
+                if (speed > 3) {
+                    speed = 3;
+                }
 
                 //let the robot have a little rest, sleep is healthy
                 sleep(40);

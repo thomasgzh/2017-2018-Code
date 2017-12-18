@@ -8,16 +8,16 @@
         "source": "C:\\Users\\Bear\\.gradle\\caches\\transforms-1\\files-1.1\\FtcCommon-release.aar\\93efcaab51727b3013bb6551234a19df\\res\\layout\\analog_inputs.xml"
     },
     {
-        "merged": "C:\\Users\\Andrew\\Documents\\GitHub\\ftc_app\\2017-2018-Code\\TeamCode\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xxhdpi-v4_ic_launcher.png.flat",
-        "source": "C:\\Users\\Andrew\\Documents\\GitHub\\ftc_app\\2017-2018-Code\\FtcRobotController\\build\\intermediates\\bundles\\debug\\res\\drawable-xxhdpi-v4\\ic_launcher.png"
+        "merged": "C:\\Users\\Bear\\Documents\\GitHub\\2017-2018-Code\\TeamCode\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout_info_button.xml.flat",
+        "source": "C:\\Users\\Bear\\.gradle\\caches\\transforms-1\\files-1.1\\FtcCommon-release.aar\\93efcaab51727b3013bb6551234a19df\\res\\layout\\info_button.xml"
     },
     {
         "merged": "C:\\Users\\Andrew\\Documents\\GitHub\\ftc_app\\2017-2018-Code\\TeamCode\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout_motor.xml.flat",
         "source": "C:\\Users\\Andrew\\.gradle\\caches\\transforms-1\\files-1.1\\FtcCommon-release.aar\\1b3e2a85c3ca283e82f77084473f0ec5\\res\\layout\\motor.xml"
     },
     {
-        "merged": "C:\\Users\\Bear\\Documents\\GitHub\\2017-2018-Code\\TeamCode\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout_info_button.xml.flat",
-        "source": "C:\\Users\\Bear\\.gradle\\caches\\transforms-1\\files-1.1\\FtcCommon-release.aar\\93efcaab51727b3013bb6551234a19df\\res\\layout\\info_button.xml"
+        "merged": "C:\\Users\\Andrew\\Documents\\GitHub\\ftc_app\\2017-2018-Code\\TeamCode\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xxhdpi-v4_ic_launcher.png.flat",
+        "source": "C:\\Users\\Andrew\\Documents\\GitHub\\ftc_app\\2017-2018-Code\\FtcRobotController\\build\\intermediates\\bundles\\debug\\res\\drawable-xxhdpi-v4\\ic_launcher.png"
     },
     {
         "merged": "C:\\Users\\ablauch\\Documents\\GitHub\\2017-2018-Code\\TeamCode\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout_matrices.xml.flat",
@@ -100,12 +100,12 @@
         "source": "C:\\Users\\Bear\\Documents\\GitHub\\2017-2018-Code\\FtcRobotController\\build\\intermediates\\bundles\\debug\\res\\layout\\activity_ftc_controller.xml"
     },
     {
-        "merged": "C:\\Users\\Bear\\Documents\\GitHub\\2017-2018-Code\\TeamCode\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout_activity_load.xml.flat",
-        "source": "C:\\Users\\Bear\\.gradle\\caches\\transforms-1\\files-1.1\\FtcCommon-release.aar\\93efcaab51727b3013bb6551234a19df\\res\\layout\\activity_load.xml"
-    },
-    {
         "merged": "C:\\Users\\ablauch\\Documents\\GitHub\\2017-2018-Code\\TeamCode\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout_servo.xml.flat",
         "source": "C:\\Users\\ablauch\\.gradle\\caches\\transforms-1\\files-1.1\\FtcCommon-release.aar\\44b9a2f053cacf75ffdec333aae5424f\\res\\layout\\servo.xml"
+    },
+    {
+        "merged": "C:\\Users\\Bear\\Documents\\GitHub\\2017-2018-Code\\TeamCode\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout_activity_load.xml.flat",
+        "source": "C:\\Users\\Bear\\.gradle\\caches\\transforms-1\\files-1.1\\FtcCommon-release.aar\\93efcaab51727b3013bb6551234a19df\\res\\layout\\activity_load.xml"
     },
     {
         "merged": "C:\\Users\\Bear\\Documents\\GitHub\\2017-2018-Code\\TeamCode\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout_activity_ftc_lynx_fw_update.xml.flat",
@@ -120,12 +120,12 @@
         "source": "C:\\Users\\Andrew\\Documents\\GitHub\\ftc_app\\2017-2018-Code\\FtcRobotController\\build\\intermediates\\bundles\\debug\\res\\drawable-mdpi-v4\\ic_launcher.png"
     },
     {
-        "merged": "C:\\Users\\Bear\\Documents\\GitHub\\2017-2018-Code\\TeamCode\\build\\intermediates\\res\\merged\\androidTest\\debug\\raw_texture_fragment_shader.glsl.flat",
-        "source": "C:\\Users\\Bear\\.gradle\\caches\\transforms-1\\files-1.1\\RobotCore-release.aar\\3f382c59d4898fdb7747107fd5716297\\res\\raw\\texture_fragment_shader.glsl"
-    },
-    {
         "merged": "C:\\Users\\ablauch\\Documents\\GitHub\\2017-2018-Code\\TeamCode\\build\\intermediates\\res\\merged\\androidTest\\debug\\xml_device_filter.xml.flat",
         "source": "C:\\Users\\ablauch\\Documents\\GitHub\\2017-2018-Code\\FtcRobotController\\build\\intermediates\\bundles\\debug\\res\\xml\\device_filter.xml"
+    },
+    {
+        "merged": "C:\\Users\\Bear\\Documents\\GitHub\\2017-2018-Code\\TeamCode\\build\\intermediates\\res\\merged\\androidTest\\debug\\raw_texture_fragment_shader.glsl.flat",
+        "source": "C:\\Users\\Bear\\.gradle\\caches\\transforms-1\\files-1.1\\RobotCore-release.aar\\3f382c59d4898fdb7747107fd5716297\\res\\raw\\texture_fragment_shader.glsl"
     },
     {
         "merged": "C:\\Users\\Andrew\\Documents\\GitHub\\ftc_app\\2017-2018-Code\\TeamCode\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable_button_shape.xml.flat",

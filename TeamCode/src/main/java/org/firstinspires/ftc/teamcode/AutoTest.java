@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 
 //naming the teleop thing
-@Autonomous(name="AutoTest", group ="Practice")
+@Autonomous(name="Auto Test", group ="Drive")
 public class AutoTest extends LinearOpMode {
 
     RobotConfig robot = new RobotConfig();

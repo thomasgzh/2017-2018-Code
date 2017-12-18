@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
     //naming the teleop thing
-    @TeleOp(name="mecanum test", group="Drive")
+    @TeleOp(name="Mecanum Test", group="Drive")
     public class MecanumTest extends LinearOpMode {
 
         RobotConfig robot = new RobotConfig();
@@ -45,7 +45,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
             boolean rightdpad;
             double reverse = 1;
 
-
             //waits for that giant PLAY button to be pressed on RC
             waitForStart();
 
@@ -53,6 +52,9 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
             while (opModeIsActive()) {
                 //and now, the fun stuff
 
+                /* Update extended gamepad */
+                egamepad1.UpdateEdge();
+                egamepad2.UpdateEdge();
 
                 updpad = gamepad1.dpad_up;
                 downdpad = gamepad1.dpad_down;
@@ -60,22 +62,12 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
                 rightdpad = gamepad1.dpad_right;
                 boolean abutton = egamepad1.a.released;
 
-            /* Update extended gamepad */
-                egamepad1.UpdateEdge();
-                egamepad2.UpdateEdge();
-
                 //adds a lil' version thing to the telemetry so you know you're using the right version
-                telemetry.addData("Version", "2.0, aaaaaaaaaa");
-                telemetry.addData("Speed", speed);
-                telemetry.addData("x", "d");
-                telemetry.addData("ltrigger", egamepad1.left_bumper.pressed);
-                telemetry.addData("rtrigger", egamepad1.right_bumper.pressed);
+                telemetry.addData("Version", "2.2");
                 telemetry.addData("BRmotor", robot.BR.getPower());
                 telemetry.addData("BLmotor", robot.BL.getPower());
                 telemetry.addData("FLmotor", robot.FL.getPower());
                 telemetry.addData("FRmotor", robot.FR.getPower());
-                telemetry.addData("lbumper", gamepad1.left_bumper);
-                telemetry.addData("rbumper", gamepad1.right_bumper);
                 telemetry.update();
 
                 //when a button is just released, multiply the speed by -1 so it's reverse
@@ -83,18 +75,32 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
                     reverse *= -1;
                 }
 
+                //change that speed by those bumpers
+                if (gamepad1.right_bumper) {
+                    speed += 0.25;
+                }
+                if (gamepad1.left_bumper) {
+                    speed -= 0.25;
+                }
+                //if the speed is at the min/max value set it to NOT min/max so boom it cant go over
+                if (speed < 0) {
+                    speed = 0;
+                }
+                if (speed > 3) {
+                    speed = 3;
+                }
 
                 // using the right joystick's x axis to rotate left and right
-                front_right = gamepad1.right_stick_x * 2;
-                front_left = -gamepad1.right_stick_x * 2;
-                back_left = -gamepad1.right_stick_x * 2;
-                back_right = gamepad1.right_stick_x * 2;
+                front_right = -gamepad1.right_stick_x * 2;
+                front_left = gamepad1.right_stick_x * 2;
+                back_left = gamepad1.right_stick_x * 2;
+                back_right = -gamepad1.right_stick_x * 2;
 
                 // using the left joystick's y axis to move forward and backwards
-                front_right += gamepad1.left_stick_y;
-                front_left += gamepad1.left_stick_y;
-                back_left += gamepad1.left_stick_y;
-                back_right += gamepad1.left_stick_y;
+                front_right -= gamepad1.left_stick_y;
+                front_left -= gamepad1.left_stick_y;
+                back_left -= gamepad1.left_stick_y;
+                back_right -= gamepad1.left_stick_y;
 
                 // using the left joystick's x axis to strafe left and right
                 front_right += -gamepad1.left_stick_x * 2;
@@ -102,11 +108,11 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
                 back_left += -gamepad1.left_stick_x * 2;
                 back_right += gamepad1.left_stick_x * 2;
 
-                //takes all those values, divides by three, and tells the motors to use that power
-                robot.FR.setPower(front_right / 3 * speed * reverse);
-                robot.FL.setPower(front_left / 3 * speed * reverse);
-                robot.BL.setPower(back_left / 3 * speed * reverse);
-                robot.BR.setPower(back_right / 3 * speed * reverse);
+                //takes all those values, divides
+                front_right = front_right / 3.414 * speed * reverse;
+                front_left = front_left / 3.414 * speed * reverse;
+                back_left = back_left / 3.414 * speed * reverse;
+                back_right = back_right / 3.414 * speed * reverse;
 
             /*for later- joysticks have a max input of 1 or -1. divide it by 3,
               which leaves us with a max input of 0.333333. motors have a max input
@@ -117,88 +123,34 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
                1 / 3 * 3 * 1, equaling out to 1, our max value.
             */
 
-
                 //directional input with the dpad.
                 if (updpad) {
-                    robot.FR.setPower(-speed);
-                    robot.FL.setPower(-speed);
-                    robot.BL.setPower(-speed);
-                    robot.BR.setPower(-speed);
-
+                    front_right = speed;
+                    front_left = speed;
+                    back_left = speed;
+                    back_right = speed;
                 } else if (downdpad) {
-                    robot.FR.setPower(speed);
-                    robot.FL.setPower(speed);
-                    robot.BL.setPower(speed);
-                    robot.BR.setPower(speed);
-
+                    front_right = -speed;
+                    front_left = -speed;
+                    back_left = -speed;
+                    back_right = -speed;
                 } else if (rightdpad) {
-                    robot.FR.setPower(-speed);
-                    robot.FL.setPower(speed);
-                    robot.BL.setPower(-speed);
-                    robot.BR.setPower(speed);
-
+                    front_right = -speed;
+                    front_left = speed;
+                    back_left = -speed;
+                    back_right = speed;
                 } else if (leftdpad) {
-                    robot.FR.setPower(-speed);
-                    robot.FL.setPower(-speed);
-                    robot.BL.setPower(speed);
-                    robot.BR.setPower(speed);
-
+                    front_right = speed;
+                    front_left = -speed;
+                    back_left = speed;
+                    back_right = -speed;
                 }
-            }
-            //change that speed by those bumpers
 
-
-            if (gamepad1.right_bumper) {
-                speed += 0.25;
-            }
-            if (gamepad1.left_bumper) {
-                speed -= 0.25;
-            }
-            //if the speed is at the min/max value set it to NOT min/max so boom it cant go over
-            if (speed < 0) {
-                speed = 0;
-            }
-            if (speed > 3) {
-                speed = 3;
-            }
-            while (opModeIsActive()) {
-                telemetry.addData("GGR", robot.GGR.getPosition());
-                telemetry.addData("GGL", robot.GGL.getPosition());
-                telemetry.update();
-
-                    /* Update extended gamepad */
-                egamepad1.UpdateEdge();
-                egamepad2.UpdateEdge();
-
-                // andrew and braden changed this:
-
-                double servoval1 = 0.4;
-                if (gamepad1.x)
-                    servoval1 = 0.112;
-                robot.GGL.setPosition(servoval1);
-
-
-
-/*
-                if (gamepad1.x) {
-                    robot.GGL.setPosition(0.4);
-                    robot.GGR.setPosition(0.4);
-                }
-                if (gamepad1.y) {
-                    robot.GGL.setPosition(.112);
-                    robot.GGR.setPosition(.078);
-                }
-            }
-
-             if (egamepad1.x.released){
-            robot.GGL.setPosition(.4);
-            robot.GGR.setPosition(.4);
-            }
-            if (egamepad1.y.released){
-            robot.GGL.setPosition(.112);
-            robot.GGR.setPosition(.078);
-            } */
-
+                // tells the motors to use that power
+                robot.FR.setPower(front_right);
+                robot.FL.setPower(front_left);
+                robot.BL.setPower(back_left);
+                robot.BR.setPower(back_right);
 
                 //let the robot have a little rest, sleep is healthy
                 sleep(40);

@@ -99,8 +99,10 @@ public class RobotConfig
         LR.setDirection(DcMotor.Direction.REVERSE);
         UR.setDirection(DcMotor.Direction.REVERSE);
 
-      //  GGR.setDirection(Servo.Direction.REVERSE);
-        GGR.setPosition(0.4);
+        GGR.setDirection(Servo.Direction.REVERSE);
+
+//        GGR.setPosition(0.4);
+//        GGL.setPosition(0.4);
 
         // Set all motors to zero power
         FL.setPower(0);

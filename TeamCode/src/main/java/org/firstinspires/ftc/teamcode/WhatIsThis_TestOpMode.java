@@ -19,8 +19,7 @@ import org.opencv.core.Mat;
 import java.io.IOException;
 
 
-@TeleOp(name="TestOpMode", group="Drive")
-
+@TeleOp(name="WhatIsThisTestOpMode", group="WhatIsThis")
 public class WhatIsThis_TestOpMode extends OpMode
 {
 

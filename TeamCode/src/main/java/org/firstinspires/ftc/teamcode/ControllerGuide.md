@@ -35,3 +35,5 @@ All programs should be compatible with this guide
     Start Button = N/A
     Mode Button = N/A
     (Start + B = Sets controller 2)
+
+    Ignore this.

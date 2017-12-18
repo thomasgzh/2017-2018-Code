@@ -26,7 +26,7 @@ public class Equation extends LinearOpMode {
 
         robot.init(hardwareMap);
 
-        double Vx; fred
+        double Vx;
         double Vy;
         Math W = atan (Vy / Vx);
         double O;

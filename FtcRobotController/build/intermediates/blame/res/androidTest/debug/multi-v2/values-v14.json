@@ -17,6 +17,22 @@
             ]
         },
         {
+            "outputFile": "C:\\Users\\speer\\OneDrive\\Documents\\2017-2018-Code\\FtcRobotController\\build\\intermediates\\incremental\\mergeDebugAndroidTestResources\\merged.dir\\values-v14\\values-v14.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\speer\\.gradle\\caches\\transforms-1\\files-1.1\\RobotCore-release.aar\\43b961c83e61e7245b6f414e0deab910\\res\\values-v14\\values-v14.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endLines": "4",
+                        "endColumns": "12",
+                        "endOffsets": "201"
+                    }
+                }
+            ]
+        },
+        {
             "outputFile": "C:\\Users\\Bear\\Documents\\GitHub\\2017-2018-Code\\FtcRobotController\\build\\intermediates\\incremental\\mergeDebugAndroidTestResources\\merged.dir\\values-v14\\values-v14.xml",
             "map": [
                 {

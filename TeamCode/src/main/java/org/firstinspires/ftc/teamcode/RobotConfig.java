@@ -88,6 +88,17 @@ public class RobotConfig
         // reverse those motors
         FR.setDirection(DcMotor.Direction.REVERSE);
         BR.setDirection(DcMotor.Direction.REVERSE);
+ 
+
+        LR.setDirection(DcMotor.Direction.REVERSE);
+        UR.setDirection(DcMotor.Direction.REVERSE);
+
+
+        GGR.setPosition(0.52);
+        GGL.setPosition(0.715);
+
+
+
         // Set all motors to zero power
         FL.setPower(0);
         FR.setPower(0);

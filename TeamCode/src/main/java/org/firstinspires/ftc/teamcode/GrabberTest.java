@@ -74,7 +74,7 @@ public class GrabberTest extends LinearOpMode {
                     robot.GGR.setPosition(.89);
                 }
                  else if (egamepad1.right_bumper.released) {
-                    robot.GGR.setPosition(.92);
+                    robot.GGR.setPosition(.995);
                 }
 
             /*Left Trigger = Left Grabber Open

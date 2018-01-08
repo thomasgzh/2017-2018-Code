@@ -44,21 +44,8 @@ public class GrabberTest extends LinearOpMode {
             egamepad1.UpdateEdge();
             egamepad2.UpdateEdge();
 
-            if (egamepad1.a.released) {
-                robot.GGL.setPosition(0.4);
-            }
 
-            if (egamepad1.b.released) {
-                robot.GGL.setPosition(0.1);
-            }
-
-            if (egamepad1.x.released) {
-                robot.GGR.setPosition(0.4);
-            }
-
-            if (egamepad1.y.released) {
-                robot.GGR.setPosition(0.1);
-            }
+            //increments -------------------------------------------------------------
 
             if (egamepad1.dpad_down.pressed) {
                 robot.GGL.setPosition(robot.GGL.getPosition() - increment);
@@ -75,6 +62,25 @@ public class GrabberTest extends LinearOpMode {
             if (egamepad1.dpad_right.pressed) {
                 robot.GGR.setPosition(robot.GGR.getPosition() + increment);
             }
+
+            //prototype --------------------------------------------------------------
+            if (gamepad1.left_trigger > 0.7) {
+                robot.GGL.setPosition(.34);
+            }
+                else if (egamepad1.left_bumper.released) {
+                    robot.GGL.setPosition(.27944);
+                }
+                else if (gamepad1.right_trigger > 0.7) {
+                    robot.GGR.setPosition(.89);
+                }
+                 else if (egamepad1.right_bumper.released) {
+                    robot.GGR.setPosition(.92);
+                }
+
+            /*Left Trigger = Left Grabber Open
+            Left Button = Left Grabber Close
+            Right Trigger = Right Grabber Open
+            Right Button = Right Grabber Close */
 
             //let the robot have a little rest, sleep is healthy
             sleep(40);

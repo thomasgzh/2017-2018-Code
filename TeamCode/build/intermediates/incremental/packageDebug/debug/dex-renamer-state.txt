@@ -1,4 +1,4 @@
-#Mon Dec 18 16:51:39 EST 2017
-base.0=C\:\\Users\\ablauch\\Documents\\GitHub\\2017-2018-Code\\TeamCode\\build\\intermediates\\transforms\\dexMerger\\debug\\0
+#Mon Jan 08 13:47:05 EST 2018
+base.0=C\:\\Users\\speer\\OneDrive\\Documents\\2017-2018-Code\\TeamCode\\build\\intermediates\\transforms\\dexMerger\\debug\\0
 path.0=classes.dex
 renamed.0=classes.dex

@@ -52,12 +52,12 @@ public void runOpMode() throws InterruptedException {
         telemetry.addData("URpos", robot.UR.getCurrentPosition());
         if (gamepad1.dpad_up) {
             telemetry.addData("Lower","pos");
-            robot.UR.setPower(0.7);
+            robot.UR.setPower(0.2);
 //            robot.UL.setPower(0.7);
         } else {
             if (gamepad1.dpad_down) {
                 telemetry.addData("Lower", "neg");
-                robot.UR.setPower(-0.5);
+                robot.UR.setPower(-0.2);
 //                robot.UL.setPower(-0.5);
             } else {
                 robot.UR.setPower(0.0);
@@ -67,12 +67,12 @@ public void runOpMode() throws InterruptedException {
         if (gamepad1.dpad_right) {
             telemetry.addData("Lower","pos");
 //            robot.UR.setPower(0.7);
-            robot.UL.setPower(0.7);
+            robot.UL.setPower(0.2);
         } else {
             if (gamepad1.dpad_left) {
                 telemetry.addData("Lower", "neg");
 //                robot.UR.setPower(-0.5);
-                robot.UL.setPower(-0.5);
+                robot.UL.setPower(-0.2);
             } else {
 //                robot.UR.setPower(0.0);
                 robot.UL.setPower(0.0);

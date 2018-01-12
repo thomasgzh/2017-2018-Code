@@ -48,35 +48,50 @@ public void runOpMode() throws InterruptedException {
 
         //adds a lil' version thing to the telemetry so you know you're using the right version
         telemetry.addData("Version", "1.0");
-
+        telemetry.addData("ULpos", robot.UL.getCurrentPosition());
+        telemetry.addData("URpos", robot.UR.getCurrentPosition());
         if (gamepad1.dpad_up) {
             telemetry.addData("Lower","pos");
-            robot.LR.setPower(0.5);
-            robot.LL.setPower(0.5);
+            robot.UR.setPower(0.2);
+//            robot.UL.setPower(0.7);
         } else {
             if (gamepad1.dpad_down) {
                 telemetry.addData("Lower", "neg");
-                robot.LL.setPower(-0.5);
-                robot.LR.setPower(-0.5);
+                robot.UR.setPower(-0.2);
+//                robot.UL.setPower(-0.5);
             } else {
-                robot.LL.setPower(0.0);
-                robot.LR.setPower(0.0);
+                robot.UR.setPower(0.0);
+//                robot.UL.setPower(0.0);
             }
         }
         if (gamepad1.dpad_right) {
-            telemetry.addData("Upper","pos");
-            robot.UR.setPower(0.5);
-            robot.UL.setPower(0.5);
+            telemetry.addData("Lower","pos");
+//            robot.UR.setPower(0.7);
+            robot.UL.setPower(0.2);
         } else {
             if (gamepad1.dpad_left) {
-                telemetry.addData("Upper", "neg");
-                robot.UL.setPower(-0.5);
-                robot.UR.setPower(-0.5);
+                telemetry.addData("Lower", "neg");
+//                robot.UR.setPower(-0.5);
+                robot.UL.setPower(-0.2);
             } else {
+//                robot.UR.setPower(0.0);
                 robot.UL.setPower(0.0);
-                robot.UR.setPower(0.0);
             }
         }
+//        if (gamepad1.dpad_right) {
+//            telemetry.addData("Upper","pos");
+//            robot.UR.setTargetPosition(robot.UR.getCurrentPosition());
+//            robot.UL.setTargetPosition(robot.UL.getCurrentPosition());
+ //       } else {
+ //           if (gamepad1.dpad_left) {
+ //               telemetry.addData("Upper", "neg");
+ //               robot.UL.setPower(-0.5);
+ //               robot.UR.setPower(-0.5);
+ //           } else {
+//                robot.UL.setPower(0.0);
+//                robot.UR.setPower(0.0);
+//            }
+//        }
 
         telemetry.update();
 

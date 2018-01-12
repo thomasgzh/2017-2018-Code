@@ -90,12 +90,11 @@ public class RobotConfig
         BR.setDirection(DcMotor.Direction.REVERSE);
  
 
-        LR.setDirection(DcMotor.Direction.REVERSE);
-        UR.setDirection(DcMotor.Direction.REVERSE);
 
 
-        GGR.setPosition(0.52);
-        GGL.setPosition(0.715);
+
+        //GGR.setPosition(0.52);
+        //GGL.setPosition(0.715);
 
 
 
@@ -117,13 +116,15 @@ public class RobotConfig
         LL   = hwMap.dcMotor.get("LL");
         LR   = hwMap.dcMotor.get("LR");
         // reverse those motors
-        LR.setDirection(DcMotor.Direction.REVERSE);
         UR.setDirection(DcMotor.Direction.REVERSE);
+
+
         // Set all motors to zero power
         LL.setPower(0);
         LR.setPower(0);
         UL.setPower(0);
         UR.setPower(0);
+
         // Set all motors to run with encoders.
         LR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         LL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -135,8 +136,7 @@ public class RobotConfig
         GGR = hwMap.servo.get("GGR");
         GGL = hwMap.servo.get("GGL");
         // set initial positions
-        //GGR.setPosition(-0.2);
-        //GGL.setPosition(0.2);
+
     }
 
     /* forward is positive speed, backward is negative speed */

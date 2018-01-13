@@ -46,7 +46,7 @@ public class RobotConfig
     /* Public members
     * Devices
     * -------
-    * The arm motors WILL BE private - can only be controlled by Arm methods
+    * Make sure to control both left and right arms in unison
     * LR - lower right arm DC motor
     * LL - lower left arm DC motor (must be reverse of LR)
     * UR - upper right arm DC motor
@@ -57,6 +57,11 @@ public class RobotConfig
     public DcMotor  UR   = null;
     public DcMotor  UL = null;
 
+    /* Arm position switch */
+    public DigitalChannel ArmSwitch = null;
+    public int URArmHome = 0;   // change when potentionmeter added
+    public int ULArmHome = 0;
+
     /* Public members
     * Devices
     * -------
@@ -65,11 +70,8 @@ public class RobotConfig
     */
     public Servo GGR = null;
     public Servo GGL = null;
-    double[] GRABBER_LEFT = {0.745, .255, .375};
-    double[] GRABBER_RIGHT = {0.54, .99, .895};
-
-    /* Arm position switch */
-    DigitalChannel ArmSwitch;  // Hardware Device Object
+    public double[] GRABBER_LEFT = {0.745, .255, .375};
+    public double[] GRABBER_RIGHT = {0.54, .99, .895};
 
     /* Local OpMode members. */
     HardwareMap hwMap  = null;
@@ -136,7 +138,7 @@ public class RobotConfig
 
         // **** Arm Switch ****
         // Define and initialize switch
-        ArmSwitch = hwMap.get(DigitalChannel.class, "touch sensor0");
+        ArmSwitch = hwMap.get(DigitalChannel.class, "touch sensor");
         // set the digital channel to input.
         ArmSwitch.setMode(DigitalChannel.Mode.INPUT);
         // false = pressed

@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 //naming the teleop thing
-@TeleOp(name="teleop", group="Drive")
+@TeleOp(name="TeleOp", group="Drive")
 public class teleop extends LinearOpMode {
 
     RobotConfig robot = new RobotConfig();

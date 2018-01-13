@@ -8,9 +8,10 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.Gamepad;
 
-    //naming the teleop thing
-    @TeleOp(name="Mecanum Test", group="Drive")
+//naming the teleop thing
+    @TeleOp(name="MecanumTest", group="Drive")
     public class MecanumTest extends LinearOpMode {
 
         RobotConfig robot = new RobotConfig();
@@ -27,7 +28,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
             double back_left;
             double back_right;
             double speed = 1;
-
 
         /* Initialize the hardware variables.
          * The init() method of the hardware class does all the work here
@@ -56,10 +56,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
                 egamepad1.UpdateEdge();
                 egamepad2.UpdateEdge();
 
-                updpad = gamepad1.dpad_up;
-                downdpad = gamepad1.dpad_down;
-                leftdpad = gamepad1.dpad_left;
-                rightdpad = gamepad1.dpad_right;
+                DpadDirection dpadDirection = GetDpadDirection(gamepad1);
+
                 boolean abutton = egamepad1.a.released;
 
                 //adds a lil' version thing to the telemetry so you know you're using the right version
@@ -68,6 +66,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
                 telemetry.addData("BLmotor", robot.BL.getPower());
                 telemetry.addData("FLmotor", robot.FL.getPower());
                 telemetry.addData("FRmotor", robot.FR.getPower());
+                telemetry.addData("Speed", speed);
                 telemetry.update();
 
                 //when a button is just released, multiply the speed by -1 so it's reverse
@@ -124,37 +123,71 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
             */
 
                 //directional input with the dpad.
-                if (updpad) {
-                    front_right = speed;
-                    front_left = speed;
-                    back_left = speed;
-                    back_right = speed;
-                } else if (downdpad) {
-                    front_right = -speed;
-                    front_left = -speed;
-                    back_left = -speed;
-                    back_right = -speed;
-                } else if (rightdpad) {
-                    front_right = -speed;
-                    front_left = speed;
-                    back_left = -speed;
-                    back_right = speed;
-                } else if (leftdpad) {
-                    front_right = speed;
-                    front_left = -speed;
-                    back_left = speed;
-                    back_right = -speed;
-                }
-
-                // tells the motors to use that power
-                robot.FR.setPower(front_right);
-                robot.FL.setPower(front_left);
-                robot.BL.setPower(back_left);
-                robot.BR.setPower(back_right);
+                // Move() talks directly to the robot
+                // so don't set motor powers elsewhere
+                Move(dpadDirection, speed);
 
                 //let the robot have a little rest, sleep is healthy
                 sleep(40);
             }
+        }
+
+        // Movement code
+        private void Move(DpadDirection buttonDirection, double speed) {
+            switch (buttonDirection) {
+                case Up:
+                    robot.FR.setPower(speed);
+                    robot.FL.setPower(speed);
+                    robot.BL.setPower(speed);
+                    robot.BR.setPower(speed);
+                    break;
+                case Down:
+                    robot.FR.setPower(-speed);
+                    robot.FL.setPower(-speed);
+                    robot.BL.setPower(-speed);
+                    robot.BR.setPower(-speed);
+                    break;
+                case Left:
+                    robot.FR.setPower(speed);
+                    robot.FL.setPower(-speed);
+                    robot.BL.setPower(speed);
+                    robot.BR.setPower(-speed);
+                    break;
+                case Right:
+                    robot.FR.setPower(-speed);
+                    robot.FL.setPower(speed);
+                    robot.BL.setPower(-speed);
+                    robot.BR.setPower(speed);
+                    break;
+                case None:
+                    robot.FR.setPower(0);
+                    robot.FL.setPower(0);
+                    robot.BL.setPower(0);
+                    robot.BR.setPower(0);
+                    break;
+            }
+        }
+
+        private DpadDirection GetDpadDirection(Gamepad gamepad) {
+            if (gamepad.dpad_up) {
+                return DpadDirection.Up;
+            } else if (gamepad.dpad_down) {
+                return DpadDirection.Down;
+            } else if (gamepad.dpad_left) {
+                return DpadDirection.Left;
+            } else if (gamepad.dpad_right) {
+                return DpadDirection.Right;
+            } else {
+                return DpadDirection.None;
+            }
+        }
+
+        private enum DpadDirection {
+            None,
+            Up,
+            Down,
+            Left,
+            Right
         }
     }
 

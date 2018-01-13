@@ -20,12 +20,12 @@
         "source": "C:\\Users\\Bear\\.gradle\\caches\\transforms-1\\files-1.1\\Blocks-release.aar\\bcc19ded7f5943c66efab185b28aa0bd\\res\\layout\\activity_blocks.xml"
     },
     {
-        "merged": "C:\\Users\\Bear\\Documents\\GitHub\\2017-2018-Code\\TeamCode\\build\\intermediates\\res\\merged\\debug\\xml_advanced_rc_settings.xml.flat",
-        "source": "C:\\Users\\Bear\\.gradle\\caches\\transforms-1\\files-1.1\\FtcCommon-release.aar\\93efcaab51727b3013bb6551234a19df\\res\\xml\\advanced_rc_settings.xml"
-    },
-    {
         "merged": "C:\\Users\\Andrew\\Documents\\GitHub\\ftc_app\\2017-2018-Code\\TeamCode\\build\\intermediates\\res\\merged\\debug\\layout_digital_devices.xml.flat",
         "source": "C:\\Users\\Andrew\\.gradle\\caches\\transforms-1\\files-1.1\\FtcCommon-release.aar\\1b3e2a85c3ca283e82f77084473f0ec5\\res\\layout\\digital_devices.xml"
+    },
+    {
+        "merged": "C:\\Users\\Bear\\Documents\\GitHub\\2017-2018-Code\\TeamCode\\build\\intermediates\\res\\merged\\debug\\xml_advanced_rc_settings.xml.flat",
+        "source": "C:\\Users\\Bear\\.gradle\\caches\\transforms-1\\files-1.1\\FtcCommon-release.aar\\93efcaab51727b3013bb6551234a19df\\res\\xml\\advanced_rc_settings.xml"
     },
     {
         "merged": "C:\\Users\\ablauch\\Documents\\GitHub\\2017-2018-Code\\TeamCode\\build\\intermediates\\res\\merged\\debug\\layout_item_list_parent.xml.flat",

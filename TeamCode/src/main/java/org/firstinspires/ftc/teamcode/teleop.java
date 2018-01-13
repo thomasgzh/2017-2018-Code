@@ -19,8 +19,6 @@ public class teleop extends LinearOpMode {
     /* Declare extended gamepad */
     GamepadEdge egamepad1;
     GamepadEdge egamepad2;
-    double[] GRABBER_LEFT = {0.745, .0255, .375};
-    double[] GRABBER_RIGHT = {0.54, .99, .895};
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -29,7 +27,7 @@ public class teleop extends LinearOpMode {
         double front_left;
         double back_left;
         double back_right;
-        double speed = 1;
+        double speed = 2.5;
         int grabber_left;
         int grabber_right;
 
@@ -127,40 +125,38 @@ public class teleop extends LinearOpMode {
                1 / 3 * 3 * 1, equaling out to 1, our max value.
             */
 
-            //directional input with the dpad.
-            // Move() talks directly to the robot
-            // so don't set motor powers elsewhere
-            //Move(dpadDirection, speed);
+            /********** GamePad2 controls **********/
+            /********** Grabber code **********/
             if (egamepad2.left_bumper.released) {
                 grabber_left = (grabber_left<2) ? grabber_left+1 : 0;
             }
             if (egamepad2.right_bumper.released) {
                 grabber_right = (grabber_right<2) ? grabber_right+1 : 0;
             }
-            if (egamepad2.x.released){
+            if (egamepad2.b.released){
                 grabber_left = 0;
                 grabber_right = 0;
             }
-            if (egamepad2.b.released) {
+            if (egamepad2.x.released) {
                 grabber_left = 1;
                 grabber_right = 1;
             }
+            robot.GGL.setPosition(robot.GRABBER_LEFT[grabber_left]);
+            robot.GGR.setPosition(robot.GRABBER_RIGHT[grabber_right]);
 
-
-            robot.GGL.setPosition(GRABBER_LEFT[grabber_left]);
-            robot.GGR.setPosition(GRABBER_RIGHT[grabber_right]);
-
-            /*\if (gamepad2.left_trigger > 0.7) {
-                robot.GGL.setPosition(.34);
-            } else if (egamepad2.left_bumper.released) {
-                robot.GGL.setPosition(.27944);
-            } else if (gamepad2.right_trigger > 0.7) {
-                robot.GGR.setPosition(.89);
-            } else if (egamepad2.right_bumper.released) {
-                robot.GGR.setPosition(.995);
+            /********** Arm code **********/
+            if (gamepad2.dpad_up) {
+                robot.UR.setPower(0.2);
+                robot.UL.setPower(0.2);
+            } else {
+                if (gamepad2.dpad_down) {
+                    robot.UR.setPower(-0.2);
+                    robot.UL.setPower(-0.2);
+                } else {
+                    robot.UR.setPower(0.0);
+                    robot.UL.setPower(0.0);
+                }
             }
-            */
-
 
             //let the robot have a little rest, sleep is healthy
             sleep(40);

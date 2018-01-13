@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.CompassSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.I2cAddr;
@@ -64,7 +65,11 @@ public class RobotConfig
     */
     public Servo GGR = null;
     public Servo GGL = null;
+    double[] GRABBER_LEFT = {0.745, .255, .375};
+    double[] GRABBER_RIGHT = {0.54, .99, .895};
 
+    /* Arm position switch */
+    DigitalChannel ArmSwitch;  // Hardware Device Object
 
     /* Local OpMode members. */
     HardwareMap hwMap  = null;
@@ -89,15 +94,6 @@ public class RobotConfig
         FR.setDirection(DcMotor.Direction.REVERSE);
         BR.setDirection(DcMotor.Direction.REVERSE);
  
-
-
-
-
-        //GGR.setPosition(0.52);
-        //GGL.setPosition(0.715);
-
-
-
         // Set all motors to zero power
         FL.setPower(0);
         FR.setPower(0);
@@ -118,7 +114,6 @@ public class RobotConfig
         // reverse those motors
         UR.setDirection(DcMotor.Direction.REVERSE);
 
-
         // Set all motors to zero power
         LL.setPower(0);
         LR.setPower(0);
@@ -136,7 +131,15 @@ public class RobotConfig
         GGR = hwMap.servo.get("GGR");
         GGL = hwMap.servo.get("GGL");
         // set initial positions
+        GGL.setPosition(GRABBER_LEFT[0]);
+        GGR.setPosition(GRABBER_RIGHT[0]);
 
+        // **** Arm Switch ****
+        // Define and initialize switch
+        ArmSwitch = hwMap.get(DigitalChannel.class, "touch sensor0");
+        // set the digital channel to input.
+        ArmSwitch.setMode(DigitalChannel.Mode.INPUT);
+        // false = pressed
     }
 
     /* forward is positive speed, backward is negative speed */

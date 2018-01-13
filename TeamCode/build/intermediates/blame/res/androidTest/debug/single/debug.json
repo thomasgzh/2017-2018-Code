@@ -8,24 +8,24 @@
         "source": "C:\\Users\\Bear\\.gradle\\caches\\transforms-1\\files-1.1\\FtcCommon-release.aar\\93efcaab51727b3013bb6551234a19df\\res\\layout\\analog_inputs.xml"
     },
     {
-        "merged": "C:\\Users\\Bear\\Documents\\GitHub\\2017-2018-Code\\TeamCode\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout_info_button.xml.flat",
-        "source": "C:\\Users\\Bear\\.gradle\\caches\\transforms-1\\files-1.1\\FtcCommon-release.aar\\93efcaab51727b3013bb6551234a19df\\res\\layout\\info_button.xml"
-    },
-    {
-        "merged": "C:\\Users\\Andrew\\Documents\\GitHub\\ftc_app\\2017-2018-Code\\TeamCode\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout_motor.xml.flat",
-        "source": "C:\\Users\\Andrew\\.gradle\\caches\\transforms-1\\files-1.1\\FtcCommon-release.aar\\1b3e2a85c3ca283e82f77084473f0ec5\\res\\layout\\motor.xml"
-    },
-    {
-        "merged": "C:\\Users\\Andrew\\Documents\\GitHub\\ftc_app\\2017-2018-Code\\TeamCode\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xxhdpi-v4_ic_launcher.png.flat",
-        "source": "C:\\Users\\Andrew\\Documents\\GitHub\\ftc_app\\2017-2018-Code\\FtcRobotController\\build\\intermediates\\bundles\\debug\\res\\drawable-xxhdpi-v4\\ic_launcher.png"
+        "merged": "C:\\Users\\speer\\OneDrive\\Documents\\2017-2018-Code\\TeamCode\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout_info_button.xml.flat",
+        "source": "C:\\Users\\speer\\.gradle\\caches\\transforms-1\\files-1.1\\FtcCommon-release.aar\\8b675cd23d4e49020c59d62677958154\\res\\layout\\info_button.xml"
     },
     {
         "merged": "C:\\Users\\speer\\OneDrive\\Documents\\2017-2018-Code\\TeamCode\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout_pwms.xml.flat",
         "source": "C:\\Users\\speer\\.gradle\\caches\\transforms-1\\files-1.1\\FtcCommon-release.aar\\8b675cd23d4e49020c59d62677958154\\res\\layout\\pwms.xml"
     },
     {
-        "merged": "C:\\Users\\speer\\OneDrive\\Documents\\2017-2018-Code\\TeamCode\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout_info_button.xml.flat",
-        "source": "C:\\Users\\speer\\.gradle\\caches\\transforms-1\\files-1.1\\FtcCommon-release.aar\\8b675cd23d4e49020c59d62677958154\\res\\layout\\info_button.xml"
+        "merged": "C:\\Users\\Andrew\\Documents\\GitHub\\ftc_app\\2017-2018-Code\\TeamCode\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xxhdpi-v4_ic_launcher.png.flat",
+        "source": "C:\\Users\\Andrew\\Documents\\GitHub\\ftc_app\\2017-2018-Code\\FtcRobotController\\build\\intermediates\\bundles\\debug\\res\\drawable-xxhdpi-v4\\ic_launcher.png"
+    },
+    {
+        "merged": "C:\\Users\\Andrew\\Documents\\GitHub\\ftc_app\\2017-2018-Code\\TeamCode\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout_motor.xml.flat",
+        "source": "C:\\Users\\Andrew\\.gradle\\caches\\transforms-1\\files-1.1\\FtcCommon-release.aar\\1b3e2a85c3ca283e82f77084473f0ec5\\res\\layout\\motor.xml"
+    },
+    {
+        "merged": "C:\\Users\\Bear\\Documents\\GitHub\\2017-2018-Code\\TeamCode\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout_info_button.xml.flat",
+        "source": "C:\\Users\\Bear\\.gradle\\caches\\transforms-1\\files-1.1\\FtcCommon-release.aar\\93efcaab51727b3013bb6551234a19df\\res\\layout\\info_button.xml"
     },
     {
         "merged": "C:\\Users\\ablauch\\Documents\\GitHub\\2017-2018-Code\\TeamCode\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout_matrices.xml.flat",

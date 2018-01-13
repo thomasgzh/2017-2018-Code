@@ -8,6 +8,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 //naming the teleop thing
 @TeleOp(name="ArmCode Test", group="Drive")
@@ -22,7 +23,7 @@ GamepadEdge egamepad2;
 @Override
 public void runOpMode() throws InterruptedException {
     //declaring all my variables in one place for my sake
-
+    double upper_arm;
 
     /* Initialize the hardware variables.
      * The init() method of the hardware class does all the work here
@@ -50,34 +51,27 @@ public void runOpMode() throws InterruptedException {
         telemetry.addData("Version", "1.0");
         telemetry.addData("ULpos", robot.UL.getCurrentPosition());
         telemetry.addData("URpos", robot.UR.getCurrentPosition());
-        if (gamepad1.dpad_up) {
-            telemetry.addData("Lower","pos");
-            robot.UR.setPower(0.2);
-//            robot.UL.setPower(0.7);
+        telemetry.addData("Switch", robot.ArmSwitch.getState());
+
+        /********** TeleOp code **********/
+        if (gamepad2.dpad_up) {
+            upper_arm = 0.2;
         } else {
-            if (gamepad1.dpad_down) {
-                telemetry.addData("Lower", "neg");
-                robot.UR.setPower(-0.2);
-//                robot.UL.setPower(-0.5);
+            if (gamepad2.dpad_down) {
+                upper_arm = -0.2;
             } else {
-                robot.UR.setPower(0.0);
-//                robot.UL.setPower(0.0);
+                upper_arm = 0.0;
             }
         }
-        if (gamepad1.dpad_right) {
-            telemetry.addData("Lower","pos");
-//            robot.UR.setPower(0.7);
-            robot.UL.setPower(0.2);
-        } else {
-            if (gamepad1.dpad_left) {
-                telemetry.addData("Lower", "neg");
-//                robot.UR.setPower(-0.5);
-                robot.UL.setPower(-0.2);
-            } else {
-//                robot.UR.setPower(0.0);
-                robot.UL.setPower(0.0);
-            }
+        if (robot.ArmSwitch.getState()==false) {
+            /* when switch is closed reset encoder positions */
+            robot.UR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            robot.UL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            if (upper_arm < 0.0) upper_arm = 0.0;
         }
+        robot.UR.setPower(upper_arm);
+        robot.UL.setPower(upper_arm);
+
 //        if (gamepad1.dpad_right) {
 //            telemetry.addData("Upper","pos");
 //            robot.UR.setTargetPosition(robot.UR.getCurrentPosition());

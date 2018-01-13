@@ -1,19 +1,19 @@
 [
     {
-        "merged": "C:\\Users\\Bear\\Documents\\GitHub\\2017-2018-Code\\FtcRobotController\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout_activity_blocks.xml.flat",
-        "source": "C:\\Users\\Bear\\.gradle\\caches\\transforms-1\\files-1.1\\Blocks-release.aar\\bcc19ded7f5943c66efab185b28aa0bd\\res\\layout\\activity_blocks.xml"
-    },
-    {
         "merged": "C:\\Users\\Bear\\Documents\\GitHub\\2017-2018-Code\\FtcRobotController\\build\\intermediates\\res\\merged\\androidTest\\debug\\menu_menu_server.xml.flat",
         "source": "C:\\Users\\Bear\\.gradle\\caches\\transforms-1\\files-1.1\\Blocks-release.aar\\bcc19ded7f5943c66efab185b28aa0bd\\res\\menu\\menu_server.xml"
     },
     {
-        "merged": "C:\\Users\\Bear\\Documents\\GitHub\\2017-2018-Code\\FtcRobotController\\build\\intermediates\\res\\merged\\androidTest\\debug\\xml_maxmodules.xml.flat",
-        "source": "C:\\Users\\Bear\\.gradle\\caches\\transforms-1\\files-1.1\\FtcCommon-release.aar\\93efcaab51727b3013bb6551234a19df\\res\\xml\\maxmodules.xml"
+        "merged": "C:\\Users\\Bear\\Documents\\GitHub\\2017-2018-Code\\FtcRobotController\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout_activity_blocks.xml.flat",
+        "source": "C:\\Users\\Bear\\.gradle\\caches\\transforms-1\\files-1.1\\Blocks-release.aar\\bcc19ded7f5943c66efab185b28aa0bd\\res\\layout\\activity_blocks.xml"
     },
     {
         "merged": "C:\\Users\\speer\\OneDrive\\Documents\\2017-2018-Code\\FtcRobotController\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xxhdpi-v4_ic_launcher.png.flat",
         "source": "C:\\Users\\speer\\OneDrive\\Documents\\2017-2018-Code\\FtcRobotController\\build\\intermediates\\bundles\\debug\\res\\drawable-xxhdpi-v4\\ic_launcher.png"
+    },
+    {
+        "merged": "C:\\Users\\Bear\\Documents\\GitHub\\2017-2018-Code\\FtcRobotController\\build\\intermediates\\res\\merged\\androidTest\\debug\\xml_maxmodules.xml.flat",
+        "source": "C:\\Users\\Bear\\.gradle\\caches\\transforms-1\\files-1.1\\FtcCommon-release.aar\\93efcaab51727b3013bb6551234a19df\\res\\xml\\maxmodules.xml"
     },
     {
         "merged": "C:\\Users\\Bear\\Documents\\GitHub\\2017-2018-Code\\FtcRobotController\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout_activity_program_and_manage.xml.flat",

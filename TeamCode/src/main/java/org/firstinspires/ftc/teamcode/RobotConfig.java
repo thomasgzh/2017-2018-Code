@@ -95,8 +95,7 @@ public class RobotConfig
         // reverse those motors
         FR.setDirection(DcMotor.Direction.REVERSE);
         BR.setDirection(DcMotor.Direction.REVERSE);
- 
-        // Set all motors to zero power
+         // Set all motors to zero power
         FL.setPower(0);
         FR.setPower(0);
         BL.setPower(0);
@@ -115,13 +114,11 @@ public class RobotConfig
         LR   = hwMap.dcMotor.get("LR");
         // reverse those motors
         UR.setDirection(DcMotor.Direction.REVERSE);
-
         // Set all motors to zero power
         LL.setPower(0);
         LR.setPower(0);
         UL.setPower(0);
         UR.setPower(0);
-
         // Set all motors to run with encoders.
         LR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         LL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);

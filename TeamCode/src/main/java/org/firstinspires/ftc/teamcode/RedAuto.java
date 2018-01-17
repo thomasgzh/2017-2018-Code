@@ -1,8 +1,9 @@
 package org.firstinspires.ftc.teamcode;
-/* version history 2.0
-     -11/06/17 created autonomous practice
-               add methods for basic movement (forward/backward, left/right, rotate left/right)
+
+/**
+ * Created by Andrew on 1/15/2018.
  */
+
 
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -12,8 +13,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 
 //naming the teleop thing
-@Autonomous(name="Auto Test", group ="Drive")
-public class AutoTest extends LinearOpMode {
+@Autonomous(name="Red Auto", group ="Drive")
+public class RedAuto extends LinearOpMode {
+
 
     RobotConfig robot = new RobotConfig();
     private ElapsedTime runtime = new ElapsedTime();
@@ -27,7 +29,7 @@ public class AutoTest extends LinearOpMode {
     //mode 'stuff'
     //modes lists which steps and in what order to accomplish them
     int mode = 0;
-    int [] modes = {2, 3, 7, 8, 9, 11, 12, 13, 100};
+    int[] modes = {2, 3, 7, 8, 9, 11, 12, 13, 100};
 
     //time based variables
     double lastReset = 0;
@@ -40,9 +42,9 @@ public class AutoTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         //declaring all my variables in one place for my sake
-        final double     MOVE_SPEED = 0.5;
-        final double     ROTATE_SPEED = 0.3;
-        final double     TEST_TIME = 2.0;
+        final double MOVE_SPEED = 0.5;
+        final double ROTATE_SPEED = 0.3;
+        final double TEST_TIME = 2.0;
 
         /* Initialize the hardware variables.
          * The init() method of the hardware class does all the work here
@@ -117,7 +119,7 @@ public class AutoTest extends LinearOpMode {
                         mode++;
                         resetClock();
                     }
-                    robot.RotateLeft(MOVE_SPEED);
+                    robot.RotateRight(MOVE_SPEED);
                     break;
 
                 case 9:
@@ -153,82 +155,13 @@ public class AutoTest extends LinearOpMode {
                         mode++;
                         resetClock();
                     }
-                    robot.RotateRight(ROTATE_SPEED);
+                    robot.RotateLeft(ROTATE_SPEED);
                     break;
 
                 //MODE 14: Bonus glyphs! (if time)
 
 
             }  // end of switch
-
-            /*
-            //and now, the fun stuff
-
-            // Test forwards movement
-            robot.MoveForward(MOVE_SPEED);
-            runtime.reset();
-            while (opModeIsActive() && (runtime.seconds() < TEST_TIME)) {
-                telemetry.addData("Move Forward", "Leg 1: %2.5f S Elapsed", runtime.seconds());
-                telemetry.update();
-            }
-            robot.MoveStop();
-
-            // Test backwards movement
-            robot.MoveBackward(MOVE_SPEED);
-            runtime.reset();
-            while (opModeIsActive() && (runtime.seconds() < TEST_TIME)) {
-                telemetry.addData("Move Backward", "Leg 1: %2.5f S Elapsed", runtime.seconds());
-                telemetry.update();
-            }
-            robot.MoveStop();
-
-            // Test left movement
-            robot.MoveLeft(MOVE_SPEED);
-            runtime.reset();
-            while (opModeIsActive() && (runtime.seconds() < TEST_TIME)) {
-                telemetry.addData("Move Left", "Leg 1: %2.5f S Elapsed", runtime.seconds());
-                telemetry.update();
-            }
-            robot.MoveStop();
-
-            // Test right movement
-            robot.MoveRight(MOVE_SPEED);
-            runtime.reset();
-            while (opModeIsActive() && (runtime.seconds() < TEST_TIME)) {
-                telemetry.addData("Move Right", "Leg 1: %2.5f S Elapsed", runtime.seconds());
-                telemetry.update();
-            }
-            robot.MoveStop();
-
-            // Test rotate left
-            robot.RotateLeft(ROTATE_SPEED);
-            runtime.reset();
-            while (opModeIsActive() && (runtime.seconds() < TEST_TIME)) {
-                telemetry.addData("Rotate Left", "Leg 1: %2.5f S Elapsed", runtime.seconds());
-                telemetry.update();
-            }
-            robot.MoveStop();
-
-            // Test rotate right
-            robot.RotateRight(ROTATE_SPEED);
-            runtime.reset();
-            while (opModeIsActive() && (runtime.seconds() < TEST_TIME)) {
-                telemetry.addData("Rotate Right", "Leg 1: %2.5f S Elapsed", runtime.seconds());
-                telemetry.update();
-            }
-            robot.MoveStop();
-
-            // Send telemetry message to signify robot waiting;
-            telemetry.addData("Status", "Wait for end of autonomous");    //
-            telemetry.update();
-            while (opModeIsActive()) {
-            }
-*/
-
-
-
-
-
         }
     }
 }

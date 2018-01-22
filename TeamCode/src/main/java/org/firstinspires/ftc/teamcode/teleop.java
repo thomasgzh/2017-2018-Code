@@ -116,6 +116,19 @@ public class teleop extends LinearOpMode {
             robot.BL.setPower(back_left / 2 * speed * reverse);
             robot.BR.setPower(back_right / 2 * speed * reverse);
 
+            if (gamepad1.dpad_left){
+                robot.MoveLeft(speed);
+            }
+            if (gamepad1.dpad_right){
+                robot.MoveRight(speed);
+            }
+            if (gamepad1.dpad_up){
+                robot.MoveForward(speed);
+            }
+            if (gamepad1.dpad_down){
+                robot.MoveBackward(speed);
+            }
+
             /*for later- joysticks have a max input of 1 or -1. divide it by 3,
               which leaves us with a max input of 0.333333. motors have a max input
                of one. i'm not quite sure if this is perfectly true because i havent tested,

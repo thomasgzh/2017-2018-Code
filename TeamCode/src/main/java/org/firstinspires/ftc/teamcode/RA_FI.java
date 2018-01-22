@@ -67,7 +67,22 @@ public class RA_FI extends LinearOpMode {
     //mode 'stuff'
     //modes lists which steps and in what order to accomplish them
     int mode = 0;
-    int [] modes = {2, 3, 10, 21, 11, 12, 13, 20, 100};
+    int [] modes = {2, 3, 9, 22, 10, 21, 11, 12, 13, 20, 100};
+    //1:  Check Vumark
+    //2:  Close servos on preloaded glyph
+    //3:  Lock arm in resting position
+    //4-8 to be added if advance past state to score jewel
+    //9:  Back off cryptobox
+    //10: Drive in front of cryptobox
+    //11: Drive into cryptobox
+    //12: Release glyph
+    //13: Back up from cryptobox
+    //14: Turn 135 degrees (left for red, right for blue)
+    //15: Bonus glyphs! (if time)
+    //20: Turn 180 degrees
+    //21: Turn 90 degrees (right for red, left for blue)
+    //22: Turn 90 degrees (left for red, right for blue)
+    //31: Turn 90 degrees (right for red, left for blue) (for BI)
 
     //start position variables
     boolean FI;
@@ -149,7 +164,14 @@ public class RA_FI extends LinearOpMode {
 
                 //MODE 4-8 to be added if advance past state to score jewel
 
-                //MODE 9: Drive off cryptobox (for FI)
+                //MODE 9: Back off cryptobox
+                case 9:
+                    if (now > 0.5) {
+                        mode++;
+                        resetClock();
+                    }
+                    robot.MoveBackward(MOVE_SPEED);
+                    break;
 
                 //MODE 10: Drive in front of cryptobox
                 case 10:

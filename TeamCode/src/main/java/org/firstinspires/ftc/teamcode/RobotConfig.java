@@ -88,10 +88,10 @@ public class RobotConfig
 
         // **** Mecanum drive ****
         // Define and Initialize Motors
-        FL   = hwMap.dcMotor.get("FL");
-        FR  = hwMap.dcMotor.get("FR");
-        BL   = hwMap.dcMotor.get("BL");
-        BR   = hwMap.dcMotor.get("BR");
+        FL = hwMap.dcMotor.get("FL");
+        FR = hwMap.dcMotor.get("FR");
+        BL = hwMap.dcMotor.get("BL");
+        BR = hwMap.dcMotor.get("BR");
         // reverse those motors
         FR.setDirection(DcMotor.Direction.REVERSE);
         BR.setDirection(DcMotor.Direction.REVERSE);
@@ -108,12 +108,13 @@ public class RobotConfig
 
         // **** Arm motors ****
         // Define and Initialize Motors
-        UL   = hwMap.dcMotor.get("UL");
-        UR  = hwMap.dcMotor.get("UR");
-        LL   = hwMap.dcMotor.get("LL");
-        LR   = hwMap.dcMotor.get("LR");
+        UL = hwMap.dcMotor.get("UL");
+        UR = hwMap.dcMotor.get("UR");
+        LL = hwMap.dcMotor.get("LL");
+        LR = hwMap.dcMotor.get("LR");
         // reverse those motors
         UR.setDirection(DcMotor.Direction.REVERSE);
+        LR.setDirection(DcMotor.Direction.REVERSE);
         // Set all motors to zero power
         LL.setPower(0);
         LR.setPower(0);

@@ -72,8 +72,8 @@ public class RA_FI extends LinearOpMode {
     //2:  Close servos on preloaded glyph
     //3:  Lock arm in resting position
     //4-8 to be added if advance past state to score jewel
-    //9:  Back off cryptobox
-    //10: Drive in front of cryptobox
+    //9:  Back off stone
+    //10: Drive in front of/towards cryptobox (BI/FI)
     //11: Drive into cryptobox
     //12: Release glyph
     //13: Back up from cryptobox
@@ -82,7 +82,8 @@ public class RA_FI extends LinearOpMode {
     //20: Turn 180 degrees
     //21: Turn 90 degrees (right for red, left for blue)
     //22: Turn 90 degrees (left for red, right for blue)
-    //31: Turn 90 degrees (right for red, left for blue) (for BI)
+    //31: Turn 90 degrees (right for red, left for blue) (BI)
+    //32: Turn 90 degrees (left for red, right for blue) (BI)
 
     //start position variables
     boolean FI;
@@ -164,7 +165,7 @@ public class RA_FI extends LinearOpMode {
 
                 //MODE 4-8 to be added if advance past state to score jewel
 
-                //MODE 9: Back off cryptobox
+                //MODE 9: Back off stone
                 case 9:
                     if (now > 0.5) {
                         mode++;

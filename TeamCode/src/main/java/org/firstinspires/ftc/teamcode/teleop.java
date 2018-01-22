@@ -110,23 +110,25 @@ public class teleop extends LinearOpMode {
             back_left += -gamepad1.left_stick_x * 2;
             back_right += gamepad1.left_stick_x * 2;
 
-            //takes all those values, divides
-            robot.FR.setPower(front_right / 2 * speed * reverse);
-            robot.FL.setPower(front_left / 2 * speed * reverse);
-            robot.BL.setPower(back_left / 2 * speed * reverse);
-            robot.BR.setPower(back_right / 2 * speed * reverse);
+            front_right = front_right / 3.414 * speed * reverse;
+            front_left = front_left / 3.414 * speed * reverse;
+            back_left = back_left / 3.414 * speed * reverse;
+            back_right = back_right / 3.414 * speed * reverse;
 
             if (gamepad1.dpad_left){
                 robot.MoveLeft(speed);
-            }
-            if (gamepad1.dpad_right){
+            } else if (gamepad1.dpad_right){
                 robot.MoveRight(speed);
-            }
-            if (gamepad1.dpad_up){
+            } else if (gamepad1.dpad_up){
                 robot.MoveForward(speed);
-            }
-            if (gamepad1.dpad_down){
+            } else if (gamepad1.dpad_down){
                 robot.MoveBackward(speed);
+            } else {
+                //takes all those values, divides
+                robot.FR.setPower(front_right);
+                robot.FL.setPower(front_left);
+                robot.BL.setPower(back_left);
+                robot.BR.setPower(back_right);
             }
 
             /*for later- joysticks have a max input of 1 or -1. divide it by 3,

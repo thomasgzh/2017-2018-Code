@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 //naming the teleop thing
-    @TeleOp(name="MecanumTest", group="Drive")
+    @TeleOp(name="Mecanum Test", group="Test")
     public class MecanumTest extends LinearOpMode {
 
         RobotConfig robot = new RobotConfig();
@@ -55,8 +55,6 @@ import com.qualcomm.robotcore.hardware.Gamepad;
                 /* Update extended gamepad */
                 egamepad1.UpdateEdge();
                 egamepad2.UpdateEdge();
-
-                DpadDirection dpadDirection = GetDpadDirection(gamepad1);
 
                 boolean abutton = egamepad1.a.released;
 
@@ -122,73 +120,27 @@ import com.qualcomm.robotcore.hardware.Gamepad;
                1 / 3 * 3 * 1, equaling out to 1, our max value.
             */
 
-                //directional input with the dpad.
-                // Move() talks directly to the robot
-                // so don't set motor powers elsewhere
-                Move(dpadDirection, speed);
+                if (gamepad1.dpad_left){
+                    robot.MoveLeft(speed);
+                } else if (gamepad1.dpad_right){
+                    robot.MoveRight(speed);
+                } else if (gamepad1.dpad_up){
+                    robot.MoveForward(speed);
+                } else if (gamepad1.dpad_down){
+                    robot.MoveBackward(speed);
+                } else {
+                    //takes all those values, divides
+                    robot.FR.setPower(front_right);
+                    robot.FL.setPower(front_left);
+                    robot.BL.setPower(back_left);
+                    robot.BR.setPower(back_right);
+                }
 
                 //let the robot have a little rest, sleep is healthy
                 sleep(40);
             }
         }
 
-        // Movement code
-        private void Move(DpadDirection buttonDirection, double speed) {
-            switch (buttonDirection) {
-                case Up:
-                    robot.FR.setPower(speed);
-                    robot.FL.setPower(speed);
-                    robot.BL.setPower(speed);
-                    robot.BR.setPower(speed);
-                    break;
-                case Down:
-                    robot.FR.setPower(-speed);
-                    robot.FL.setPower(-speed);
-                    robot.BL.setPower(-speed);
-                    robot.BR.setPower(-speed);
-                    break;
-                case Left:
-                    robot.FR.setPower(speed);
-                    robot.FL.setPower(-speed);
-                    robot.BL.setPower(speed);
-                    robot.BR.setPower(-speed);
-                    break;
-                case Right:
-                    robot.FR.setPower(-speed);
-                    robot.FL.setPower(speed);
-                    robot.BL.setPower(-speed);
-                    robot.BR.setPower(speed);
-                    break;
-                case None:
-                    robot.FR.setPower(0);
-                    robot.FL.setPower(0);
-                    robot.BL.setPower(0);
-                    robot.BR.setPower(0);
-                    break;
-            }
-        }
-
-        private DpadDirection GetDpadDirection(Gamepad gamepad) {
-            if (gamepad.dpad_up) {
-                return DpadDirection.Up;
-            } else if (gamepad.dpad_down) {
-                return DpadDirection.Down;
-            } else if (gamepad.dpad_left) {
-                return DpadDirection.Left;
-            } else if (gamepad.dpad_right) {
-                return DpadDirection.Right;
-            } else {
-                return DpadDirection.None;
-            }
-        }
-
-        private enum DpadDirection {
-            None,
-            Up,
-            Down,
-            Left,
-            Right
-        }
     }
 
 

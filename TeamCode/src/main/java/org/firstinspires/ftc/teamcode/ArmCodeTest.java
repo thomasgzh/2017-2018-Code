@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 //naming the teleop thing
-@TeleOp(name="ArmCode Test", group="Drive")
+@TeleOp(name="ArmCode Test", group="Test")
 public class ArmCodeTest extends LinearOpMode {
 
     RobotConfig robot = new RobotConfig();

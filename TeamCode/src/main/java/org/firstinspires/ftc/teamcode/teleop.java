@@ -30,6 +30,7 @@ public class teleop extends LinearOpMode {
         double speed = 2.5;
         int grabber_left;
         int grabber_right;
+        double upper_arm;
 
         /* Initialize the hardware variables.
          * The init() method of the hardware class does all the work here
@@ -160,18 +161,19 @@ public class teleop extends LinearOpMode {
             robot.GGR.setPosition(robot.GRABBER_RIGHT[grabber_right]);
 
             /********** Arm code **********/
+            upper_arm = 0.0;
             if (gamepad2.dpad_up) {
-                robot.UR.setPower(0.2);
-                robot.UL.setPower(0.2);
+                upper_arm = 0.2;
             } else {
                 if (gamepad2.dpad_down) {
-                    robot.UR.setPower(-0.2);
-                    robot.UL.setPower(-0.2);
-                } else {
-                    robot.UR.setPower(0.0);
-                    robot.UL.setPower(0.0);
+                    upper_arm = -0.2;
                 }
             }
+            if (robot.ArmSwitch.getState()==false) {
+                if (upper_arm < 0.0) upper_arm = 0.0;
+            }
+            robot.UR.setPower(upper_arm);
+            robot.UL.setPower(upper_arm);
 
             //let the robot have a little rest, sleep is healthy
             sleep(40);

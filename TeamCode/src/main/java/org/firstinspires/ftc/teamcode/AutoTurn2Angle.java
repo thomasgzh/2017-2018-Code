@@ -28,6 +28,10 @@ public class AutoTurn2Angle extends LinearOpMode {
         lastReset = runtime.seconds();
     }
 
+    public void angleTurn() {
+        
+    }
+
     //mode 'stuff'
     //modes lists which steps and in what order to accomplish them
     int mode = 0;

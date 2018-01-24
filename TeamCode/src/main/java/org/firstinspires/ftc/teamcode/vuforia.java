@@ -9,6 +9,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+/********** vv copy this 1/6 vv **********/
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
@@ -22,12 +23,16 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
+/********** ^^ copy this ^^ **********/
+
 //naming the teleop thing
 @TeleOp(name="vuforia", group="Drive")
 public class vuforia extends LinearOpMode {
+
+    /********** vv copy this 2/6 vv **********/
     OpenGLMatrix lastLocation = null;
     VuforiaLocalizer vuforia;
-
+    /********** ^^ copy this ^^ **********/
 
     RobotConfig robot = new RobotConfig();
 
@@ -37,6 +42,9 @@ public class vuforia extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+
+        /********** vv copy this 3/6 vv **********/
+
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
 
@@ -47,12 +55,25 @@ public class vuforia extends LinearOpMode {
         VuforiaTrackable relicTemplate = relicTrackables.get(0);
         relicTemplate.setName("relicVuMarkTemplate"); // can help in debugging; otherwise not necessary
 
+        /********** ^^ copy this ^^ **********/
+
+
+
         telemetry.addData(">", "Press Play to start");
         telemetry.update();
                 waitForStart();
+
+
+
+        /********** vv copy this 4/6 vv **********/
         relicTrackables.activate();
+        /********** ^^ copy this ^^ **********/
+
+
         //telling the code to run until you press that giant STOP button on RC
         while (opModeIsActive()) {
+
+            /********** vv copy this 5/6 vv **********/
             RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
             if (vuMark != RelicRecoveryVuMark.UNKNOWN) {
 
@@ -86,16 +107,26 @@ public class vuforia extends LinearOpMode {
             else {
                 telemetry.addData("VuMark", "not visible");
             }
+            /********** ^^ copy this ^^ **********/
+
+
 
             telemetry.update();
 
 
         }
 
+
+
     }
+
+    /********** vv copy this 6/6 vv **********/
+
+
     String format(OpenGLMatrix transformationMatrix) {
         return (transformationMatrix != null) ? transformationMatrix.formatAsTransform() : "null";
     }
+    /********** ^^ copy this ^^ **********/
 }
 
 

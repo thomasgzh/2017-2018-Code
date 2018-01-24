@@ -39,9 +39,10 @@ public class Test123 extends LinearOpMode {
         parameters.loggingTag = "IMU";
         parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
 
+
+        telemetry.update();
         imu = hardwareMap.get(BNO055IMU.class, "imu");
-        if (imu == null)
-            return;
+
         imu.initialize(parameters);
         angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
         gravity = imu.getGravity();
@@ -79,6 +80,9 @@ public class Test123 extends LinearOpMode {
             /* Update extended gamepad */
             egamepad1.UpdateEdge();
             egamepad2.UpdateEdge();
+
+            angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+            gravity = imu.getGravity();
 
             boolean abutton = egamepad1.a.released;
 

@@ -39,7 +39,6 @@ public class Test123 extends LinearOpMode {
         parameters.loggingTag = "IMU";
         parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
 
-
         telemetry.update();
         imu = hardwareMap.get(BNO055IMU.class, "imu");
 

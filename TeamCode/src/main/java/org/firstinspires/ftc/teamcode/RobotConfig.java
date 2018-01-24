@@ -61,9 +61,6 @@ public class RobotConfig
     /* Arm sensors */
     public DigitalChannel ArmSwitch = null;         /* home switch */
     public AnalogInput UpperArmPot = null;          /* potentiometers */
-    public boolean ArmHomed = false;                /* has the arm been home */
-    public double UpperArmHomePosition = 0;         /* position value at home */
-    public double UpperArmPosition = 0;             /* current position relative to home */
 
 
     /* Public members

@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cCompassSensor;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
+import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.CompassSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -57,10 +58,13 @@ public class RobotConfig
     public DcMotor  UR   = null;
     public DcMotor  UL = null;
 
-    /* Arm position switch */
-    public DigitalChannel ArmSwitch = null;
-    public int URArmHome = 0;   // change when potentionmeter added
-    public int ULArmHome = 0;
+    /* Arm sensors */
+    public DigitalChannel ArmSwitch = null;         /* home switch */
+    public AnalogInput UpperArmPot = null;          /* potentiometers */
+    public boolean ArmHomed = false;                /* has the arm been home */
+    public double UpperArmHomePosition = 0;         /* position value at home */
+    public double UpperArmPosition = 0;             /* current position relative to home */
+
 
     /* Public members
     * Devices
@@ -136,10 +140,14 @@ public class RobotConfig
 
         // **** Arm Switch ****
         // Define and initialize switch
-        ArmSwitch = hwMap.get(DigitalChannel.class, "touch sensor");
+        ArmSwitch = hwMap.digitalChannel.get("touch sensor");
         // set the digital channel to input.
         ArmSwitch.setMode(DigitalChannel.Mode.INPUT);
         // false = pressed
+
+        // **** Arm Potentiometers ****
+        // Define and initialize potentiometers
+        UpperArmPot = hwMap.analogInput.get("upper pot");
     }
 
     /* forward is positive speed, backward is negative speed */

@@ -152,13 +152,14 @@ public class BlueAuto extends LinearOpMode {
 
                 case 3:
                     if (now > 0.9) {
-                        robot.UL.setPower(0);
-                        robot.UR.setPower(0);
-                        mode++;
-                        resetClock();
+                        robot.Arm.MoveHome();
+                        // wait until home until next step
+                        if (robot.ArmSwitch.getState()==false) {
+                            mode++;
+                            resetClock();
+                        }
                     } else {
-                        robot.UL.setPower(0.2);
-                        robot.UR.setPower(0.2);
+                        robot.Arm.MoveToPosition(0.2);
                     }
                     break;
 
@@ -223,73 +224,7 @@ public class BlueAuto extends LinearOpMode {
 
             }  // end of switch
 
-            /*
-            //and now, the fun stuff
-
-            // Test forwards movement
-            robot.MoveForward(MOVE_SPEED);
-            runtime.reset();
-            while (opModeIsActive() && (runtime.seconds() < TEST_TIME)) {
-                telemetry.addData("Move Forward", "Leg 1: %2.5f S Elapsed", runtime.seconds());
-                telemetry.update();
-            }
-            robot.MoveStop();
-
-            // Test backwards movement
-            robot.MoveBackward(MOVE_SPEED);
-            runtime.reset();
-            while (opModeIsActive() && (runtime.seconds() < TEST_TIME)) {
-                telemetry.addData("Move Backward", "Leg 1: %2.5f S Elapsed", runtime.seconds());
-                telemetry.update();
-            }
-            robot.MoveStop();
-
-            // Test left movement
-            robot.MoveLeft(MOVE_SPEED);
-            runtime.reset();
-            while (opModeIsActive() && (runtime.seconds() < TEST_TIME)) {
-                telemetry.addData("Move Left", "Leg 1: %2.5f S Elapsed", runtime.seconds());
-                telemetry.update();
-            }
-            robot.MoveStop();
-
-            // Test right movement
-            robot.MoveRight(MOVE_SPEED);
-            runtime.reset();
-            while (opModeIsActive() && (runtime.seconds() < TEST_TIME)) {
-                telemetry.addData("Move Right", "Leg 1: %2.5f S Elapsed", runtime.seconds());
-                telemetry.update();
-            }
-            robot.MoveStop();
-
-            // Test rotate left
-            robot.RotateLeft(ROTATE_SPEED);
-            runtime.reset();
-            while (opModeIsActive() && (runtime.seconds() < TEST_TIME)) {
-                telemetry.addData("Rotate Left", "Leg 1: %2.5f S Elapsed", runtime.seconds());
-                telemetry.update();
-            }
-            robot.MoveStop();
-
-            // Test rotate right
-            robot.RotateRight(ROTATE_SPEED);
-            runtime.reset();
-            while (opModeIsActive() && (runtime.seconds() < TEST_TIME)) {
-                telemetry.addData("Rotate Right", "Leg 1: %2.5f S Elapsed", runtime.seconds());
-                telemetry.update();
-            }
-            robot.MoveStop();
-
-            // Send telemetry message to signify robot waiting;
-            telemetry.addData("Status", "Wait for end of autonomous");    //
-            telemetry.update();
-            while (opModeIsActive()) {
-            }
-*/
-
-
-
-
+            robot.Arm.Update();
 
         }
     }

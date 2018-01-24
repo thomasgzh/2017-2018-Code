@@ -53,10 +53,10 @@ public class RobotConfig
     * UR - upper right arm DC motor
     * UL - upper left arm DC motor (must be same of UR)
     */
-    public DcMotor  LR   = null;
-    public DcMotor  LL  = null;
-    public DcMotor  UR   = null;
-    public DcMotor  UL = null;
+    private DcMotor  LR = null;
+    private DcMotor  LL = null;
+    private DcMotor  UR = null;
+    private DcMotor  UL = null;
 
     /* Arm sensors */
     public DigitalChannel ArmSwitch = null;         /* home switch */
@@ -71,8 +71,15 @@ public class RobotConfig
     */
     public Servo GGR = null;
     public Servo GGL = null;
+    /* open full, closed full, partial open */
     public double[] GRABBER_LEFT = {0.745, .255, .375};
     public double[] GRABBER_RIGHT = {0.54, .99, .895};
+
+    /* Public
+    * arm control class
+    */
+    ArmControl  Arm = new ArmControl();
+
 
     /* Local OpMode members. */
     HardwareMap hwMap  = null;
@@ -145,6 +152,9 @@ public class RobotConfig
         // **** Arm Potentiometers ****
         // Define and initialize potentiometers
         UpperArmPot = hwMap.analogInput.get("upper pot");
+
+        // **** Initialize arm control
+        Arm.init();
     }
 
     /* forward is positive speed, backward is negative speed */
@@ -192,6 +202,120 @@ public class RobotConfig
         RotateLeftRight(-speed);
     }
 
+
+    /********** Arm Control class **********/
+    public class ArmControl {
+        //declaring all my variables in one place for my sake
+        private double UpperArmHomePosition = 0;        /* position value at home */
+        private double UpperArmPosition = 0;            /* current position relative to home */
+        private double UpperArmTarget = 0;              /* target position */
+        private boolean Homed = false;
+
+        /* Constructor */
+        public ArmControl() {
+        }
+
+        /* Initialize standard Hardware interfaces */
+        public void init() {
+            UpperArmHomePosition = UpperArmPot.getVoltage();
+        }
+
+        public void MoveUp() {
+            UpperArmTarget += 0.01;
+            if (UpperArmTarget>1.0) UpperArmTarget = 1.0;
+
+            //adds a lil' version thing to the telemetry so you know you're using the right version
+//            telemetry.addLine("MoveUp");
+        }
+
+        public void MoveDown() {
+            UpperArmTarget -= 0.01;
+            if (UpperArmTarget<0.0) UpperArmTarget = 0.0;
+
+            //adds a lil' version thing to the telemetry so you know you're using the right version
+//            telemetry.addLine("MoveDown");
+        }
+
+        public void MoveHome() {
+            UpperArmTarget = 0.0;
+
+            //adds a lil' version thing to the telemetry so you know you're using the right version
+//            telemetry.addLine("MoveHome");
+        }
+
+        public void HoldCurrentPosition() {
+            UpperArmTarget = UpperArmPosition;
+
+            //adds a lil' version thing to the telemetry so you know you're using the right version
+//            telemetry.addLine("Hold");
+        }
+
+        public void MoveToPosition(double target) {
+            UpperArmTarget = target;
+            if (UpperArmTarget>1.0) UpperArmTarget = 1.0;
+            if (UpperArmTarget<0.0) UpperArmTarget = 0.0;
+
+            //adds a lil' version thing to the telemetry so you know you're using the right version
+//            telemetry.addLine("MoveTo");
+        }
+
+        /* Call this method when you want to update the arm motors */
+        public void Update() {
+            boolean at_home;                 /* home switch active */
+            double upper_arm;
+            double error;
+            final double UPPER_ARM_HOLD_POWER = 0.01;
+            final double UPPER_ARM_POWER = 0.2;
+
+            /* Check to see if on home switch */
+            at_home = false;
+            if (ArmSwitch.getState()==false) {
+                /* arm in home position */
+                at_home = true;
+                Homed = true;
+                UpperArmHomePosition = UpperArmPot.getVoltage();
+
+                //adds a lil' version thing to the telemetry so you know you're using the right version
+//                telemetry.addLine("At Home");
+            }
+
+            /* determine current position relative to home */
+            UpperArmPosition = UpperArmPot.getVoltage() - UpperArmHomePosition;
+
+            //adds a lil' version thing to the telemetry so you know you're using the right version
+//            telemetry.addData("Pos/Home/Target", "%.2f %.2f %.2f",UpperArmPosition, UpperArmHomePosition,UpperArmTarget);
+
+            /*********** control code **********/
+            error = UpperArmTarget - UpperArmPosition;
+            if (error>0.2) error = 0.2;
+            if (error<-0.2) error = -0.2;
+
+            upper_arm = UPPER_ARM_POWER * 5 * error;
+            upper_arm += UPPER_ARM_HOLD_POWER*(2.5-UpperArmTarget)/2.5;
+            if (upper_arm==0.0) upper_arm = UPPER_ARM_HOLD_POWER/4;
+
+            /* prevent negative power when...
+                at home position or never homed
+            */
+            if (at_home || !Homed) {
+                if (upper_arm < 0.0) upper_arm = 0.0;
+            }
+
+            /* when target is zero ...
+            * prevent positive power
+            * zero power if close to home
+            */
+            if (UpperArmTarget<0.01) {
+                if (upper_arm > 0.0) upper_arm = 0.0;
+                if (error > -0.1) upper_arm = 0.0;
+            }
+
+//            telemetry.addData("Error/Power","%.2f %.2f", error, upper_arm);
+
+            UR.setPower(upper_arm);
+            UL.setPower(upper_arm);
+        }
+    }
 
     /***
      *

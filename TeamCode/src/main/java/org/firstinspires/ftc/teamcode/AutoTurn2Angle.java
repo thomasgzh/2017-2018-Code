@@ -24,13 +24,12 @@ public class AutoTurn2Angle extends LinearOpMode {
 
 
     //clock reseter
-    public void resetClock() {
-        lastReset = runtime.seconds();
+    public void resetClock() {lastReset = runtime.seconds();
     }
 
-    public void angleTurn() {
-        
-    }
+    //public void angleTurn(double) {
+
+
 
     //mode 'stuff'
     //modes lists which steps and in what order to accomplish them

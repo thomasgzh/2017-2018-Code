@@ -208,7 +208,7 @@ public class AutoTurn2Angle extends LinearOpMode {
                         robot.MoveStop();
                     }
                     break;
-                    
+
             }  // end of switch
 
             robot.Arm.Update();

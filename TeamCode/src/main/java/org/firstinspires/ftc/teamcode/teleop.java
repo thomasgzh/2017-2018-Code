@@ -147,10 +147,12 @@ public class teleop extends LinearOpMode {
 
             /********** Grabber code **********/
             if (egamepad2.left_bumper.released) {
-                grabber_left = (grabber_left<2) ? grabber_left+1 : 0;
+                grabber_left = (grabber_left>0) ? grabber_left-1 : 2;
+                grabber_right = (grabber_right>0) ? grabber_right-1 : 2;
             }
             if (egamepad2.right_bumper.released) {
                 grabber_right = (grabber_right<2) ? grabber_right+1 : 0;
+                grabber_left = (grabber_left<2) ? grabber_left+1 : 0;
             }
             if (egamepad2.b.released){
                 grabber_left = 0;

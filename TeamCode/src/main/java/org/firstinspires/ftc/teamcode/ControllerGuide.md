@@ -16,24 +16,24 @@ All programs should be compatible with this guide
     X Button = N/A
     Y Buton = N/A
     B Button = N/A
-    A Button = N/A
+    A Button = Reverse Motors
     Back Button = N/A
     Start Button = N/A
     Mode Button = N/A
     (Start + A = Sets Controller 1)
 
  >> Gamepad 2 (Manipulator) controls
-    Left Trigger = Left Grabber Open
-    Left Button = Left Grabber Close
-    Right Trigger = Right Grabber Open
-    Right Button = Right Grabber Close
+    Left Trigger = Toggle Grabbers Backward
+    Left Button = N/A
+    Right Trigger = Toggle Grabbers Forward
+    Right Button = N/A
     D-Pad = Crypto Box Position (down=1, left=2, right=3, up=4)
     Left Stick = Arm 1
     Right Stick = Arm 2
-    X Button = N/A
+    X Button = Open Grabbers
     Y Buton = Relic
-    B Button = N/A
-    A Button = Pickup
+    B Button = Close Grabbers
+    A Button = N/A
     Back Button = N/A
     Start Button = N/A
     Mode Button = N/A

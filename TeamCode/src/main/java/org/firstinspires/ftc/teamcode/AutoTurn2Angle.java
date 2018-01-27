@@ -34,7 +34,7 @@ public class AutoTurn2Angle extends LinearOpMode {
     //mode 'stuff'
     //modes lists which steps and in what order to accomplish them
     int mode = 0;
-    int [] modes = {1, 100};
+    int [] modes = {0, 1, 2, 3, 4, 5, 2, 6, 4, 7, 2, 100};
 
     //time based variables
     double lastReset = 0;
@@ -48,12 +48,15 @@ public class AutoTurn2Angle extends LinearOpMode {
     //servo1
     //servo2
 
+    //vvIMPORTANT
     BNO055IMU imu;
     Orientation angles;
     Acceleration gravity;
+    //^^IMPORTANT
 
     @Override
     public void runOpMode() throws InterruptedException {
+        //vvIMPORTANT
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
         parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
@@ -68,14 +71,12 @@ public class AutoTurn2Angle extends LinearOpMode {
         imu.initialize(parameters);
         angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
         gravity = imu.getGravity();
+        //^^IMPORTANT
 
         //declaring all my variables in one place for my sake
         final double MOVE_SPEED = 0.5;
-        final double ROTATE_SPEED = 0.3;
+        final double ROTATE_SPEED = 0.4;
         final double TEST_TIME = 2.0;
-
-        startAngle = angles.firstAngle;
-        currentAngle = angles.firstAngle;
 
         /* Initialize the hardware variables.
          * The init() method of the hardware class does all the work here
@@ -89,131 +90,125 @@ public class AutoTurn2Angle extends LinearOpMode {
         //waits for that giant PLAY button to be pressed on RC
         waitForStart();
 
-        resetClock();
+        resetClock();//vvIMPORTANT
+        startAngle = angles.firstAngle;
+        //^^IMPORTANT
 
         // telling the code to run until you press that giant STOP button on RC
         // include opModeIsActive in all while loops so that STOP button terminates all actions
         while (opModeIsActive() && modes[mode] < 100) {
 
+            //vvIMPORTANT
+            angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+            gravity = imu.getGravity();
+            //^^IMPORTANT
+            //vvless important
             telemetry.addData("IMUangle", angles);
             telemetry.addData("IMUgravity", gravity);
             telemetry.addData("Start Angle", startAngle);
             telemetry.addData("Current Angle", currentAngle);
             telemetry.addData("Turn Angle", turnAngle);
+            telemetry.addData("mode", modes[mode]);
             telemetry.update();
+            //^^less important
 
             //keeps now up to date
             now = runtime.seconds() - lastReset;
 
+            //vvIMPORTANT
             currentAngle = angles.firstAngle;
-
             turnAngle = startAngle-currentAngle;
 
             if (turnAngle > 180)
-                turnAngle -= 180;
+                turnAngle -= 360;
             if (turnAngle < -180)
-                turnAngle += 180;
-            //MODE 1: Check Vumark
-            /*if (modes[mode] == 1) {
-                if (now > 1) {
-                    mode++;
-                    resetClock();
-                }
+                turnAngle += 360;
+            //^^IMPORTANT
 
-                //Vuforia check
-            }*/
-
-            //MODE 2: Lock arm in resting pos
             switch (modes[mode]) {
 
-                case 1:
+                case 0:
+                    mode++;
+                    resetClock();
                     startAngle = angles.firstAngle;
-                    if (turnAngle < 90){
-                        robot.RotateRight(ROTATE_SPEED);
-                    }
+                    robot.MoveStop();
+                    break;
 
+                //right turn example. use 5 less then the degrees you want
+                case 1:
+                    robot.RotateRight(ROTATE_SPEED);
+                    if (turnAngle > 85) {
+                        //include with each mode. <-- means what is added to this requirement
+                        mode++;
+                        resetClock();
+                        startAngle = angles.firstAngle;//<--
+                        robot.MoveStop();//<--
+                    }
+                    break;
 
                 case 2:
                     robot.GGL.setPosition(robot.GRABBER_LEFT[1]);
                     robot.GGR.setPosition(robot.GRABBER_RIGHT[1]);
-                    if (now > 0.5) {
+                    if (now > 1.0) {
                         mode++;
                         resetClock();
+                        startAngle = angles.firstAngle;
+                        robot.MoveStop();
                     }
                     break;
 
+                //left turn example
                 case 3:
-                    if (now > 0.9) {
-                        robot.Arm.MoveHome();
-                        // wait until home until next step
-                        if (robot.ArmSwitch.getState() == false) {
-                            mode++;
-                            resetClock();
-                        }
-                    } else {
-                        robot.Arm.MoveToPosition(0.2);
-                    }
-                    break;
-
-                //MODE 3-7 to be added if advance past state to score jewel
-
-                //MODE 8: Grab preloaded glyph
-
-                case 7:
-                    if (now > 1) {
+                    robot.RotateLeft(ROTATE_SPEED);
+                    if (turnAngle < -85) {
                         mode++;
                         resetClock();
+                        startAngle = angles.firstAngle;
+                        robot.MoveStop();
                     }
-                    robot.MoveForward(MOVE_SPEED);
                     break;
 
-                case 8:
-                    if (now > 1) {
-                        mode++;
-                        resetClock();
-                    }
-                    robot.RotateLeft(MOVE_SPEED);
-                    break;
-
-                case 9:
-                    if (now > 0.3) {
-                        mode++;
-                        resetClock();
-                    }
-                    robot.MoveForward(MOVE_SPEED);
-                    break;
-
-                //MODE 11: Release glyph
-                case 11:
+                case 4:
                     robot.GGL.setPosition(robot.GRABBER_LEFT[0]);
                     robot.GGR.setPosition(robot.GRABBER_RIGHT[0]);
-                    if (now > 0.5) {
+                    if (now > 1.0) {
                         mode++;
                         resetClock();
+                        startAngle = angles.firstAngle;
+                        robot.MoveStop();
                     }
                     break;
 
-                //MODE 12: Back up a bit
-                case 12:
-                    if (now > 0.3) {
+                case 5:
+                    robot.RotateLeft(ROTATE_SPEED);
+                    if (turnAngle < -40) {
                         mode++;
                         resetClock();
+                        startAngle = angles.firstAngle;
+                        robot.MoveStop();
                     }
-                    robot.MoveBackward(MOVE_SPEED);
                     break;
 
-                //MODE 13: Do a 180
-                case 13:
-                    if (now > 2.4) {
-                        mode++;
-                        resetClock();
-                    }
+                case 6:
                     robot.RotateRight(ROTATE_SPEED);
+                    if (turnAngle > 40) {
+                        mode++;
+                        resetClock();
+                        startAngle = angles.firstAngle;
+                        robot.MoveStop();
+                    }
                     break;
 
-                //MODE 14: Bonus glyphs! (if time)
-
-
+                case 7:
+                    robot.RotateRight(ROTATE_SPEED);
+                    if (turnAngle > 175) {
+                        mode++;
+                        resetClock();
+                        startAngle = angles.firstAngle;
+                        robot.MoveStop();
+                    }
+                    break;
+                    
             }  // end of switch
 
             robot.Arm.Update();

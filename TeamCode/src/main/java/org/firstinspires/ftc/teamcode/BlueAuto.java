@@ -5,12 +5,15 @@ package org.firstinspires.ftc.teamcode;
  */
 
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
@@ -35,24 +38,25 @@ public class BlueAuto extends LinearOpMode {
     RobotConfig robot = new RobotConfig();
     private ElapsedTime runtime = new ElapsedTime();
 
+    //mode 'stuff'
+    //modes lists which steps and in what order to accomplish them
+    int mode = 0;
+    int [] modes = {1, 3, 7, 8, 9, 11, 12, 13, 100};
+
+    //time based variables
+    double lastReset = 0;
+    double now = 0;
+
+    /* IMU objects */
+    BNO055IMU imu;
+    Orientation angles;
+
 
     //clock reseter
     public void resetClock() {
         lastReset = runtime.seconds();
     }
 
-    //mode 'stuff'
-    //modes lists which steps and in what order to accomplish them
-    int mode = 0;
-    int [] modes = {2, 3, 7, 8, 9, 11, 12, 13, 100};
-
-    //time based variables
-    double lastReset = 0;
-    double now = 0;
-
-    //servo initialization
-    //servo1
-    //servo2
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -61,17 +65,32 @@ public class BlueAuto extends LinearOpMode {
         final double     ROTATE_SPEED = 0.3;
         final double     TEST_TIME = 2.0;
 
+        // Send telemetry message to signify robot waiting;
+        telemetry.addLine("Blue Auto");    //
+
         /* Initialize the hardware variables.
          * The init() method of the hardware class does all the work here
          */
         robot.init(hardwareMap);
 
+        /* initialize IMU */
         // Send telemetry message to signify robot waiting;
-        telemetry.addData("Status", "Wait for start");    //
-        telemetry.update();
+        telemetry.addLine("Init imu");    //
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample opmode
+        parameters.loggingEnabled = true;
+        parameters.loggingTag = "IMU";
+        parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
+        imu.initialize(parameters);
+        angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+
+        // Send telemetry message to signify robot waiting;
+        telemetry.addLine("Init VuForia");    //
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
-
         parameters.vuforiaLicenseKey = "AQepDXf/////AAAAGcvzfI2nd0MHnzIGZ7JtquJk3Yx64l7jwu6XImRkNmBkhjVdVcI47QZ7xQq0PvugAb3+ppJxL4n+pNcnt1+PYpQHVETBEPk5WkofitFuYL8zzXEbs7uLY0dMUepnOiJcLSiVISKWWDyc8BJkKcK3a/KmB2sHaE1Lp2LJ+skW43+pYeqtgJE8o8xStowxPJB0OaSFXXw5dGUurK+ykmPam5oE+t+6hi9o/pO1EOHZFoqKl6tj/wsdu9+3I4lqGMsRutKH6s1rKLfip8s3MdlxqnlRKFmMDFewprELOwm+zpjmrJ1cqdlzzWQ6i/EMOzhcOzrPmH3JiH4CocA/Kcck12IuqvN4l6iAIjntb8b0G8zL";
         parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK  ;
         this.vuforia = ClassFactory.createVuforiaLocalizer(parameters);
@@ -83,6 +102,7 @@ public class BlueAuto extends LinearOpMode {
         telemetry.update();
         //waits for that giant PLAY button to be pressed on RC
         waitForStart();
+
         relicTrackables.activate();
         resetClock();
 

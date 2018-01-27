@@ -40,6 +40,10 @@ public class AutoTurn2Angle extends LinearOpMode {
     double lastReset = 0;
     double now = 0;
 
+    float startAngle;
+    float currentAngle;
+    float turnAngle;
+
     //servo initialization
     //servo1
     //servo2
@@ -70,6 +74,9 @@ public class AutoTurn2Angle extends LinearOpMode {
         final double ROTATE_SPEED = 0.3;
         final double TEST_TIME = 2.0;
 
+        startAngle = angles.firstAngle;
+        currentAngle = angles.firstAngle;
+
         /* Initialize the hardware variables.
          * The init() method of the hardware class does all the work here
          */
@@ -90,11 +97,22 @@ public class AutoTurn2Angle extends LinearOpMode {
 
             telemetry.addData("IMUangle", angles);
             telemetry.addData("IMUgravity", gravity);
+            telemetry.addData("Start Angle", startAngle);
+            telemetry.addData("Current Angle", currentAngle);
+            telemetry.addData("Turn Angle", turnAngle);
             telemetry.update();
 
             //keeps now up to date
             now = runtime.seconds() - lastReset;
 
+            currentAngle = angles.firstAngle;
+
+            turnAngle = startAngle-currentAngle;
+
+            if (turnAngle > 180)
+                turnAngle -= 180;
+            if (turnAngle < -180)
+                turnAngle += 180;
             //MODE 1: Check Vumark
             /*if (modes[mode] == 1) {
                 if (now > 1) {
@@ -109,6 +127,10 @@ public class AutoTurn2Angle extends LinearOpMode {
             switch (modes[mode]) {
 
                 case 1:
+                    startAngle = angles.firstAngle;
+                    if (turnAngle < 90){
+                        robot.RotateRight(ROTATE_SPEED);
+                    }
 
 
                 case 2:

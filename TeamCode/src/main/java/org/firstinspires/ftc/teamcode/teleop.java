@@ -66,11 +66,7 @@ public class teleop extends LinearOpMode {
 
             /******Telemetry*****/
             //adds a lil' version thing to the telemetry so you know you're using the right version
-            telemetry.addData("Version", "2.2");
-            telemetry.addData("BRmotor", robot.BR.getPower());
-            telemetry.addData("BLmotor", robot.BL.getPower());
-            telemetry.addData("FLmotor", robot.FL.getPower());
-            telemetry.addData("FRmotor", robot.FR.getPower());
+            telemetry.addData("Version", "2.3");
             telemetry.addData("Speed", speed);
             telemetry.update();
 
@@ -147,12 +143,10 @@ public class teleop extends LinearOpMode {
 
             /********** Grabber code **********/
             if (egamepad2.left_bumper.released) {
-                grabber_left = (grabber_left>0) ? grabber_left-1 : 2;
-                grabber_right = (grabber_right>0) ? grabber_right-1 : 2;
+                grabber_left = (grabber_left<2) ? grabber_left+1 : 0;
             }
             if (egamepad2.right_bumper.released) {
                 grabber_right = (grabber_right<2) ? grabber_right+1 : 0;
-                grabber_left = (grabber_left<2) ? grabber_left+1 : 0;
             }
             if (egamepad2.b.released){
                 grabber_left = 0;
@@ -173,13 +167,13 @@ public class teleop extends LinearOpMode {
                 robot.Arm.MoveToPosition(0.20);
             }
             if (gamepad2.dpad_right) {
-                robot.Arm.MoveToPosition(0.40);
+                robot.Arm.MoveToPosition(0.30);
             }
             if (gamepad2.dpad_up) {
-                robot.Arm.MoveToPosition(0.60);
+                robot.Arm.MoveToPosition(0.40);
             }
 
-            robot.Arm.Update();
+            robot.Arm.Update(this);
 
             //let the robot have a little rest, sleep is healthy
             sleep(40);

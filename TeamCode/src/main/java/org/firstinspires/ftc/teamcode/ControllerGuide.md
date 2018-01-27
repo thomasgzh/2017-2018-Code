@@ -23,9 +23,9 @@ All programs should be compatible with this guide
     (Start + A = Sets Controller 1)
 
  >> Gamepad 2 (Manipulator) controls
-    Left Trigger = Toggle Grabbers Backward
+    Left Trigger = Toggle Left Grabber Forward
     Left Button = N/A
-    Right Trigger = Toggle Grabbers Forward
+    Right Trigger = Toggle Right Grabber Forward
     Right Button = N/A
     D-Pad = Crypto Box Position (down=1, left=2, right=3, up=4)
     Left Stick = Arm 1

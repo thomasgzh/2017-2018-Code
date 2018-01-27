@@ -162,7 +162,7 @@ public class RedAuto extends LinearOpMode {
                 //MODE 14: Bonus glyphs! (if time)
             }  // end of switch
 
-            robot.Arm.Update();
+            robot.Arm.Update(this);
 
         }
     }

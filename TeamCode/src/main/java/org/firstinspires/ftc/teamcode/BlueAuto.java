@@ -162,7 +162,7 @@ public class BlueAuto extends LinearOpMode {
 
             }  // end of switch
 
-            robot.Arm.Update();
+            robot.Arm.Update(this);
 
         }
     }

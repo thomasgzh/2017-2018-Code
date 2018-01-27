@@ -41,7 +41,7 @@ public class BlueAuto extends LinearOpMode {
     //mode 'stuff'
     //modes lists which steps and in what order to accomplish them
     int mode = 0;
-    int [] modes = {1, 3, 7, 8, 9, 11, 12, 13, 100};
+    int [] modes = {-1, 0, 1, 0, 2, 0, 3, 0, 4, 0, 5, 0, 6, 0, 100};
 
     //time based variables
     double lastReset = 0;
@@ -50,7 +50,7 @@ public class BlueAuto extends LinearOpMode {
     /* IMU objects */
     BNO055IMU imu;
     Orientation angles;
-
+    double startAngle;
 
     //clock reseter
     public void resetClock() {
@@ -61,9 +61,11 @@ public class BlueAuto extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         //declaring all my variables in one place for my sake
-        final double     MOVE_SPEED = 0.5;
-        final double     ROTATE_SPEED = 0.3;
-        final double     TEST_TIME = 2.0;
+        final double    MOVE_SPEED = 0.5;
+        final double    STRAFFE_SPEED = 0.5;
+        final double    ROTATE_SPEED = 0.5;
+        double          turnAngle;
+        double          currentAngle;
 
         // Send telemetry message to signify robot waiting;
         telemetry.addLine("Blue Auto");    //
@@ -76,92 +78,171 @@ public class BlueAuto extends LinearOpMode {
         /* initialize IMU */
         // Send telemetry message to signify robot waiting;
         telemetry.addLine("Init imu");    //
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
-        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-        parameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample opmode
-        parameters.loggingEnabled = true;
-        parameters.loggingTag = "IMU";
-        parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
+        BNO055IMU.Parameters imu_parameters = new BNO055IMU.Parameters();
+        imu_parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        imu_parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        imu_parameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample opmode
+        imu_parameters.loggingEnabled = true;
+        imu_parameters.loggingTag = "IMU";
+        imu_parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
         imu = hardwareMap.get(BNO055IMU.class, "imu");
-        imu.initialize(parameters);
+        imu.initialize(imu_parameters);
         angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+
 
         // Send telemetry message to signify robot waiting;
         telemetry.addLine("Init VuForia");    //
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
-        parameters.vuforiaLicenseKey = "AQepDXf/////AAAAGcvzfI2nd0MHnzIGZ7JtquJk3Yx64l7jwu6XImRkNmBkhjVdVcI47QZ7xQq0PvugAb3+ppJxL4n+pNcnt1+PYpQHVETBEPk5WkofitFuYL8zzXEbs7uLY0dMUepnOiJcLSiVISKWWDyc8BJkKcK3a/KmB2sHaE1Lp2LJ+skW43+pYeqtgJE8o8xStowxPJB0OaSFXXw5dGUurK+ykmPam5oE+t+6hi9o/pO1EOHZFoqKl6tj/wsdu9+3I4lqGMsRutKH6s1rKLfip8s3MdlxqnlRKFmMDFewprELOwm+zpjmrJ1cqdlzzWQ6i/EMOzhcOzrPmH3JiH4CocA/Kcck12IuqvN4l6iAIjntb8b0G8zL";
-        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK  ;
-        this.vuforia = ClassFactory.createVuforiaLocalizer(parameters);
+        VuforiaLocalizer.Parameters vuforia_parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
+        vuforia_parameters.vuforiaLicenseKey = "AQepDXf/////AAAAGcvzfI2nd0MHnzIGZ7JtquJk3Yx64l7jwu6XImRkNmBkhjVdVcI47QZ7xQq0PvugAb3+ppJxL4n+pNcnt1+PYpQHVETBEPk5WkofitFuYL8zzXEbs7uLY0dMUepnOiJcLSiVISKWWDyc8BJkKcK3a/KmB2sHaE1Lp2LJ+skW43+pYeqtgJE8o8xStowxPJB0OaSFXXw5dGUurK+ykmPam5oE+t+6hi9o/pO1EOHZFoqKl6tj/wsdu9+3I4lqGMsRutKH6s1rKLfip8s3MdlxqnlRKFmMDFewprELOwm+zpjmrJ1cqdlzzWQ6i/EMOzhcOzrPmH3JiH4CocA/Kcck12IuqvN4l6iAIjntb8b0G8zL";
+        vuforia_parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK  ;
+        this.vuforia = ClassFactory.createVuforiaLocalizer(vuforia_parameters);
         VuforiaTrackables relicTrackables = this.vuforia.loadTrackablesFromAsset("RelicVuMark");
         VuforiaTrackable relicTemplate = relicTrackables.get(0);
         relicTemplate.setName("relicVuMarkTemplate"); // can help in debugging; otherwise not necessary
+        relicTrackables.activate();
+        RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
 
         telemetry.addData(">", "Press Play to start");
         telemetry.update();
+
         //waits for that giant PLAY button to be pressed on RC
         waitForStart();
 
-        relicTrackables.activate();
         resetClock();
+        startAngle = angles.firstAngle;
 
         // telling the code to run until you press that giant STOP button on RC
         // include opModeIsActive in all while loops so that STOP button terminates all actions
         while (opModeIsActive() && modes[mode] < 100) {
-            RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
-            if (vuMark != RelicRecoveryVuMark.UNKNOWN) {
 
-                /* Found an instance of the template. In the actual game, you will probably
-                 * loop until this condition occurs, then move on to act accordingly depending
-                 * on which VuMark was visible. */
-                telemetry.addData("VuMark", "%s visible", vuMark);
+            /* IMU update code */
+            angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+            currentAngle = angles.firstAngle;
+            turnAngle = startAngle-currentAngle;
 
-                /* For fun, we also exhibit the navigational pose. In the Relic Recovery game,
-                 * it is perhaps unlikely that you will actually need to act on this pose information, but
-                 * we illustrate it nevertheless, for completeness. */
-                OpenGLMatrix pose = ((VuforiaTrackableDefaultListener)relicTemplate.getListener()).getPose();
-                telemetry.addData("Pose", format(pose));
-                /* We further illustrate how to decompose the pose into useful rotational and
-                 * translational components */
-                if (pose != null) {
-                    VectorF trans = pose.getTranslation();
-                    Orientation rot = Orientation.getOrientation(pose, AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
-
-                    // Extract the X, Y, and Z components of the offset of the target relative to the robot
-                    double tX = trans.get(0);
-                    double tY = trans.get(1);
-                    double tZ = trans.get(2);
-
-                    // Extract the rotational components of the target relative to the robot
-                    double rX = rot.firstAngle;
-                    double rY = rot.secondAngle;
-                    double rZ = rot.thirdAngle;
-                }
-            }
-            else {
-                telemetry.addData("VuMark", "not visible");
-            }
-
-            telemetry.update();
+            if (turnAngle > 180)
+                turnAngle -= 360;
+            if (turnAngle < -180)
+                turnAngle += 360;
 
             //keeps now up to date
             now = runtime.seconds() - lastReset;
 
-            //MODE 1: Check Vumark
-            /*if (modes[mode] == 1) {
-                if (now > 1) {
-                    mode++;
-                    resetClock();
-                }
-
-                //Vuforia check
-            }*/
-
-            //MODE 2: Lock arm in resting pos
             switch (modes[mode]) {
 
+                default:
+                    telemetry.addLine("All done");
+                    robot.MoveStop();
+                    break;
+
+                /* wait for vuMark detection */
+                case -1:
+                    /* VuForia update code */
+                    vuMark = RelicRecoveryVuMark.from(relicTemplate);
+
+                    if (vuMark == RelicRecoveryVuMark.UNKNOWN) {
+                        telemetry.addData("VuMark", "not visible");
+                    }
+                    if (vuMark == RelicRecoveryVuMark.LEFT){
+                        telemetry.addData("VuMark", "left");
+                    }
+                    if (vuMark == RelicRecoveryVuMark.RIGHT){
+                        telemetry.addData("VuMark", "right");
+                    }
+                    if (vuMark == RelicRecoveryVuMark.CENTER){
+                        telemetry.addData("VuMark", "center");
+                    }
+                    if ((vuMark != RelicRecoveryVuMark.UNKNOWN) || (now > 5.0)){
+                        mode++;
+                        resetClock();
+                        startAngle = angles.firstAngle;
+                        robot.MoveStop();
+                    }
+                    break;
+
+                /* wait one second */
+                case 0:
+                    if (now > 1.0) {
+                        mode++;
+                        resetClock();
+                        startAngle = angles.firstAngle;
+                        robot.MoveStop();
+                    }
+                    break;
+
+                /* backup 30 inches */
+                case 1:
+                    robot.MoveBackward(MOVE_SPEED);
+                    if (now > 0.9) {
+                        mode++;
+                        resetClock();
+                        startAngle = angles.firstAngle;
+                        robot.MoveStop();
+                    }
+                    break;
+
+                /* straff right 36 inches */
                 case 2:
+                    robot.MoveRight(STRAFFE_SPEED);
+                    if (now > 2.2) {
+                        mode++;
+                        resetClock();
+                        startAngle = angles.firstAngle;
+                        robot.MoveStop();
+                    }
+                    break;
+
+                /* move forward 24 inches */
+                case 3:
+                    robot.MoveForward(MOVE_SPEED);
+                    if (now > 1.2) {
+                        mode++;
+                        resetClock();
+                        startAngle = angles.firstAngle;
+                        robot.MoveStop();
+                    }
+                    break;
+
+                /* straff left/right 8 inches */
+                case 4:
+                    if (vuMark == RelicRecoveryVuMark.LEFT){
+                        robot.MoveLeft(STRAFFE_SPEED);
+                    }
+                    if (vuMark == RelicRecoveryVuMark.RIGHT){
+                        robot.MoveRight(STRAFFE_SPEED);
+                    }
+                    if (now > 1.0) {
+                        mode++;
+                        resetClock();
+                        startAngle = angles.firstAngle;
+                        robot.MoveStop();
+                    }
+                    break;
+
+                /* move forward 8 inches */
+                case 5:
+                    robot.MoveForward(MOVE_SPEED);
+                    if (now > 0.3) {
+                        mode++;
+                        resetClock();
+                        startAngle = angles.firstAngle;
+                        robot.MoveStop();
+                    }
+                    break;
+
+                /* rotate 90 degrees */
+                case 6:
+                    robot.RotateRight(ROTATE_SPEED);
+                    if (turnAngle > 85) {
+                        mode++;
+                        resetClock();
+                        startAngle = angles.firstAngle;
+                        robot.MoveStop();
+                    }
+                    break;
+
+                case 21:
                     robot.GGL.setPosition(robot.GRABBER_LEFT[1]);
                     robot.GGR.setPosition(robot.GRABBER_RIGHT[1]);
                     if (now > 0.5) {
@@ -170,7 +251,7 @@ public class BlueAuto extends LinearOpMode {
                     }
                     break;
 
-                case 3:
+                case 31:
                     if (now > 0.9) {
                         robot.Arm.MoveHome();
                         // wait until home until next step
@@ -187,7 +268,7 @@ public class BlueAuto extends LinearOpMode {
 
                 //MODE 8: Grab preloaded glyph
 
-                case 7:
+                case 71:
                     if (now > 1) {
                         mode++;
                         resetClock();
@@ -195,7 +276,7 @@ public class BlueAuto extends LinearOpMode {
                     robot.MoveForward(MOVE_SPEED);
                     break;
 
-                case 8:
+                case 81:
                     if (now > 1) {
                         mode++;
                         resetClock();
@@ -203,7 +284,7 @@ public class BlueAuto extends LinearOpMode {
                     robot.RotateLeft(MOVE_SPEED);
                     break;
 
-                case 9:
+                case 91:
                     if (now > 0.3) {
                         mode++;
                         resetClock();
@@ -245,6 +326,8 @@ public class BlueAuto extends LinearOpMode {
             }  // end of switch
 
             robot.Arm.Update();
+
+            telemetry.update();
 
         }
     }

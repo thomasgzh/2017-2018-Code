@@ -50,8 +50,8 @@ public class ArmCodeTest extends LinearOpMode {
 <<<<<<< HEAD
             //adds a lil' version thing to the telemetry so you know you're using the right version
             telemetry.addData("Version", "1.0");
-            telemetry.addData("URpos","%d (%d)", robot.UR.getCurrentPosition(), robot.URArmHome);
-            telemetry.addData("ULpos","%d (%d)", robot.UL.getCurrentPosition(), robot.ULArmHome);
+            telemetry.addData("URpos", "%d (%d)", robot.UR.getCurrentPosition(), robot.URArmHome);
+            telemetry.addData("ULpos", "%d (%d)", robot.UL.getCurrentPosition(), robot.ULArmHome);
             telemetry.addData("Switch", robot.ArmSwitch.getState());
             telemetry.update();
 
@@ -65,62 +65,62 @@ public class ArmCodeTest extends LinearOpMode {
                 }
 =======
             /* TeleOp code */
-            if (gamepad2.dpad_down) {
-                robot.Arm.MoveHome();
-            }
-            if (gamepad2.dpad_left) {
-                robot.Arm.MoveToPosition(0.20);
-            }
-            if (gamepad2.dpad_right) {
-                robot.Arm.MoveToPosition(0.30);
-            }
-            if (gamepad2.dpad_up) {
-                robot.Arm.MoveToPosition(0.40);
+                if (gamepad2.dpad_down) {
+                    robot.Arm.MoveHome();
+                }
+                if (gamepad2.dpad_left) {
+                    robot.Arm.MoveToPosition(0.20);
+                }
+                if (gamepad2.dpad_right) {
+                    robot.Arm.MoveToPosition(0.30);
+                }
+                if (gamepad2.dpad_up) {
+                    robot.Arm.MoveToPosition(0.40);
 >>>>>>> master
-            }
-            if (robot.ArmSwitch.getState()==false) {
+                }
+                if (robot.ArmSwitch.getState() == false) {
                 /* when switch is closed reset encoder positions */
-                robot.URArmHome = robot.UR.getCurrentPosition();
-                robot.ULArmHome = robot.UL.getCurrentPosition();
-                if (upper_arm < 0.0) upper_arm = 0.0;
-            }
-            robot.UR.setPower(upper_arm);
-            robot.UL.setPower(upper_arm);
+                    robot.URArmHome = robot.UR.getCurrentPosition();
+                    robot.ULArmHome = robot.UL.getCurrentPosition();
+                    if (upper_arm < 0.0) upper_arm = 0.0;
+                }
+                robot.UR.setPower(upper_arm);
+                robot.UL.setPower(upper_arm);
 
 <<<<<<< HEAD
-            if (egamepad2.x.released) {
-                robot.UR.setTargetPosition(robot.URArmHome + 200);
-                int integral = 0;
-                int error = 0;
-=======
-            robot.Arm.Update(this);
->>>>>>> master
+                if (egamepad2.x.released) {
+                    robot.UR.setTargetPosition(robot.URArmHome + 200);
+                    int integral = 0;
+                    int error = 0;
+//=======
+                    //robot.Arm.Update(this);
+//>>>>>>> master
 
-                while (opModeIsActive() && (!egamepad2.x.pressed) ) {
+                    while (opModeIsActive() && (!egamepad2.x.pressed)) {
 
-                    // home made PI control loop
-                    error = robot.UR.getTargetPosition()-robot.UR.getCurrentPosition();
-                    if (Math.abs(error)>10)
-                        integral += error;
+                        // home made PI control loop
+                        error = robot.UR.getTargetPosition() - robot.UR.getCurrentPosition();
+                        if (Math.abs(error) > 10)
+                            integral += error;
 
-                    upper_arm = integral/100000.0 + error/1000.0;
+                        upper_arm = integral / 100000.0 + error / 1000.0;
 
-                    if (upper_arm>0.8) upper_arm = 0.8;
-                    if (upper_arm<-0.8) upper_arm = -0.8;
+                        if (upper_arm > 0.8) upper_arm = 0.8;
+                        if (upper_arm < -0.8) upper_arm = -0.8;
 
-                    robot.UR.setPower(upper_arm);
-                    robot.UL.setPower(upper_arm);
+                        robot.UR.setPower(upper_arm);
+                        robot.UL.setPower(upper_arm);
 
-                    // Display it for the driver.
-                    telemetry.addData("Path", " %7d (%7d)",
-                            robot.UR.getCurrentPosition(), robot.UR.getTargetPosition());
-                    telemetry.addData("Motor", " %f", upper_arm);
-                    telemetry.update();
+                        // Display it for the driver.
+                        telemetry.addData("Path", " %7d (%7d)",
+                                robot.UR.getCurrentPosition(), robot.UR.getTargetPosition());
+                        telemetry.addData("Motor", " %f", upper_arm);
+                        telemetry.update();
 
-                    //let the robot have a little rest, sleep is healthy
-                    sleep(40);
+                        //let the robot have a little rest, sleep is healthy
+                        sleep(40);
+                    }
                 }
-            }
 
             /* ****** setTargetPosition does not work
             does not get to target with one motor
@@ -148,8 +148,9 @@ public class ArmCodeTest extends LinearOpMode {
             }
 */
 
-            //let the robot have a little rest, sleep is healthy
-            sleep(40);
+                //let the robot have a little rest, sleep is healthy
+                sleep(40);
+            }
         }
     }
 }

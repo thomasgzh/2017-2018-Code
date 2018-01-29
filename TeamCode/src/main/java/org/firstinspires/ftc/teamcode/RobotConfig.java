@@ -2,6 +2,11 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cCompassSensor;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
+<<<<<<< HEAD
+=======
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.AnalogInput;
+>>>>>>> master
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.CompassSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -187,6 +192,129 @@ public class RobotConfig
     }
 
 
+<<<<<<< HEAD
+=======
+    /********** Arm Control class **********/
+    public class ArmControl {
+        //declaring all my variables in one place for my sake
+        private double UpperArmHomePosition = 0;        /* position value at home */
+        private double UpperArmPosition = 0;            /* current position relative to home */
+        private double UpperArmFinalTarget = 0;         /* final target position */
+        private double UpperArmTarget = 0;              /* target position */
+        private boolean Homed = false;
+        private double LastError = 0;
+        private ElapsedTime Time  = new ElapsedTime();
+
+        /* Constructor */
+        public ArmControl() {
+        }
+
+        /* Initialize standard Hardware interfaces */
+        public void init() {
+            UpperArmHomePosition = UpperArmPot.getVoltage();
+        }
+
+        public void MoveUp() {
+            UpperArmFinalTarget += 0.01;
+            if (UpperArmFinalTarget>0.6) UpperArmFinalTarget = 0.6;
+        }
+
+        public void MoveDown() {
+            UpperArmFinalTarget -= 0.01;
+            if (UpperArmFinalTarget<0.0) UpperArmFinalTarget = 0.0;
+        }
+
+        public void MoveHome() {
+            UpperArmFinalTarget = 0.0;
+        }
+
+        public void HoldCurrentPosition() {
+            UpperArmFinalTarget = UpperArmPosition;
+        }
+
+        public void MoveToPosition(double target) {
+            UpperArmFinalTarget = target;
+            if (UpperArmFinalTarget>1.0) UpperArmFinalTarget = 1.0;
+            if (UpperArmFinalTarget<0.0) UpperArmFinalTarget = 0.0;
+        }
+
+        /* Call this method when you want to update the arm motors */
+        public void Update(OpMode om) {
+            boolean at_home;                 /* home switch active */
+            double upper_arm;
+            double error, error_rate;
+            final double UPPER_ARM_HOLD_POWER = 0.01;
+            final double UPPER_ARM_POWER = 0.2;
+
+            /* Check to see if on home switch */
+            at_home = false;
+            if (ArmSwitch.getState()==false) {
+                /* arm in home position */
+                at_home = true;
+                Homed = true;
+                UpperArmHomePosition = UpperArmPot.getVoltage();
+
+                //adds a lil' version thing to the telemetry so you know you're using the right version
+                om.telemetry.addLine("At Home");
+            }
+
+            /* determine current position relative to home */
+            UpperArmPosition = UpperArmPot.getVoltage() - UpperArmHomePosition;
+
+            /* incrementally change target value */
+            if (UpperArmTarget < UpperArmFinalTarget-0.01)
+                UpperArmTarget += 0.02;
+            if (UpperArmTarget > UpperArmFinalTarget+0.01)
+                UpperArmTarget -= 0.02;
+
+            /*********** control code **********/
+            error = UpperArmTarget - UpperArmPosition;
+            if (error>0.2) error = 0.2;
+            if (error<-0.2) error = -0.2;
+
+            upper_arm = UPPER_ARM_POWER * 5 * error;
+            upper_arm += UPPER_ARM_HOLD_POWER*(2.5-UpperArmTarget)/2.5;
+            if (upper_arm==0.0) upper_arm = UPPER_ARM_HOLD_POWER/4;
+
+            error_rate = 1000*(error-LastError)/Time.milliseconds();
+            om.telemetry.addData("rate","%.3f", error_rate);
+
+            /* compensate for a dropping arm, large power boast to stop it from falling */
+            if ((error>0.0)&&(error_rate<-0.05)) {
+                upper_arm += UPPER_ARM_POWER/4;
+                om.telemetry.addLine("Save me!!!!");
+            }
+            if ((error<0.0)&&(error_rate>-0.05)) {
+                upper_arm -= UPPER_ARM_POWER/4;
+                om.telemetry.addLine("Save me!!!!");
+            }
+            LastError = error;
+            Time.reset();
+
+            /* prevent negative power when...
+                at home position or never homed
+            */
+            if (at_home || !Homed) {
+                if (upper_arm < 0.0) upper_arm = 0.0;
+            }
+
+            /* when target is zero ...
+            * prevent positive power
+            * zero power if close to home
+            */
+            if (UpperArmTarget<0.01) {
+                if (upper_arm > 0.0) upper_arm = 0.0;
+                if (error > -0.1) upper_arm = 0.0;
+            }
+
+            om.telemetry.addData("Error/Power","%.2f %.2f", error, upper_arm);
+
+            UR.setPower(upper_arm);
+            UL.setPower(upper_arm);
+        }
+    }
+
+>>>>>>> master
     /***
      *
      * waitForTick implements a periodic delay. However, this acts like a metronome with a regular

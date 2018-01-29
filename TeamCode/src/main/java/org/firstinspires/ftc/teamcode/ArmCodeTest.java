@@ -47,6 +47,7 @@ public class ArmCodeTest extends LinearOpMode {
             egamepad1.UpdateEdge();
             egamepad2.UpdateEdge();
 
+<<<<<<< HEAD
             //adds a lil' version thing to the telemetry so you know you're using the right version
             telemetry.addData("Version", "1.0");
             telemetry.addData("URpos","%d (%d)", robot.UR.getCurrentPosition(), robot.URArmHome);
@@ -62,6 +63,20 @@ public class ArmCodeTest extends LinearOpMode {
                 if (gamepad2.dpad_down) {
                     upper_arm = -0.2;
                 }
+=======
+            /* TeleOp code */
+            if (gamepad2.dpad_down) {
+                robot.Arm.MoveHome();
+            }
+            if (gamepad2.dpad_left) {
+                robot.Arm.MoveToPosition(0.20);
+            }
+            if (gamepad2.dpad_right) {
+                robot.Arm.MoveToPosition(0.30);
+            }
+            if (gamepad2.dpad_up) {
+                robot.Arm.MoveToPosition(0.40);
+>>>>>>> master
             }
             if (robot.ArmSwitch.getState()==false) {
                 /* when switch is closed reset encoder positions */
@@ -72,10 +87,14 @@ public class ArmCodeTest extends LinearOpMode {
             robot.UR.setPower(upper_arm);
             robot.UL.setPower(upper_arm);
 
+<<<<<<< HEAD
             if (egamepad2.x.released) {
                 robot.UR.setTargetPosition(robot.URArmHome + 200);
                 int integral = 0;
                 int error = 0;
+=======
+            robot.Arm.Update(this);
+>>>>>>> master
 
                 while (opModeIsActive() && (!egamepad2.x.pressed) ) {
 

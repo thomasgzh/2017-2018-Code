@@ -63,20 +63,23 @@ public class teleop extends LinearOpMode {
 
             boolean abutton = egamepad1.a.released;
 
+            /******Telemetry*****/
             //adds a lil' version thing to the telemetry so you know you're using the right version
-            telemetry.addData("Version", "2.2");
-            telemetry.addData("BRmotor", robot.BR.getPower());
-            telemetry.addData("BLmotor", robot.BL.getPower());
-            telemetry.addData("FLmotor", robot.FL.getPower());
-            telemetry.addData("FRmotor", robot.FR.getPower());
+            telemetry.addData("Version", "2.3");
             telemetry.addData("Speed", speed);
             telemetry.update();
 
+            /**------------------------------------------------------------------------**/
+            /******GAMEPAD1 CONTROLS*****/
+            /**------------------------------------------------------------------------**/
+
+            /******Reverse*****/
             //when a button is just released, multiply the speed by -1 so it's reverse
             if (abutton) {
                 reverse *= -1;
             }
 
+            /******Speed Changing*****/
             //change that speed by those bumpers
             if (egamepad1.right_bumper.released) {
                 speed += 0.25;
@@ -92,6 +95,7 @@ public class teleop extends LinearOpMode {
                 speed = 3;
             }
 
+            /******Joystick Drive*****/
             // using the right joystick's x axis to rotate left and right
             front_right = -gamepad1.right_stick_x * 2;
             front_left = gamepad1.right_stick_x * 2;
@@ -110,22 +114,40 @@ public class teleop extends LinearOpMode {
             back_left += -gamepad1.left_stick_x * 2;
             back_right += gamepad1.left_stick_x * 2;
 
+<<<<<<< HEAD
             //takes all those values, divides
             robot.FR.setPower(front_right / 2 * speed * reverse);
             robot.FL.setPower(front_left / 2 * speed * reverse);
             robot.BL.setPower(back_left / 2 * speed * reverse);
             robot.BR.setPower(back_right / 2 * speed * reverse);
+=======
+            front_right = front_right / 3.414 * speed * reverse;
+            front_left = front_left / 3.414 * speed * reverse;
+            back_left = back_left / 3.414 * speed * reverse;
+            back_right = back_right / 3.414 * speed * reverse;
 
-            /*for later- joysticks have a max input of 1 or -1. divide it by 3,
-              which leaves us with a max input of 0.333333. motors have a max input
-               of one. i'm not quite sure if this is perfectly true because i havent tested,
-               but that should allow us to have a max speed var of 3. if you were to
-               have max inputs on everything, you'd have 1 / 3 * 1 * 1, which
-               equals 0.33. so the max speed should be set to 3, leaving us with
-               1 / 3 * 3 * 1, equaling out to 1, our max value.
-            */
+            /******Dpad Drive*****/
+            if (gamepad1.dpad_left){
+                robot.MoveLeft(speed);
+            } else if (gamepad1.dpad_right){
+                robot.MoveRight(speed);
+            } else if (gamepad1.dpad_up){
+                robot.MoveForward(speed);
+            } else if (gamepad1.dpad_down){
+                robot.MoveBackward(speed);
+            } else {
+                //takes all those values, divides
+                robot.FR.setPower(front_right);
+                robot.FL.setPower(front_left);
+                robot.BL.setPower(back_left);
+                robot.BR.setPower(back_right);
+            }
+>>>>>>> master
 
-            /********** GamePad2 controls **********/
+            /**------------------------------------------------------------------------**/
+            /********** GAMEPAD2 CONTROLS **********/
+            /**------------------------------------------------------------------------**/
+
             /********** Grabber code **********/
             if (egamepad2.left_bumper.released) {
                 grabber_left = (grabber_left<2) ? grabber_left+1 : 0;
@@ -145,6 +167,7 @@ public class teleop extends LinearOpMode {
             robot.GGR.setPosition(robot.GRABBER_RIGHT[grabber_right]);
 
             /********** Arm code **********/
+<<<<<<< HEAD
             if (gamepad2.dpad_up) {
                 robot.UR.setPower(0.2);
                 robot.UL.setPower(0.2);
@@ -158,68 +181,27 @@ public class teleop extends LinearOpMode {
                 }
             }
 
+=======
+            if (gamepad2.dpad_down) {
+                robot.Arm.MoveHome();
+            }
+            if (gamepad2.dpad_left) {
+                robot.Arm.MoveToPosition(0.20);
+            }
+            if (gamepad2.dpad_right) {
+                robot.Arm.MoveToPosition(0.30);
+            }
+            if (gamepad2.dpad_up) {
+                robot.Arm.MoveToPosition(0.40);
+            }
+
+            robot.Arm.Update(this);
+
+>>>>>>> master
             //let the robot have a little rest, sleep is healthy
             sleep(40);
         }
     }
 }
-
-
-
-    // Movement code
-    /*private void Move(DpadDirection buttonDirection, double speed) {
-        switch (buttonDirection) {
-            case Up:
-                robot.FR.setPower(speed);
-                robot.FL.setPower(speed);
-                robot.BL.setPower(speed);
-                robot.BR.setPower(speed);
-                break;
-            case Down:
-                robot.FR.setPower(-speed);
-                robot.FL.setPower(-speed);
-                robot.BL.setPower(-speed);
-                robot.BR.setPower(-speed);
-                break;
-            case Left:
-                robot.FR.setPower(speed);
-                robot.FL.setPower(-speed);
-                robot.BL.setPower(speed);
-                robot.BR.setPower(-speed);
-                break;
-            case Right:
-                robot.FR.setPower(-speed);
-                robot.FL.setPower(speed);
-                robot.BL.setPower(-speed);
-                robot.BR.setPower(speed);
-                break;
-            case None:
-                // do nothing
-                break;
-        }
-    }
-
-    private DpadDirection GetDpadDirection(Gamepad gamepad) {
-        if (gamepad.dpad_up) {
-            return DpadDirection.Up;
-        } else if (gamepad.dpad_down) {
-            return DpadDirection.Down;
-        } else if (gamepad.dpad_left) {
-            return DpadDirection.Left;
-        } else if (gamepad.dpad_right) {
-            return DpadDirection.Right;
-        } else {
-            return DpadDirection.None;
-        }
-    }
-
-    private enum DpadDirection {
-        None,
-        Up,
-        Down,
-        Left,
-        Right
-    }
-} */
 
 

@@ -153,13 +153,14 @@ public class AllAuto extends LinearOpMode {
                 //MODE 3: Lock arm in resting position
                 case 3:
                     if (now > 0.9) {
-                        robot.UL.setPower(0);
-                        robot.UR.setPower(0);
-                        mode++;
-                        resetClock();
+                        robot.Arm.MoveHome();
+                        // wait until home until next step
+                        if (robot.ArmSwitch.getState()==false) {
+                            mode++;
+                            resetClock();
+                        }
                     } else {
-                        robot.UL.setPower(0.2);
-                        robot.UR.setPower(0.2);
+                        robot.Arm.MoveToPosition(0.2);
                     }
                     break;
 
@@ -256,6 +257,9 @@ public class AllAuto extends LinearOpMode {
                     }
                     break;
             }  // end of switch
+
+            robot.Arm.Update(this);
+
         }
     }
 }

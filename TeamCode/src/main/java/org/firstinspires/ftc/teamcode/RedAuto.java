@@ -92,13 +92,14 @@ public class RedAuto extends LinearOpMode {
 
                 case 3:
                     if (now > 0.9) {
-                        robot.UL.setPower(0);
-                        robot.UR.setPower(0);
-                        mode++;
-                        resetClock();
+                        robot.Arm.MoveHome();
+                        // wait until home until next step
+                        if (robot.ArmSwitch.getState()==false) {
+                            mode++;
+                            resetClock();
+                        }
                     } else {
-                        robot.UL.setPower(0.2);
-                        robot.UR.setPower(0.2);
+                        robot.Arm.MoveToPosition(0.2);
                     }
                     break;
 
@@ -159,13 +160,10 @@ public class RedAuto extends LinearOpMode {
                     break;
 
                 //MODE 14: Bonus glyphs! (if time)
-
-//<<<<<<< HEAD
-//=======
-            //robot.Arm.Update(this);
-//>>>>>>> master
-
             }  // end of switch
+
+            robot.Arm.Update(this);
+
         }
     }
 }

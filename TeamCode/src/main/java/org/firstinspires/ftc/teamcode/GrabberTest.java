@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 
 
 //naming the teleop thing
-@TeleOp(name="Grabber Test", group="Drive")
+@TeleOp(name="Grabber Test", group="Test")
 public class GrabberTest extends LinearOpMode {
 
     RobotConfig robot = new RobotConfig();

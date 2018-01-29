@@ -30,6 +30,7 @@ public class teleop extends LinearOpMode {
         double speed = 2.5;
         int grabber_left;
         int grabber_right;
+        double upper_arm;
 
         /* Initialize the hardware variables.
          * The init() method of the hardware class does all the work here
@@ -114,13 +115,6 @@ public class teleop extends LinearOpMode {
             back_left += -gamepad1.left_stick_x * 2;
             back_right += gamepad1.left_stick_x * 2;
 
-<<<<<<< HEAD
-            //takes all those values, divides
-            robot.FR.setPower(front_right / 2 * speed * reverse);
-            robot.FL.setPower(front_left / 2 * speed * reverse);
-            robot.BL.setPower(back_left / 2 * speed * reverse);
-            robot.BR.setPower(back_right / 2 * speed * reverse);
-=======
             front_right = front_right / 3.414 * speed * reverse;
             front_left = front_left / 3.414 * speed * reverse;
             back_left = back_left / 3.414 * speed * reverse;
@@ -142,7 +136,6 @@ public class teleop extends LinearOpMode {
                 robot.BL.setPower(back_left);
                 robot.BR.setPower(back_right);
             }
->>>>>>> master
 
             /**------------------------------------------------------------------------**/
             /********** GAMEPAD2 CONTROLS **********/
@@ -167,21 +160,6 @@ public class teleop extends LinearOpMode {
             robot.GGR.setPosition(robot.GRABBER_RIGHT[grabber_right]);
 
             /********** Arm code **********/
-<<<<<<< HEAD
-            if (gamepad2.dpad_up) {
-                robot.UR.setPower(0.2);
-                robot.UL.setPower(0.2);
-            } else {
-                if (gamepad2.dpad_down) {
-                    robot.UR.setPower(-0.2);
-                    robot.UL.setPower(-0.2);
-                } else {
-                    robot.UR.setPower(0.0);
-                    robot.UL.setPower(0.0);
-                }
-            }
-
-=======
             if (gamepad2.dpad_down) {
                 robot.Arm.MoveHome();
             }
@@ -197,7 +175,6 @@ public class teleop extends LinearOpMode {
 
             robot.Arm.Update(this);
 
->>>>>>> master
             //let the robot have a little rest, sleep is healthy
             sleep(40);
         }

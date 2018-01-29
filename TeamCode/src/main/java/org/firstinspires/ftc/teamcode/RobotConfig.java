@@ -2,11 +2,8 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cCompassSensor;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
-<<<<<<< HEAD
-=======
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.AnalogInput;
->>>>>>> master
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.CompassSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -57,15 +54,15 @@ public class RobotConfig
     * UR - upper right arm DC motor
     * UL - upper left arm DC motor (must be same of UR)
     */
-    public DcMotor  LR   = null;
-    public DcMotor  LL  = null;
-    public DcMotor  UR   = null;
-    public DcMotor  UL = null;
+    private DcMotor  LR = null;
+    private DcMotor  LL = null;
+    private DcMotor  UR = null;
+    private DcMotor  UL = null;
 
-    /* Arm position switch */
-    public DigitalChannel ArmSwitch = null;
-    public int URArmHome = 0;   // change when potentionmeter added
-    public int ULArmHome = 0;
+    /* Arm sensors */
+    public DigitalChannel ArmSwitch = null;         /* home switch */
+    public AnalogInput UpperArmPot = null;          /* potentiometers */
+
 
     /* Public members
     * Devices
@@ -75,8 +72,16 @@ public class RobotConfig
     */
     public Servo GGR = null;
     public Servo GGL = null;
+    /* open full, closed full, partial open */
     public double[] GRABBER_LEFT = {0.745, .255, .375};
-    public double[] GRABBER_RIGHT = {0.54, .99, .895};
+    public double[] GRABBER_RIGHT = {0.44, .89, .765};
+//    public double[] GRABBER_RIGHT = {0.54, .99, .895};
+
+    /* Public
+    * arm control class
+    */
+    ArmControl  Arm = new ArmControl();
+
 
     /* Local OpMode members. */
     HardwareMap hwMap  = null;
@@ -93,10 +98,10 @@ public class RobotConfig
 
         // **** Mecanum drive ****
         // Define and Initialize Motors
-        FL   = hwMap.dcMotor.get("FL");
-        FR  = hwMap.dcMotor.get("FR");
-        BL   = hwMap.dcMotor.get("BL");
-        BR   = hwMap.dcMotor.get("BR");
+        FL = hwMap.dcMotor.get("FL");
+        FR = hwMap.dcMotor.get("FR");
+        BL = hwMap.dcMotor.get("BL");
+        BR = hwMap.dcMotor.get("BR");
         // reverse those motors
         FR.setDirection(DcMotor.Direction.REVERSE);
         BR.setDirection(DcMotor.Direction.REVERSE);
@@ -113,12 +118,13 @@ public class RobotConfig
 
         // **** Arm motors ****
         // Define and Initialize Motors
-        UL   = hwMap.dcMotor.get("UL");
-        UR  = hwMap.dcMotor.get("UR");
-        LL   = hwMap.dcMotor.get("LL");
-        LR   = hwMap.dcMotor.get("LR");
+        UL = hwMap.dcMotor.get("UL");
+        UR = hwMap.dcMotor.get("UR");
+        LL = hwMap.dcMotor.get("LL");
+        LR = hwMap.dcMotor.get("LR");
         // reverse those motors
         UR.setDirection(DcMotor.Direction.REVERSE);
+        LR.setDirection(DcMotor.Direction.REVERSE);
         // Set all motors to zero power
         LL.setPower(0);
         LR.setPower(0);
@@ -140,10 +146,17 @@ public class RobotConfig
 
         // **** Arm Switch ****
         // Define and initialize switch
-        ArmSwitch = hwMap.get(DigitalChannel.class, "touch sensor");
+        ArmSwitch = hwMap.digitalChannel.get("touch sensor");
         // set the digital channel to input.
         ArmSwitch.setMode(DigitalChannel.Mode.INPUT);
         // false = pressed
+
+        // **** Arm Potentiometers ****
+        // Define and initialize potentiometers
+        UpperArmPot = hwMap.analogInput.get("upper pot");
+
+        // **** Initialize arm control
+        Arm.init();
     }
 
     /* forward is positive speed, backward is negative speed */
@@ -192,8 +205,6 @@ public class RobotConfig
     }
 
 
-<<<<<<< HEAD
-=======
     /********** Arm Control class **********/
     public class ArmControl {
         //declaring all my variables in one place for my sake
@@ -314,7 +325,6 @@ public class RobotConfig
         }
     }
 
->>>>>>> master
     /***
      *
      * waitForTick implements a periodic delay. However, this acts like a metronome with a regular

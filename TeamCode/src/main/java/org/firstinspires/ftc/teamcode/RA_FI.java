@@ -41,7 +41,7 @@ public class RA_FI extends LinearOpMode {
     //mode 'stuff'
     //modes lists which steps and in what order to accomplish them
     int mode = 0;
-    int [] modes = {-1, 0, 1, 0, 2, 0, 3, 0, 4, 0, 5, 0, 7, 0, 8, 0, 100};
+    int [] modes = {-1, 0, 21, 20, 0, 1, 0, 2, 0, 3, 0, 4, 0, 5, 0, 7, 0, 8, 0, 100};
 
     //time based variables
     double lastReset = 0;
@@ -62,16 +62,16 @@ public class RA_FI extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        //declaring all my variables in one place for my sake
-        final double    MOVE_SPEED = 0.5;
-        final double    STRAFFE_SPEED = 0.5;
-        final double    ROTATE_SPEED = 0.5;
-        double          turnAngle;
-        double          currentAngle;
-
         VoltageSensor vs = hardwareMap.voltageSensor.get("Lower hub 2");
         double voltage = vs.getVoltage();
-        telemetry.addData("Voltage", "voltage");
+        telemetry.addData("Voltage", voltage);
+
+        //declaring all my variables in one place for my sake
+        final double    MOVE_SPEED = 4/(voltage-5.2);
+        final double    STRAFFE_SPEED = 6/(voltage-5.2);
+        final double    ROTATE_SPEED = 4/(voltage-5.2);
+        double          turnAngle;
+        double          currentAngle;
 
         // Send telemetry message to signify robot waiting;
         telemetry.addLine("RA_FI");    //
@@ -180,7 +180,7 @@ public class RA_FI extends LinearOpMode {
                 /* backup 24 inches */
                 case 1:
                     robot.MoveBackward(MOVE_SPEED);
-                    if (now > 0.8) {
+                    if (now > 0.7) {
                         mode++;
                         resetClock();
                         startAngle = angles.firstAngle;
@@ -190,8 +190,8 @@ public class RA_FI extends LinearOpMode {
 
                 /* turn left 90 degrees */
                 case 2:
-                    robot.RotateLeft(ROTATE_SPEED);
-                    if (turnAngle < -85) {
+                    robot.RotateRight(ROTATE_SPEED);
+                    if (turnAngle > 85) {
                         mode++;
                         resetClock();
                         startAngle = angles.firstAngle;
@@ -202,7 +202,7 @@ public class RA_FI extends LinearOpMode {
                 /* move forward 24 inches */
                 case 3:
                     robot.MoveForward(MOVE_SPEED);
-                    if (now > 1.2) {
+                    if (now > 0.8) {
                         mode++;
                         resetClock();
                         startAngle = angles.firstAngle;
@@ -212,7 +212,7 @@ public class RA_FI extends LinearOpMode {
 
                 /* straif right 3/9/15 inches */
                 case 4:
-                    robot.MoveRight(STRAFFE_SPEED);
+                    robot.MoveLeft(STRAFFE_SPEED);
                     if (vuMark == RelicRecoveryVuMark.LEFT && now > 0.5){
                         mode++;
                         resetClock();
@@ -220,20 +220,16 @@ public class RA_FI extends LinearOpMode {
                         robot.MoveStop();
                     }
                     if (vuMark == RelicRecoveryVuMark.CENTER && now > 1.0){
-                        robot.MoveRight(STRAFFE_SPEED);
                         mode++;
                         resetClock();
                         startAngle = angles.firstAngle;
                         robot.MoveStop();
                     }
-                    if (vuMark == RelicRecoveryVuMark.RIGHT){
-                        robot.MoveRight(STRAFFE_SPEED);
-                        if (now > 1.0) {
-                            mode++;
-                            resetClock();
-                            startAngle = angles.firstAngle;
-                            robot.MoveStop();
-                        }
+                    if (vuMark == RelicRecoveryVuMark.RIGHT && now > 1.5){
+                        mode++;
+                        resetClock();
+                        startAngle = angles.firstAngle;
+                        robot.MoveStop();
                     }
                     break;
 
@@ -271,8 +267,8 @@ public class RA_FI extends LinearOpMode {
 
                 /* rotate left 135 degrees */
                 case 8:
-                    robot.RotateLeft(ROTATE_SPEED);
-                    if (turnAngle < -130) {
+                    robot.RotateRight(ROTATE_SPEED);
+                    if (turnAngle > 130) {
                         mode++;
                         resetClock();
                         startAngle = angles.firstAngle;
@@ -280,9 +276,19 @@ public class RA_FI extends LinearOpMode {
                     }
                     break;
 
+                case 20:
+                    if (now > 0.9) {
+                        robot.Arm.MoveHome();
+                        // wait until home until next step
+                        if (robot.ArmSwitch.getState()==false) {
+                            mode++;
+                            resetClock();
+                        }
+                    } else {
+                        robot.Arm.MoveToPosition(0.2);
+                    }
+                    break;
 
-
-/* not used rn
                 case 21:
                     robot.GGL.setPosition(robot.GRABBER_LEFT[1]);
                     robot.GGR.setPosition(robot.GRABBER_RIGHT[1]);
@@ -292,6 +298,7 @@ public class RA_FI extends LinearOpMode {
                     }
                     break;
 
+/* not used rn
                 case 31:
                     if (now > 0.9) {
                         robot.UL.setPower(0);
@@ -364,6 +371,8 @@ public class RA_FI extends LinearOpMode {
 */
 
             }  // end of switch
+
+            robot.Arm.Update(this);
         }
     }
 

@@ -72,10 +72,11 @@ public class RobotConfig
     */
     public Servo GGR = null;
     public Servo GGL = null;
+    public Servo Claw = null;
     /* open full, closed full, partial open */
     public double[] GRABBER_LEFT = {0.745, .255, .375};
     public double[] GRABBER_RIGHT = {0.44, .89, .765};
-//    public double[] GRABBER_RIGHT = {0.54, .99, .895};
+    public double[] CLAW = {0.9, 0.15};
 
     /* Public
     * arm control class
@@ -143,9 +144,11 @@ public class RobotConfig
         // Define and Initialize Motors
         GGR = hwMap.servo.get("GGR");
         GGL = hwMap.servo.get("GGL");
+        Claw = hwMap.servo.get("Claw");
         // set initial positions
         GGL.setPosition(GRABBER_LEFT[0]);
         GGR.setPosition(GRABBER_RIGHT[0]);
+        Claw.setPosition(CLAW[0]);
 
         // **** Arm Switch ****
         // Define and initialize switch
@@ -258,7 +261,7 @@ public class RobotConfig
             double upper_arm;
             double error, error_rate;
             final double UPPER_ARM_HOLD_POWER = 0.01;
-            final double UPPER_ARM_POWER = 0.2;
+            final double UPPER_ARM_POWER = 1;
 
             /* Check to see if on home switch */
             at_home = false;

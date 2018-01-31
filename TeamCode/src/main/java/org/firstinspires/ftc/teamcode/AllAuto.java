@@ -300,7 +300,7 @@ public class AllAuto extends LinearOpMode {
                 /* backup 24 inches */
                 case 1:
                     robot.MoveBackward(MOVE_SPEED);
-                    if (now > 0.9) {
+                    if (now > 1.1) {
                         mode++;
                         resetClock();
                         robot.MoveStop();

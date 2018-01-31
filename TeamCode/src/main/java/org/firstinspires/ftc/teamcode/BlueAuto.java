@@ -41,7 +41,7 @@ public class BlueAuto extends LinearOpMode {
     //mode 'stuff'
     //modes lists which steps and in what order to accomplish them
     int mode = 0;
-    int [] modes = {-1, 0, 1, 0, 2, 0, 3, 0, 4, 0, 5, 0, 6, 0, 100};
+    int [] modes = {-1, 0, 61, 0, 1, 0, 21, 0, 22, 0, 23, 0, 3, 0, 4, 0, 5, 0, 6, 0, 100};
 
     //time based variables
     double lastReset = 0;
@@ -182,7 +182,9 @@ public class BlueAuto extends LinearOpMode {
                     }
                     break;
 
-                /* straff right 36 inches */
+
+
+                /* straff right 36 inches
                 case 2:
                     robot.MoveRight(STRAFFE_SPEED);
                     if (now > 2.2) {
@@ -191,12 +193,46 @@ public class BlueAuto extends LinearOpMode {
                         startAngle = angles.firstAngle;
                         robot.MoveStop();
                     }
+                    break; */
+
+                /* rotate 90 degrees */
+                case 21:
+                    robot.RotateRight(ROTATE_SPEED);
+                    if (turnAngle > 40) {
+                        mode++;
+                        resetClock();
+                        startAngle = angles.firstAngle;
+                        robot.MoveStop();
+                    }
                     break;
+
+
+                case 22:
+                    robot.MoveForward(MOVE_SPEED);
+                    if (now > 1) {
+                        mode++;
+                        resetClock();
+                        startAngle = angles.firstAngle;
+                        robot.MoveStop();
+                    }
+                    break;
+
+
+                case 23:
+                    robot.RotateLeft(ROTATE_SPEED);
+                    if (turnAngle > -45) {
+                        mode++;
+                        resetClock();
+                        startAngle = angles.firstAngle;
+                        robot.MoveStop();
+                    }
+                    break;
+
 
                 /* move forward 24 inches */
                 case 3:
                     robot.MoveForward(MOVE_SPEED);
-                    if (now > 1.2) {
+                    if (now > 0.5) {
                         mode++;
                         resetClock();
                         startAngle = angles.firstAngle;
@@ -242,7 +278,7 @@ public class BlueAuto extends LinearOpMode {
                     }
                     break;
 
-                case 21:
+                case 61:
                     robot.GGL.setPosition(robot.GRABBER_LEFT[1]);
                     robot.GGR.setPosition(robot.GRABBER_RIGHT[1]);
                     if (now > 0.5) {
@@ -251,7 +287,7 @@ public class BlueAuto extends LinearOpMode {
                     }
                     break;
 
-                case 31:
+                case 65:
                     if (now > 0.9) {
                         robot.Arm.MoveHome();
                         // wait until home until next step

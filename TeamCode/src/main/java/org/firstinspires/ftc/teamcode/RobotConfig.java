@@ -76,7 +76,7 @@ public class RobotConfig
     /* open full, closed full, partial open */
     public double[] GRABBER_LEFT = {0.745, .255, .375};
     public double[] GRABBER_RIGHT = {0.44, .89, .765};
-//    public double[] GRABBER_RIGHT = {0.54, .99, .895};
+    public double[] CLAW = {0.9, 0.15};
 
     /* Public
     * arm control class
@@ -145,6 +145,7 @@ public class RobotConfig
         // set initial positions
         GGL.setPosition(GRABBER_LEFT[0]);
         GGR.setPosition(GRABBER_RIGHT[0]);
+        Claw.setPosition(CLAW[0]);
 
         // **** Arm Switch ****
         // Define and initialize switch

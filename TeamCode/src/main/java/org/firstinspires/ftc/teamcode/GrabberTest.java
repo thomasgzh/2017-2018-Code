@@ -8,6 +8,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import java.util.concurrent.TimeUnit;
 
@@ -32,13 +33,13 @@ public class GrabberTest extends LinearOpMode {
         egamepad2 = new GamepadEdge(gamepad2);
 
         double increment = 0.005;
-
-        waitForStart();
+                waitForStart();
 
         //telling the code to run until you press that giant STOP button on RC
         while (opModeIsActive()) {
             telemetry.addData("GGR", robot.GGR.getPosition());
             telemetry.addData("GGL", robot.GGL.getPosition());
+            telemetry.addData("Claw", robot.Claw.getPosition());
             telemetry.update();
 
             egamepad1.UpdateEdge();
@@ -62,21 +63,22 @@ public class GrabberTest extends LinearOpMode {
             if (egamepad1.dpad_right.pressed) {
                 robot.GGR.setPosition(robot.GGR.getPosition() + increment);
             }
+            if (egamepad1.y.pressed) {
+                robot.Claw.setPosition(robot.Claw.getPosition() + increment);
 
-            //prototype --------------------------------------------------------------
-            if (gamepad1.left_trigger > 0.7) {
-                robot.GGL.setPosition(.34);
             }
-                else if (egamepad1.left_bumper.released) {
-                    robot.GGL.setPosition(.27944);
+            if (egamepad1.a.pressed) {
+                robot.Claw.setPosition(robot.Claw.getPosition() - increment);
+            }
+            //prototype --------------------------------------------------------------
+            if (egamepad1.x.released) {
+                if (robot.Claw.getPosition() > 0.5) {
+                    robot.Claw.setPosition(robot.CLAW[1]);
                 }
-                else if (gamepad1.right_trigger > 0.7) {
-                    robot.GGR.setPosition(.89);
+                else {
+                    robot.Claw.setPosition(robot.CLAW[0]);
                 }
-                 else if (egamepad1.right_bumper.released) {
-                    robot.GGR.setPosition(.995);
-                }
-
+            }
             /*Left Trigger = Left Grabber Open
             Left Button = Left Grabber Close
             Right Trigger = Right Grabber Open

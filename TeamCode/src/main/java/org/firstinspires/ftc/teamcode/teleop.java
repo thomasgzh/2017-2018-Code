@@ -123,13 +123,13 @@ public class teleop extends LinearOpMode {
             back_right = back_right / 3.414 * speed * reverse;
 
             /******Dpad Drive*****/
-            if (gamepad1.dpad_left){
+            if (gamepad1.dpad_left) {
                 robot.MoveLeft(speed);
-            } else if (gamepad1.dpad_right){
+            } else if (gamepad1.dpad_right) {
                 robot.MoveRight(speed);
-            } else if (gamepad1.dpad_up){
+            } else if (gamepad1.dpad_up) {
                 robot.MoveForward(speed);
-            } else if (gamepad1.dpad_down){
+            } else if (gamepad1.dpad_down) {
                 robot.MoveBackward(speed);
             } else {
                 //takes all those values, divides
@@ -145,12 +145,12 @@ public class teleop extends LinearOpMode {
 
             /********** Grabber code **********/
             if (egamepad2.left_bumper.released) {
-                grabber_left = (grabber_left<2) ? grabber_left+1 : 0;
+                grabber_left = (grabber_left < 2) ? grabber_left + 1 : 0;
             }
             if (egamepad2.right_bumper.released) {
-                grabber_right = (grabber_right<2) ? grabber_right+1 : 0;
+                grabber_right = (grabber_right < 2) ? grabber_right + 1 : 0;
             }
-            if (egamepad2.b.released){
+            if (egamepad2.b.released) {
                 grabber_left = 0;
                 grabber_right = 0;
             }
@@ -161,26 +161,33 @@ public class teleop extends LinearOpMode {
             robot.GGL.setPosition(robot.GRABBER_LEFT[grabber_left]);
             robot.GGR.setPosition(robot.GRABBER_RIGHT[grabber_right]);
 
-            /********** Arm code **********/
-            if (gamepad2.dpad_down) {
-                robot.Arm.MoveHome();
-            }
-            if (gamepad2.dpad_left) {
-                robot.Arm.MoveToPosition(0.20);
-            }
-            if (gamepad2.dpad_right) {
-                robot.Arm.MoveToPosition(0.40);
-            }
-            if (gamepad2.dpad_up) {
-                robot.Arm.MoveToPosition(0.60);
-            }
+            if (egamepad2.a.released) {
+                if (robot.Claw.getPosition() > 0.5) {
+                    robot.Claw.setPosition(robot.CLAW[1]);
+                } else {
+                    robot.Claw.setPosition(robot.CLAW[0]);
+                }
 
-            robot.Arm.Update(this);
+                /********** Arm code **********/
+                if (gamepad2.dpad_down) {
+                    robot.Arm.MoveHome();
+                }
+                if (gamepad2.dpad_left) {
+                    robot.Arm.MoveToPosition(0.20);
+                }
+                if (gamepad2.dpad_right) {
+                    robot.Arm.MoveToPosition(0.40);
+                }
+                if (gamepad2.dpad_up) {
+                    robot.Arm.MoveToPosition(0.60);
+                }
 
-            //let the robot have a little rest, sleep is healthy
-            sleep(40);
+                robot.Arm.Update(this);
+
+                //let the robot have a little rest, sleep is healthy
+                sleep(40);
+            }
         }
     }
 }
-
 

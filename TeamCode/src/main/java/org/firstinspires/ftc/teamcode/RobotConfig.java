@@ -141,6 +141,7 @@ public class RobotConfig
         // Define and Initialize Motors
         GGR = hwMap.servo.get("GGR");
         GGL = hwMap.servo.get("GGL");
+        Claw = hwMap.servo.get("Claw");
         // set initial positions
         GGL.setPosition(GRABBER_LEFT[0]);
         GGR.setPosition(GRABBER_RIGHT[0]);
@@ -256,7 +257,7 @@ public class RobotConfig
             double upper_arm;
             double error, error_rate;
             final double UPPER_ARM_HOLD_POWER = 0.01;
-            final double UPPER_ARM_POWER = 0.2;
+            final double UPPER_ARM_POWER = 1;
 
             /* Check to see if on home switch */
             at_home = false;

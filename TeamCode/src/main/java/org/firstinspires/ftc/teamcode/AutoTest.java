@@ -13,6 +13,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
@@ -39,7 +40,6 @@ public class AutoTest extends LinearOpMode {
 
     /* IMU objects */
     BNO055IMU imu;
-    Orientation angles;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -65,13 +65,14 @@ public class AutoTest extends LinearOpMode {
         imu_parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
         imu = hardwareMap.get(BNO055IMU.class, "imu");
         imu.initialize(imu_parameters);
-        angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
 
         telemetry.addData(">", "Press Play to start");
         telemetry.update();
 
         //waits for that giant PLAY button to be pressed on RC
         waitForStart();
+        telemetry.addData("Go", "...");
+        telemetry.update();
 
         AutoFindVuMark(5.0);                AutoDelaySec(1.0);
         AutoGlyphGrab(1.0);                 AutoDelaySec(1.0);
@@ -98,6 +99,8 @@ public class AutoTest extends LinearOpMode {
     void AutoFindVuMark(double time_sec) {
         if ( !opModeIsActive() ) return;
 
+        telemetry.addData("Initialize","VuForia");
+        telemetry.update();
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters vuforia_parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
         vuforia_parameters.vuforiaLicenseKey = "AQepDXf/////AAAAGcvzfI2nd0MHnzIGZ7JtquJk3Yx64l7jwu6XImRkNmBkhjVdVcI47QZ7xQq0PvugAb3+ppJxL4n+pNcnt1+PYpQHVETBEPk5WkofitFuYL8zzXEbs7uLY0dMUepnOiJcLSiVISKWWDyc8BJkKcK3a/KmB2sHaE1Lp2LJ+skW43+pYeqtgJE8o8xStowxPJB0OaSFXXw5dGUurK+ykmPam5oE+t+6hi9o/pO1EOHZFoqKl6tj/wsdu9+3I4lqGMsRutKH6s1rKLfip8s3MdlxqnlRKFmMDFewprELOwm+zpjmrJ1cqdlzzWQ6i/EMOzhcOzrPmH3JiH4CocA/Kcck12IuqvN4l6iAIjntb8b0G8zL";
@@ -114,9 +117,11 @@ public class AutoTest extends LinearOpMode {
         double timeNow = 0;
         timeStart = runtime.seconds();
         do {
+            telemetry.addData("Searching","%.1f",timeNow);
+            telemetry.update();
             AutoUpdate();
             timeNow = runtime.seconds() - timeStart;
-        } while ( ((timeNow-timeStart) < time_sec) && opModeIsActive() && (vuMark==RelicRecoveryVuMark.UNKNOWN));
+        } while ( (timeNow<time_sec) && opModeIsActive() && (vuMark==RelicRecoveryVuMark.UNKNOWN));
 
         if (vuMark == RelicRecoveryVuMark.UNKNOWN) {
             telemetry.addData("VuMark", "not visible");
@@ -136,8 +141,12 @@ public class AutoTest extends LinearOpMode {
     void AutoRotateAngle(double speed, double target) {
         if ( !opModeIsActive() ) return;
 
+        telemetry.addLine("Rotate Angle");
+        telemetry.update();
+
         double startAngle;
         double turnAngle;
+        Orientation angles;
 
         angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
         startAngle = angles.firstAngle;
@@ -146,18 +155,24 @@ public class AutoTest extends LinearOpMode {
             robot.RotateRight(speed);
             do {
                 AutoUpdate();
+                angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
                 turnAngle = -(angles.firstAngle-startAngle);
                 if (turnAngle>180) turnAngle -= 360;
                 if (turnAngle<-180) turnAngle += 360;
+                telemetry.addData("turn/target","%.0f %.0f",turnAngle,target);
+                telemetry.update();
             } while ( (turnAngle < target) && opModeIsActive() );
         }
         if (target<0) {
             robot.RotateLeft(speed);
             do {
                 AutoUpdate();
+                angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
                 turnAngle = -(angles.firstAngle-startAngle);
                 if (turnAngle>180) turnAngle -= 360;
                 if (turnAngle<-180) turnAngle += 360;
+                telemetry.addData("turn/target","%.0f %.0f",turnAngle,target);
+                telemetry.update();
             } while ( (turnAngle > target) && opModeIsActive() );
         }
         robot.MoveStop();
@@ -165,6 +180,8 @@ public class AutoTest extends LinearOpMode {
 
     void AutoRotateRight(double speed, double time_sec) {
         if ( !opModeIsActive() ) return;
+        telemetry.addLine("Rotate Right");
+        telemetry.update();
         robot.RotateRight(speed);
         AutoDelaySec(time_sec);
         robot.MoveStop();
@@ -172,6 +189,8 @@ public class AutoTest extends LinearOpMode {
 
     void AutoRotateLeft(double speed, double time_sec) {
         if ( !opModeIsActive() ) return;
+        telemetry.addLine("Rotate Left");
+        telemetry.update();
         robot.RotateLeft(speed);
         AutoDelaySec(time_sec);
         robot.MoveStop();
@@ -179,6 +198,8 @@ public class AutoTest extends LinearOpMode {
 
     void AutoMoveForward(double speed, double time_sec) {
         if ( !opModeIsActive() ) return;
+        telemetry.addLine("Move Forward");
+        telemetry.update();
         robot.MoveForward(speed);
         AutoDelaySec(time_sec);
         robot.MoveStop();
@@ -186,6 +207,8 @@ public class AutoTest extends LinearOpMode {
 
     void AutoMoveBackward(double speed, double time_sec) {
         if ( !opModeIsActive() ) return;
+        telemetry.addLine("Move Backward");
+        telemetry.update();
         robot.MoveBackward(speed);
         AutoDelaySec(time_sec);
         robot.MoveStop();
@@ -193,6 +216,8 @@ public class AutoTest extends LinearOpMode {
 
     void AutoMoveLeft(double speed, double time_sec) {
         if ( !opModeIsActive() ) return;
+        telemetry.addLine("Move Left");
+        telemetry.update();
         robot.MoveLeft(speed);
         AutoDelaySec(time_sec);
         robot.MoveStop();
@@ -200,6 +225,8 @@ public class AutoTest extends LinearOpMode {
 
     void AutoMoveRight(double speed, double time_sec) {
         if ( !opModeIsActive() ) return;
+        telemetry.addLine("Move Right");
+        telemetry.update();
         robot.MoveRight(speed);
         AutoDelaySec(time_sec);
         robot.MoveStop();
@@ -207,6 +234,8 @@ public class AutoTest extends LinearOpMode {
 
     void AutoGlyphRelease(double time_sec) {
         if ( !opModeIsActive() ) return;
+        telemetry.addLine("Glyph Release");
+        telemetry.update();
         robot.GGL.setPosition(robot.GRABBER_LEFT[0]);
         robot.GGR.setPosition(robot.GRABBER_RIGHT[0]);
         AutoDelaySec(time_sec);
@@ -215,6 +244,8 @@ public class AutoTest extends LinearOpMode {
 
     void AutoGlyphGrab(double time_sec) {
         if ( !opModeIsActive() ) return;
+        telemetry.addLine("Glyph Grab");
+        telemetry.update();
         robot.GGL.setPosition(robot.GRABBER_LEFT[1]);
         robot.GGR.setPosition(robot.GRABBER_RIGHT[1]);
         AutoDelaySec(time_sec);
@@ -222,12 +253,16 @@ public class AutoTest extends LinearOpMode {
 
     void AutoArmLift(double time_sec) {
         if ( !opModeIsActive() ) return;
+        telemetry.addLine("Arm Lift");
+        telemetry.update();
         robot.Arm.MoveToPosition(0.2);
         AutoDelaySec(time_sec);
     }
 
     void AutoArmHome(double time_sec) {
         if ( !opModeIsActive() ) return;
+        telemetry.addLine("Arm Home");
+        telemetry.update();
         robot.Arm.MoveHome();
 
         double timeStart = 0;
@@ -236,7 +271,7 @@ public class AutoTest extends LinearOpMode {
         do {
             AutoUpdate();
             timeNow = runtime.seconds() - timeStart;
-        } while ( ((timeNow-timeStart) < time_sec) && opModeIsActive() && (robot.ArmSwitch.getState()==true));
+        } while ( (timeNow<time_sec) && opModeIsActive() && (robot.ArmSwitch.getState()==true));
     }
 
     void AutoDelaySec(double time_sec) {
@@ -248,7 +283,7 @@ public class AutoTest extends LinearOpMode {
         do {
             AutoUpdate();
             timeNow = runtime.seconds() - timeStart;
-        } while ( ((timeNow-timeStart) < time_sec) && opModeIsActive() );
+        } while ( (timeNow<time_sec) && opModeIsActive() );
     }
 
     void AutoUpdate() {

@@ -49,6 +49,9 @@ public class teleop extends LinearOpMode {
         double reverse = 1;
         grabber_left = 0;
         grabber_right = 0;
+        telemetry.addData("Version", "State");
+        telemetry.update();
+
         //waits for that giant PLAY button to be pressed on RC
         waitForStart();
 
@@ -66,7 +69,6 @@ public class teleop extends LinearOpMode {
 
             /******Telemetry*****/
             //adds a lil' version thing to the telemetry so you know you're using the right version
-            telemetry.addData("Version", "2.3");
             telemetry.addData("Speed", speed);
             telemetry.update();
 

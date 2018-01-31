@@ -72,6 +72,7 @@ public class RobotConfig
     */
     public Servo GGR = null;
     public Servo GGL = null;
+    public Servo Claw = null;
     /* open full, closed full, partial open */
     public double[] GRABBER_LEFT = {0.745, .255, .375};
     public double[] GRABBER_RIGHT = {0.44, .89, .765};

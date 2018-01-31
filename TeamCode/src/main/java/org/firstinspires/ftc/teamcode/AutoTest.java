@@ -107,47 +107,84 @@ public class AutoTest extends LinearOpMode {
         telemetry.addData("Go", "...");
         telemetry.update();
 
+        /* Common initial moves */
         AutoFindVuMark(5.0);
         AutoGlyphGrab(1.0);                 AutoDelaySec(1.0);
         AutoArmLift(2.0);                   AutoDelaySec(1.0);
         AutoArmHome(2.0);                   AutoDelaySec(1.0);
 
-        AutoMoveBackward(MOVE_SPEED,2.0);   AutoDelaySec(1.0);
+        /* back off stone */
+        AutoMoveBackward(MOVE_SPEED,0.92);   AutoDelaySec(1.0);
+
         if (redteam){
             if (FI) {
                 AutoRotateAngle(ROTATE_SPEED,-45);     AutoDelaySec(1.0);
-                    // 30: Drive 1.5 diagonal tile (FI)
-                AutoMoveForward(MOVE_SPEED,2.0);    AutoDelaySec(1.0);
-                    // 40: Turn right to 0
-                // 50: Turn to column FI
+                // Drive 1.5 diagonal tile
+                AutoMoveForward(MOVE_SPEED,1.46);    AutoDelaySec(1.0);
+                // Turn to column
+                if (vuMark == RelicRecoveryVuMark.LEFT){
+                    AutoRotateAngle(ROTATE_SPEED,-25);
+                }
+                if (vuMark == RelicRecoveryVuMark.RIGHT){
+                    AutoRotateAngle(ROTATE_SPEED,25);
+                }
             } else {
                 AutoRotateAngle(ROTATE_SPEED,-45);     AutoDelaySec(1.0);
-                    // 31: Drive 1 diagonal tiles (BI)
-                AutoMoveForward(MOVE_SPEED,2.0);    AutoDelaySec(1.0);
+                // Drive 1 diagonal tiles
+                AutoMoveForward(MOVE_SPEED,1.12);    AutoDelaySec(1.0);
                 AutoRotateAngle(ROTATE_SPEED,-90);     AutoDelaySec(1.0);
-                // 51: Turn to column RABI
+                // Turn to column
+                if (vuMark == RelicRecoveryVuMark.LEFT){
+                    AutoRotateAngle(ROTATE_SPEED,-115);
+                }
+                if (vuMark == RelicRecoveryVuMark.RIGHT){
+                    AutoRotateAngle(ROTATE_SPEED,-65);
+                }
             }
         } else {
             if (FI) {
                 AutoRotateAngle(ROTATE_SPEED,45);     AutoDelaySec(1.0);
-                    // 30: Drive 1.5 diagonal tile (FI)
-                AutoMoveForward(MOVE_SPEED,2.0);    AutoDelaySec(1.0);
-                    // 42: Turn left to 0
-                // 50: Turn to column FI
+                // Drive 1.5 diagonal tile
+                AutoMoveForward(MOVE_SPEED,1.46);    AutoDelaySec(1.0);
+                // Turn to column
+                if (vuMark == RelicRecoveryVuMark.LEFT){
+                    AutoRotateAngle(ROTATE_SPEED,-25);
+                }
+                if (vuMark == RelicRecoveryVuMark.RIGHT){
+                    AutoRotateAngle(ROTATE_SPEED,25);
+                }
             } else {
                 AutoRotateAngle(ROTATE_SPEED,45);     AutoDelaySec(1.0);
-                    // 31: Drive 1 diagonal tiles (BI)
-                AutoMoveForward(MOVE_SPEED,2.0);    AutoDelaySec(1.0);
+                // Drive 1 diagonal tiles
+                AutoMoveForward(MOVE_SPEED,1.12);    AutoDelaySec(1.0);
                 AutoRotateAngle(ROTATE_SPEED,90);     AutoDelaySec(1.0);
-                // 52: Turn to column BABI
+                // Turn to column
+                if (vuMark == RelicRecoveryVuMark.LEFT){
+                    AutoRotateAngle(ROTATE_SPEED,-65);
+                }
+                if (vuMark == RelicRecoveryVuMark.RIGHT){
+                    AutoRotateAngle(ROTATE_SPEED,115);
+                }
             }
         }
-        AutoGlyphRelease(1.0);              AutoDelaySec(1.0);
-            // 6 : Drive into cryptobox
-        AutoMoveForward(MOVE_SPEED,0.5);    AutoDelaySec(1.0);
-            // 7 : Back up from cryptobox
-        AutoMoveBackward(MOVE_SPEED,0.5);    AutoDelaySec(1.0);
 
+        AutoGlyphRelease(1.0);              AutoDelaySec(1.0);
+        // Drive into cryptobox
+        if (vuMark == RelicRecoveryVuMark.CENTER){
+            AutoMoveForward(MOVE_SPEED,0.35);    AutoDelaySec(1.0);
+        }
+        else {
+            AutoMoveForward(MOVE_SPEED,0.45);    AutoDelaySec(1.0);
+        }
+        // Back up from cryptobox
+        if (vuMark == RelicRecoveryVuMark.CENTER){
+            AutoMoveBackward(MOVE_SPEED,0.3);    AutoDelaySec(1.0);
+        }
+        else {
+            AutoMoveBackward(MOVE_SPEED,0.45);    AutoDelaySec(1.0);
+        }
+
+        /* line up for autonomous */
         if (redteam){
             if (FI) {
                 AutoRotateAngle(ROTATE_SPEED,170);     AutoDelaySec(1.0);
@@ -161,16 +198,6 @@ public class AutoTest extends LinearOpMode {
                 AutoRotateAngle(ROTATE_SPEED,-140);     AutoDelaySec(1.0);
             }
         }
-
-/*
-        if (vuMark == RelicRecoveryVuMark.LEFT){
-            AutoMoveLeft(STRAFE_SPEED, 0.5);
-        }
-        if (vuMark == RelicRecoveryVuMark.RIGHT){
-            AutoMoveRight(STRAFE_SPEED, 0.5);
-        }
-        AutoDelaySec(1.0);
-*/
 
     }
 
@@ -216,6 +243,7 @@ public class AutoTest extends LinearOpMode {
         telemetry.update();
     }
 
+    /*!!!! make absolute rotation option (from initial start angle) */
     void AutoRotateAngle(double speed, double target) {
         if ( !opModeIsActive() ) return;
 

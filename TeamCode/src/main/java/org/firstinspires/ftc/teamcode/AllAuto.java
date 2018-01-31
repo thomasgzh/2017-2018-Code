@@ -300,14 +300,14 @@ public class AllAuto extends LinearOpMode {
                 /* backup 24 inches */
                 case 1:
                     robot.MoveBackward(MOVE_SPEED);
-                    if (now > 1.1) {
+                    if (now > 0.92) {
                         mode++;
                         resetClock();
                         robot.MoveStop();
                     }
                     break;
 
-                /* turn left to -45s (red) */
+                /* turn left to -45 (red) */
                 case 20:
                     robot.RotateLeft(ROTATE_SPEED);
                     if (turnAngle < -40) {
@@ -330,7 +330,7 @@ public class AllAuto extends LinearOpMode {
                 /* move forward 50.9 inches (FI) */
                 case 30:
                     robot.MoveForward(MOVE_SPEED);
-                    if (now > 1.7) {
+                    if (now > 1.46) {
                         mode++;
                         resetClock();
                         robot.MoveStop();
@@ -340,7 +340,7 @@ public class AllAuto extends LinearOpMode {
                 /* move forward 33.9 inches (BI) */
                 case 31:
                     robot.MoveForward(MOVE_SPEED);
-                    if (now > 1.2) {
+                    if (now > 1.12) {
                         mode++;
                         resetClock();
                         robot.MoveStop();
@@ -466,7 +466,7 @@ public class AllAuto extends LinearOpMode {
                 case 6:
                     robot.MoveForward(MOVE_SPEED);
                     if (vuMark == RelicRecoveryVuMark.CENTER){
-                        if (now > 0.3) {
+                        if (now > 0.35) {
                             mode++;
                             resetClock();
                             robot.MoveStop();
@@ -508,8 +508,8 @@ public class AllAuto extends LinearOpMode {
 
                 /* turn left to 140 (RABI) */
                 case 81:
-                    robot.RotateLeft(ROTATE_SPEED);
-                    if (turnAngle < 145) {
+                    robot.RotateRight(ROTATE_SPEED);
+                    if (turnAngle > 135) {
                         mode++;
                         resetClock();
                         robot.MoveStop();
@@ -518,8 +518,8 @@ public class AllAuto extends LinearOpMode {
 
                 /* turn right to -140 (BABI) */
                 case 82:
-                    robot.RotateRight(ROTATE_SPEED);
-                    if (turnAngle > -145) {
+                    robot.RotateLeft(ROTATE_SPEED);
+                    if (turnAngle < -135) {
                         mode++;
                         resetClock();
                         robot.MoveStop();

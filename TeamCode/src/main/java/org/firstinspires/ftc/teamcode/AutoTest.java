@@ -10,6 +10,7 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
@@ -30,11 +31,6 @@ public class AutoTest extends LinearOpMode {
     RobotConfig robot = new RobotConfig();
     private ElapsedTime runtime = new ElapsedTime();
 
-    /* move speeds */
-    final double    MOVE_SPEED = 0.5;
-    final double    STRAFE_SPEED = 0.5;
-    final double    ROTATE_SPEED = 0.5;
-
     /* VuMark variable */
     RelicRecoveryVuMark vuMark;
 
@@ -44,6 +40,8 @@ public class AutoTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         //declaring all my variables in one place for my sake
+        boolean redteam = true;
+        boolean FI = false;
 
         // Send telemetry message to signify robot waiting;
         telemetry.addLine("Auto Test");    //
@@ -66,23 +64,105 @@ public class AutoTest extends LinearOpMode {
         imu = hardwareMap.get(BNO055IMU.class, "imu");
         imu.initialize(imu_parameters);
 
+        /* Input the team color */
+        telemetry.addData("Input: ", "Select Team Color");
+        telemetry.update();
+        while (!gamepad1.x && !gamepad1.b) { }
+        if (gamepad1.x)
+            redteam = false;
+
+        /* Input the position */
+        telemetry.addData("Input: ", "Select Position");
+        telemetry.update();
+        while (!gamepad1.dpad_left && !gamepad1.dpad_right) { }
+        if ((gamepad1.dpad_left && redteam) || (gamepad1.dpad_right && !redteam))
+            FI = true;
+
+        /* check voltage level */
+        VoltageSensor vs = hardwareMap.voltageSensor.get("Lower hub 2");
+        double voltage = vs.getVoltage();
+        telemetry.addData("Voltage", voltage);
+
+        /* adjust speeds based on voltage level */
+        final double MOVE_SPEED = 0.5 + ((13.2-voltage)/8);
+        final double STRAFFE_SPEED = 0.75 + ((13.2-voltage)/8);
+        final double ROTATE_SPEED = 0.4 + ((13.2-voltage)/8);
+
+        telemetry.addData("Status", "Initialized");
+        if (FI)
+            telemetry.addData("Position", "FI");
+        else
+            telemetry.addData("Position", "BI");
+        if (redteam)
+            telemetry.addData("Team Color", "RED");
+        else
+            telemetry.addData("Team Color", "BLUE");
+
+        //waits for that giant PLAY button to be pressed on RC
         telemetry.addData(">", "Press Play to start");
         telemetry.update();
 
-        //waits for that giant PLAY button to be pressed on RC
         waitForStart();
+
         telemetry.addData("Go", "...");
         telemetry.update();
 
-        AutoFindVuMark(5.0);                AutoDelaySec(1.0);
+        AutoFindVuMark(5.0);
         AutoGlyphGrab(1.0);                 AutoDelaySec(1.0);
         AutoArmLift(2.0);                   AutoDelaySec(1.0);
         AutoArmHome(2.0);                   AutoDelaySec(1.0);
-        AutoMoveBackward(MOVE_SPEED,2.0);   AutoDelaySec(1.0);
-        AutoRotateAngle(ROTATE_SPEED,45);     AutoDelaySec(1.0);
-        AutoMoveForward(MOVE_SPEED,2.0);    AutoDelaySec(1.0);
-        AutoRotateAngle(ROTATE_SPEED,-45);     AutoDelaySec(1.0);
 
+        AutoMoveBackward(MOVE_SPEED,2.0);   AutoDelaySec(1.0);
+        if (redteam){
+            if (FI) {
+                AutoRotateAngle(ROTATE_SPEED,-45);     AutoDelaySec(1.0);
+                    // 30: Drive 1.5 diagonal tile (FI)
+                AutoMoveForward(MOVE_SPEED,2.0);    AutoDelaySec(1.0);
+                    // 40: Turn right to 0
+                // 50: Turn to column FI
+            } else {
+                AutoRotateAngle(ROTATE_SPEED,-45);     AutoDelaySec(1.0);
+                    // 31: Drive 1 diagonal tiles (BI)
+                AutoMoveForward(MOVE_SPEED,2.0);    AutoDelaySec(1.0);
+                AutoRotateAngle(ROTATE_SPEED,-90);     AutoDelaySec(1.0);
+                // 51: Turn to column RABI
+            }
+        } else {
+            if (FI) {
+                AutoRotateAngle(ROTATE_SPEED,45);     AutoDelaySec(1.0);
+                    // 30: Drive 1.5 diagonal tile (FI)
+                AutoMoveForward(MOVE_SPEED,2.0);    AutoDelaySec(1.0);
+                    // 42: Turn left to 0
+                // 50: Turn to column FI
+            } else {
+                AutoRotateAngle(ROTATE_SPEED,45);     AutoDelaySec(1.0);
+                    // 31: Drive 1 diagonal tiles (BI)
+                AutoMoveForward(MOVE_SPEED,2.0);    AutoDelaySec(1.0);
+                AutoRotateAngle(ROTATE_SPEED,90);     AutoDelaySec(1.0);
+                // 52: Turn to column BABI
+            }
+        }
+        AutoGlyphRelease(1.0);              AutoDelaySec(1.0);
+            // 6 : Drive into cryptobox
+        AutoMoveForward(MOVE_SPEED,0.5);    AutoDelaySec(1.0);
+            // 7 : Back up from cryptobox
+        AutoMoveBackward(MOVE_SPEED,0.5);    AutoDelaySec(1.0);
+
+        if (redteam){
+            if (FI) {
+                AutoRotateAngle(ROTATE_SPEED,170);     AutoDelaySec(1.0);
+            } else {
+                AutoRotateAngle(ROTATE_SPEED,140);     AutoDelaySec(1.0);
+            }
+        } else {
+            if (FI) {
+                AutoRotateAngle(ROTATE_SPEED,170);     AutoDelaySec(1.0);
+            } else {
+                AutoRotateAngle(ROTATE_SPEED,-140);     AutoDelaySec(1.0);
+            }
+        }
+
+/*
         if (vuMark == RelicRecoveryVuMark.LEFT){
             AutoMoveLeft(STRAFE_SPEED, 0.5);
         }
@@ -90,9 +170,7 @@ public class AutoTest extends LinearOpMode {
             AutoMoveRight(STRAFE_SPEED, 0.5);
         }
         AutoDelaySec(1.0);
-
-        AutoMoveForward(MOVE_SPEED,0.5);    AutoDelaySec(1.0);
-        AutoGlyphRelease(1.0);              AutoDelaySec(1.0);
+*/
 
     }
 

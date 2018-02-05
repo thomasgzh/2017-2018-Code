@@ -289,16 +289,7 @@ public class RobotConfig
             if (error>0.2) error = 0.2;
             if (error<-0.2) error = -0.2;
 
-            //AJB
             upper_arm = UPPER_ARM_POWER * 5 * error;
-
-            if ((error>-0.02)&&(error<0.02)) {
-                upper_arm = 0.0;
-                om.telemetry.addLine("BRAKE?");
-            }
-
-            //>>>>>MASTER
-/*            upper_arm = UPPER_ARM_POWER * 5 * error;
             upper_arm += UPPER_ARM_HOLD_POWER*(2.5-UpperArmTarget)/2.5;
             if (upper_arm==0.0) upper_arm = UPPER_ARM_HOLD_POWER/4;
 
@@ -306,7 +297,7 @@ public class RobotConfig
             om.telemetry.addData("rate","%.3f", error_rate);
 
             /* compensate for a dropping arm, large power boast to stop it from falling */
-/*            if ((error>0.0)&&(error_rate<-0.05)) {
+            if ((error>0.0)&&(error_rate<-0.05)) {
                 upper_arm += UPPER_ARM_POWER/4;
                 om.telemetry.addLine("Save me!!!!");
             }
@@ -316,8 +307,7 @@ public class RobotConfig
             }
             LastError = error;
             Time.reset();
-            //<<<<<<MASTER
-*/
+
             /* prevent negative power when...
                 at home position or never homed
             */

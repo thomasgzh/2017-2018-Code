@@ -261,7 +261,7 @@ public class RobotConfig
             boolean at_home;                 /* home switch active */
             double upper_arm;
             double error;
-//            final double UPPER_ARM_HOLD_POWER = 0.01;
+            final double UPPER_ARM_HOLD_POWER = 0.01;
             final double UPPER_ARM_POWER = 0.2;
 
             /* Check to see if on home switch */
@@ -301,15 +301,15 @@ public class RobotConfig
             if ( (error>0.0) && (UpperArmVelocity<0.0)) {
                 /* dropping down, give power boost */
                 upper_arm += UPPER_ARM_POWER * (-2.0 * UpperArmVelocity);
-                om.telemetry.addLine("!! Boost !!");
+                om.telemetry.addLine("++++ Boost");
             } else if ( (error<0.0) && (UpperArmVelocity>0.0)) {
                 /* passing by, reverse thrusters */
                 upper_arm += UPPER_ARM_POWER * (-0.5 * UpperArmVelocity);
-                om.telemetry.addLine("-- Reverse --");
-            } else if ((UpperArmTarget > 0.0) && (Math.abs(upper_arm) < 0.01) ) {
+                om.telemetry.addLine("-- Reverse");
+            } else if ((UpperArmTarget > 0.0) && (Math.abs(upper_arm) < UPPER_ARM_HOLD_POWER) ) {
                 /* always use positive power when trying to hold */
-                upper_arm = 0.01;
-                om.telemetry.addLine(".........");
+                upper_arm = UPPER_ARM_HOLD_POWER;
+                om.telemetry.addLine("..........");
             }
 
             /* prevent negative power when...

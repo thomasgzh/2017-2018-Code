@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 //naming the teleop thing
-@TeleOp(name="TeleOp 2", group="Drive")
+@TeleOp(name="TeleOp", group="Drive")
 public class teleop extends LinearOpMode {
 
     RobotConfig robot = new RobotConfig();
@@ -44,7 +44,7 @@ public class teleop extends LinearOpMode {
 
         grabber_left = 0;
         grabber_right = 0;
-        telemetry.addData("Version", "3.0");
+        telemetry.addData("Version", "State");
         telemetry.update();
 
         //waits for that giant PLAY button to be pressed on RC

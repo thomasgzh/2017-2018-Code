@@ -216,11 +216,12 @@ public class RobotConfig
         //declaring all my variables in one place for my sake
         private double UpperArmHomePosition = 0;        /* position value at home */
         private double UpperArmPosition = 0;            /* current position relative to home */
+        private double UpperArmLastPosition = 0;
+        private double UpperArmVelocity = 0;
         private double UpperArmFinalTarget = 0;         /* final target position */
         private double UpperArmTarget = 0;              /* target position */
         private boolean Homed = false;
-        private double LastError = 0;
-        private ElapsedTime Time  = new ElapsedTime();
+        private ElapsedTime Time = new ElapsedTime();
 
         /* Constructor */
         public ArmControl() {
@@ -233,12 +234,12 @@ public class RobotConfig
 
         public void MoveUp() {
             UpperArmFinalTarget += 0.01;
-            if (UpperArmFinalTarget>0.6) UpperArmFinalTarget = 0.6;
+            if (UpperArmFinalTarget > 1.0) UpperArmFinalTarget = 1.0;
         }
 
         public void MoveDown() {
             UpperArmFinalTarget -= 0.01;
-            if (UpperArmFinalTarget<0.0) UpperArmFinalTarget = 0.0;
+            if (UpperArmFinalTarget < 0.0) UpperArmFinalTarget = 0.0;
         }
 
         public void MoveHome() {
@@ -251,21 +252,21 @@ public class RobotConfig
 
         public void MoveToPosition(double target) {
             UpperArmFinalTarget = target;
-            if (UpperArmFinalTarget>1.0) UpperArmFinalTarget = 1.0;
-            if (UpperArmFinalTarget<0.0) UpperArmFinalTarget = 0.0;
+            if (UpperArmFinalTarget > 0.6) UpperArmFinalTarget = 0.6;
+            if (UpperArmFinalTarget < 0.0) UpperArmFinalTarget = 0.0;
         }
 
         /* Call this method when you want to update the arm motors */
         public void Update(OpMode om) {
             boolean at_home;                 /* home switch active */
             double upper_arm;
-            double error, error_rate;
-            final double UPPER_ARM_HOLD_POWER = 0.01;
-            final double UPPER_ARM_POWER = 1;
+            double error;
+//            final double UPPER_ARM_HOLD_POWER = 0.01;
+            final double UPPER_ARM_POWER = 0.2;
 
             /* Check to see if on home switch */
             at_home = false;
-            if (ArmSwitch.getState()==false) {
+            if (ArmSwitch.getState() == false) {
                 /* arm in home position */
                 at_home = true;
                 Homed = true;
@@ -278,35 +279,38 @@ public class RobotConfig
             /* determine current position relative to home */
             UpperArmPosition = UpperArmPot.getVoltage() - UpperArmHomePosition;
 
+            /* determine velocity */
+            UpperArmVelocity = 1000 * (UpperArmPosition - UpperArmLastPosition) / Time.milliseconds();
+            UpperArmLastPosition = UpperArmPosition;
+            Time.reset();
+
             /* incrementally change target value */
-            if (UpperArmTarget < UpperArmFinalTarget-0.01)
-                UpperArmTarget += 0.02;
-            if (UpperArmTarget > UpperArmFinalTarget+0.01)
-                UpperArmTarget -= 0.02;
+            if (UpperArmTarget < UpperArmFinalTarget - 0.01)    UpperArmTarget += 0.02;
+            if (UpperArmTarget > UpperArmFinalTarget + 0.01)    UpperArmTarget -= 0.02;
+            if (UpperArmFinalTarget < 0.01) UpperArmTarget = 0.0;
+            if (UpperArmTarget > 0.6) UpperArmTarget = 0.6;
+            if (UpperArmTarget < 0.0) UpperArmTarget = 0.0;
 
             /*********** control code **********/
             error = UpperArmTarget - UpperArmPosition;
-            if (error>0.2) error = 0.2;
-            if (error<-0.2) error = -0.2;
+            if (error > 0.2) error = 0.2;
+            if (error < -0.2) error = -0.2;
 
             upper_arm = UPPER_ARM_POWER * 5 * error;
-            upper_arm += UPPER_ARM_HOLD_POWER*(2.5-UpperArmTarget)/2.5;
-            if (upper_arm==0.0) upper_arm = UPPER_ARM_HOLD_POWER/4;
 
-            error_rate = 1000*(error-LastError)/Time.milliseconds();
-            om.telemetry.addData("rate","%.3f", error_rate);
-
-            /* compensate for a dropping arm, large power boast to stop it from falling */
-            if ((error>0.0)&&(error_rate<-0.05)) {
-                upper_arm += UPPER_ARM_POWER/4;
-                om.telemetry.addLine("Save me!!!!");
+            if ( (error>0.0) && (UpperArmVelocity<0.0)) {
+                /* dropping down, give power boost */
+                upper_arm += UPPER_ARM_POWER * (-2.0 * UpperArmVelocity);
+                om.telemetry.addLine("!! Boost !!");
+            } else if ( (error<0.0) && (UpperArmVelocity>0.0)) {
+                /* passing by, reverse thrusters */
+                upper_arm += UPPER_ARM_POWER * (-0.5 * UpperArmVelocity);
+                om.telemetry.addLine("-- Reverse --");
+            } else if ((UpperArmTarget > 0.0) && (Math.abs(upper_arm) < 0.01) ) {
+                /* always use positive power when trying to hold */
+                upper_arm = 0.01;
+                om.telemetry.addLine(".........");
             }
-            if ((error<0.0)&&(error_rate>-0.05)) {
-                upper_arm -= UPPER_ARM_POWER/4;
-                om.telemetry.addLine("Save me!!!!");
-            }
-            LastError = error;
-            Time.reset();
 
             /* prevent negative power when...
                 at home position or never homed
@@ -316,20 +320,21 @@ public class RobotConfig
             }
 
             /* when target is zero ...
-            * prevent positive power
-            * zero power if close to home
+            * kill power, let braking bring it down
             */
-            if (UpperArmTarget<0.01) {
-                if (upper_arm > 0.0) upper_arm = 0.0;
-                if (error > -0.1) upper_arm = 0.0;
+            if (UpperArmTarget < 0.01) {
+                upper_arm = 0.0;
             }
 
-            om.telemetry.addData("Error/Power","%.2f %.2f", error, upper_arm);
+            om.telemetry.addData("Velocity", "%.3f", UpperArmVelocity);
+            om.telemetry.addData("Target Position", "%.2f %.2f", UpperArmTarget, UpperArmPosition);
+            om.telemetry.addData("Error  Power   ", "%.2f %.2f", error, upper_arm);
 
             UR.setPower(upper_arm);
             UL.setPower(upper_arm);
         }
     }
+
 
     /***
      *

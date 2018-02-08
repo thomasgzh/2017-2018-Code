@@ -59,7 +59,7 @@ public class IMUDriveTest extends LinearOpMode {
         final double ROTATE_SPEED = 0.5;
         double          turnAngle;
         double          currentAngle;
-        double          currentDistance;
+        double          currentDistance = 0;
 
         double intStart = 0;
         double intEnd = 0;
@@ -87,6 +87,7 @@ public class IMUDriveTest extends LinearOpMode {
         imu = hardwareMap.get(BNO055IMU.class, "imu");
         imu.initialize(imu_parameters);
         angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        gravity = imu.getGravity();
 
         telemetry.addData(">", "Press Play to start");
         telemetry.update();
@@ -102,6 +103,7 @@ public class IMUDriveTest extends LinearOpMode {
         while (opModeIsActive() && modes[mode] < 100) {
 
             /* IMU update code */
+            gravity = imu.getGravity();
             angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
             currentAngle = angles.firstAngle;
             turnAngle = startAngle-currentAngle;
@@ -112,11 +114,10 @@ public class IMUDriveTest extends LinearOpMode {
 
             if (intStart != intEnd) {
                 intStart = intEnd;
-                intStartTime = runtime.seconds();
                 intEnd = gravity.zAccel;
                 timeInt = runtime.seconds() - intStartTime;
+                intStartTime = runtime.seconds();
             }
-            currentDistance =+ ((intStart + intEnd)*timeInt/2);
 
             telemetry.addData("current distance", currentDistance);
             telemetry.update();
@@ -146,11 +147,13 @@ public class IMUDriveTest extends LinearOpMode {
                     break;
 
                 case 1:
+                    currentDistance =+ ((intStart + intEnd)*timeInt/2)*0.0393701;
                     robot.MoveForward(MOVE_SPEED);
-                    if (currentDistance > 100) {
+                    if (currentDistance > 12) {
                         mode++;
                         resetClock();
                         robot.MoveStop();
+                        currentDistance = 0;
                     }
                     break;
 

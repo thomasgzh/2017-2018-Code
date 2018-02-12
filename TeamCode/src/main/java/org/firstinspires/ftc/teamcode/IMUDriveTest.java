@@ -18,7 +18,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
+import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
@@ -65,6 +67,8 @@ public class IMUDriveTest extends LinearOpMode {
         double intEnd = 0;
         double intStartTime = 0;
         double timeInt = 0;
+        double startAccel;
+        double currentAccel;
 
         // Send telemetry message to signify robot waiting;
         telemetry.addLine("RA_FI");    //
@@ -88,6 +92,7 @@ public class IMUDriveTest extends LinearOpMode {
         imu.initialize(imu_parameters);
         angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
         gravity = imu.getGravity();
+        //imu.startAccelerationIntegration(new Position(), new Velocity(), 100);
 
         telemetry.addData(">", "Press Play to start");
         telemetry.update();
@@ -97,6 +102,7 @@ public class IMUDriveTest extends LinearOpMode {
 
         resetClock();
         startAngle = angles.firstAngle;
+        startAccel = gravity.yAccel;
 
         // telling the code to run until you press that giant STOP button on RC
         // include opModeIsActive in all while loops so that STOP button terminates all actions
@@ -105,20 +111,27 @@ public class IMUDriveTest extends LinearOpMode {
             /* IMU update code */
             gravity = imu.getGravity();
             angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+            currentAccel = gravity.yAccel - startAccel;
             currentAngle = angles.firstAngle;
-            turnAngle = startAngle-currentAngle;
+            turnAngle = startAngle - currentAngle;
 
-            if (Math.abs(gravity.zAccel) < .1){
+            if (Math.abs(currentAccel) < .01){
                 intEnd = 0;
             }
 
+            intEnd = currentAccel;
+
             if (intStart != intEnd) {
                 intStart = intEnd;
-                intEnd = gravity.zAccel;
-                timeInt = runtime.seconds() - intStartTime;
                 intStartTime = runtime.seconds();
+                timeInt = runtime.seconds() - intStartTime;
             }
 
+            telemetry.addData("intStart", intStart);
+            telemetry.addData("intEnd", intEnd);
+            telemetry.addData("timeInt", timeInt);
+            telemetry.addData("angles", angles);
+            telemetry.addData("gravity", gravity);
             telemetry.addData("current distance", currentDistance);
             telemetry.update();
 
@@ -147,7 +160,7 @@ public class IMUDriveTest extends LinearOpMode {
                     break;
 
                 case 1:
-                    currentDistance =+ ((intStart + intEnd)*timeInt/2)*0.0393701;
+                    currentDistance += ((intStart + intEnd)*timeInt/2)*3937010;
                     robot.MoveForward(MOVE_SPEED);
                     if (currentDistance > 12) {
                         mode++;

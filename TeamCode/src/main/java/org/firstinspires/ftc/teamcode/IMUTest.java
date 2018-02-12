@@ -21,8 +21,8 @@ import java.util.Locale;
  * Created by Nicholas on 1/24/2018.
  */
 
-@TeleOp(name="IMU", group="Test")
-public class IMU extends LinearOpMode {
+@TeleOp(name="IMU Test", group="Test")
+public class IMUTest extends LinearOpMode {
         //----------------------------------------------------------------------------------------------
         // State
         //----------------------------------------------------------------------------------------------

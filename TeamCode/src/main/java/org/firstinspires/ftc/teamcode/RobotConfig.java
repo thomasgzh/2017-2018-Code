@@ -260,8 +260,10 @@ public class RobotConfig
         public void Update(OpMode om) {
             boolean at_home;                 /* home switch active */
             double upper_arm;
+
             double error;
             final double UPPER_ARM_HOLD_POWER = 0.01;
+
             final double UPPER_ARM_POWER = 0.2;
 
             /* Check to see if on home switch */

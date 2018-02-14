@@ -166,28 +166,15 @@ public class teleop extends LinearOpMode {
 
             /********** Arm code **********/
             if (gamepad2.dpad_down) {
-                //robot.Arm.MoveHome();
-                //robot.Arm.MoveDown();
-                //robot.Arm.MoveToPosition(0.20);
                 robot.Arm.MoveHome();
             }
             if (gamepad2.dpad_left) {
-                //robot.Arm.MoveToPosition(0.20);
-                robot.Arm.MoveDown();
+                robot.Arm.MoveToPosition(0.20);
             }
             if (gamepad2.dpad_right) {
-<<<<<<< HEAD
-                //robot.Arm.MoveToPosition(0.40);
-                robot.Arm.MoveUp();
-            }
-            if (gamepad2.dpad_up) {
-                //robot.Arm.MoveToPosition(0.60);
-                //robot.Arm.MoveUp();
-=======
                 robot.Arm.MoveToPosition(0.30);
             }
             if (gamepad2.dpad_up) {
->>>>>>> master
                 robot.Arm.MoveToPosition(0.40);
             }
 

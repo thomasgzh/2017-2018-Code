@@ -28,9 +28,9 @@ public class teleop extends LinearOpMode {
         double back_left;
         double back_right;
         double speed = 2.5;
+        double reverse = 1.0;
         int grabber_left;
         int grabber_right;
-        double upper_arm;
 
         /* Initialize the hardware variables.
          * The init() method of the hardware class does all the work here
@@ -42,11 +42,6 @@ public class teleop extends LinearOpMode {
         egamepad1 = new GamepadEdge(gamepad1);
         egamepad2 = new GamepadEdge(gamepad2);
 
-        boolean updpad;
-        boolean downdpad;
-        boolean leftdpad;
-        boolean rightdpad;
-        double reverse = 1;
         grabber_left = 0;
         grabber_right = 0;
         telemetry.addData("Version", "State");
@@ -181,12 +176,18 @@ public class teleop extends LinearOpMode {
                 robot.Arm.MoveDown();
             }
             if (gamepad2.dpad_right) {
+<<<<<<< HEAD
                 //robot.Arm.MoveToPosition(0.40);
                 robot.Arm.MoveUp();
             }
             if (gamepad2.dpad_up) {
                 //robot.Arm.MoveToPosition(0.60);
                 //robot.Arm.MoveUp();
+=======
+                robot.Arm.MoveToPosition(0.30);
+            }
+            if (gamepad2.dpad_up) {
+>>>>>>> master
                 robot.Arm.MoveToPosition(0.40);
             }
 

@@ -257,8 +257,8 @@ public class RobotConfig
             boolean at_home;                 /* home switch active */
             double upper_arm;
             double error, error_rate;
-            final double UPPER_ARM_HOLD_POWER = 0.01;
-            final double UPPER_ARM_POWER = 1;
+            final double UPPER_ARM_HOLD_POWER = 0.04;
+            final double UPPER_ARM_POWER = 0.2;
 
             /* Check to see if on home switch */
             at_home = false;

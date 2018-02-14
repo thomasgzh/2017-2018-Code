@@ -33,6 +33,7 @@ public class ArmCodeTest extends LinearOpMode {
 
         //adds a lil' version thing to the telemetry so you know you're using the right version
         telemetry.addData("Version", "3.0");
+        telemetry.addData("Lower arm potentiometer", robot.LowerArmPot);
         telemetry.update();
 
         //waits for that giant PLAY button to be pressed on RC
@@ -46,7 +47,21 @@ public class ArmCodeTest extends LinearOpMode {
             egamepad1.UpdateEdge();
             egamepad2.UpdateEdge();
 
-            /* TeleOp code */
+
+            if (gamepad2.dpad_down) {
+                robot.LR.setPower(-0.1);
+                robot.LL.setPower(-0.1);
+            }
+            else if (gamepad2.dpad_up) {
+                robot.LL.setPower(0.1);
+                robot.LR.setPower(0.1);
+            }
+             else {
+                robot.LR.setPower(0);
+                robot.LL.setPower(0);
+            }
+
+            /* TeleOp code
             if (gamepad2.dpad_down) {
                 robot.Arm.MoveHome();
             }
@@ -64,7 +79,7 @@ public class ArmCodeTest extends LinearOpMode {
             }
             if (gamepad2.y) {
                 robot.Arm.MoveDown();
-            }
+            } */
 
             robot.Arm.Update(this);
 

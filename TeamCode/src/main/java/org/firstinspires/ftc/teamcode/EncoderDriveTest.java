@@ -34,7 +34,7 @@ public class EncoderDriveTest extends LinearOpMode {
     //mode 'stuff'
     //modes lists which steps and in what order to accomplish them
     int mode = 0;
-    int[] modes = {0, 1, 0, 0, 0, 100};
+    int[] modes = {0, 1, 100};
 
     //time based variables
     double lastReset = 0;
@@ -59,16 +59,23 @@ public class EncoderDriveTest extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+        VoltageSensor vs = hardwareMap.voltageSensor.get("Lower hub 2");
+        double voltage = vs.getVoltage();
+        telemetry.addData("Voltage", voltage);
+
         //declaring all my variables in one place for my sake
-        final double MOVE_SPEED = 0.5;
-        final double STRAFFE_SPEED = 0.75;
-        final double ROTATE_SPEED = 0.4;
+        final double MOVE_SPEED = 0.5 + ((13.2-voltage)/8);
+        final double STRAFFE_SPEED = 0.75 + ((13.2-voltage)/8);
+        final double ROTATE_SPEED = 0.4 + ((13.2-voltage)/8);
 
         /* Initialize the hardware variables.
          * The init() method of the hardware class does all the work here
          */
         robot.init(hardwareMap);
 
+        telemetry.addData("Move Speed", MOVE_SPEED);
+        telemetry.addData("Straffe Speed", STRAFFE_SPEED);
+        telemetry.addData("Rotate Speed", ROTATE_SPEED);
         telemetry.addData(">", "Press Play to start");
         telemetry.update();
 
@@ -86,7 +93,7 @@ public class EncoderDriveTest extends LinearOpMode {
             now = runtime.seconds() - lastReset;
 
             currentDistance = -(robot.FL.getCurrentPosition() + robot.BL.getCurrentPosition() +
-                               robot.FR.getCurrentPosition() + robot.BR.getCurrentPosition())/180;
+                               robot.FR.getCurrentPosition() + robot.BR.getCurrentPosition())/360;
 
             telemetry.addData("currentDistance", currentDistance);
             telemetry.update();
@@ -112,9 +119,9 @@ public class EncoderDriveTest extends LinearOpMode {
                 case 1:
                     robot.MoveForward(MOVE_SPEED);
                     if (currentDistance > 12) {
-                        mode++;
-                        resetClock();
-                        resetEncoders();
+                        //mode++;
+                        //resetClock();
+                        //resetEncoders();
                         robot.MoveStop();
                     }
                     break;

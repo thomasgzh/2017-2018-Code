@@ -73,6 +73,11 @@ public class EncoderDriveTest extends LinearOpMode {
          */
         robot.init(hardwareMap);
 
+        robot.FL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        robot.BL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        robot.FR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        robot.BR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
         telemetry.addData("Move Speed", MOVE_SPEED);
         telemetry.addData("Straffe Speed", STRAFFE_SPEED);
         telemetry.addData("Rotate Speed", ROTATE_SPEED);

@@ -34,7 +34,7 @@ public class EncoderDriveTest extends LinearOpMode {
     //mode 'stuff'
     //modes lists which steps and in what order to accomplish them
     int mode = 0;
-    int[] modes = {0, 1, 100};
+    int[] modes = {0, 1, 2, 3, 2, 100};
 
     //time based variables
     double lastReset = 0;
@@ -64,9 +64,9 @@ public class EncoderDriveTest extends LinearOpMode {
         telemetry.addData("Voltage", voltage);
 
         //declaring all my variables in one place for my sake
-        final double MOVE_SPEED = 0.5 + ((13.2-voltage)/8);
-        final double STRAFFE_SPEED = 0.75 + ((13.2-voltage)/8);
-        final double ROTATE_SPEED = 0.4 + ((13.2-voltage)/8);
+        final double MOVE_SPEED = 0.4 + ((13.2-voltage)/12);
+        final double STRAFFE_SPEED = 0.75 + ((13.2-voltage)/12);
+        final double ROTATE_SPEED = 0.4 + ((13.2-voltage)/12);
 
         /* Initialize the hardware variables.
          * The init() method of the hardware class does all the work here
@@ -98,7 +98,7 @@ public class EncoderDriveTest extends LinearOpMode {
             now = runtime.seconds() - lastReset;
 
             currentDistance = -(robot.FL.getCurrentPosition() + robot.BL.getCurrentPosition() +
-                               robot.FR.getCurrentPosition() + robot.BR.getCurrentPosition())/360;
+                               robot.FR.getCurrentPosition() + robot.BR.getCurrentPosition())/160;
 
             telemetry.addData("currentDistance", currentDistance);
             telemetry.update();
@@ -123,9 +123,28 @@ public class EncoderDriveTest extends LinearOpMode {
                 /* move forward 12 inches */
                 case 1:
                     robot.MoveForward(MOVE_SPEED);
-                    if (currentDistance > 12) {
-                        //mode++;
-                        //resetClock();
+                    if (currentDistance > 12-6) {
+                        mode++;
+                        resetClock();
+                        //resetEncoders();
+                        robot.MoveStop();
+                    }
+                    break;
+
+                case 2:
+                    if (now > 5.0) {
+                        mode++;
+                        resetClock();
+                        resetEncoders();
+                        robot.MoveStop();
+                    }
+                    break;
+
+                case 3:
+                    robot.MoveForward(MOVE_SPEED);
+                    if (currentDistance > 30-6) {
+                        mode++;
+                        resetClock();
                         //resetEncoders();
                         robot.MoveStop();
                     }

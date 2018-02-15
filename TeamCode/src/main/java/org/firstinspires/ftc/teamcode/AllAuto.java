@@ -9,6 +9,7 @@ import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -72,13 +73,45 @@ public class AllAuto extends LinearOpMode {
         telemetry.update();
     }
 
+    VoltageSensor vs = hardwareMap.voltageSensor.get("Lower hub 2");
+    double voltage = vs.getVoltage();
+
+
+    //declaring all my variables in one place for my sake
+    final double MOVE_SPEED = 0.5 + ((13.2-voltage)/10);
+    final double STRAFFE_SPEED = 0.75 + ((13.2-voltage)/10);
+    final double ROTATE_SPEED = 0.5 + ((13.2-voltage)/10);
+    double          turnAngle;
+    double          currentAngle;
+
+    public void drive(double distance, boolean forwards){
+        if (forwards){
+            robot.MoveForward(MOVE_SPEED);
+            if (currentDistance > distance) {
+                mode++;
+                resetClock();
+                resetEncoders();
+                robot.MoveStop();
+            }
+        }
+        if (!forwards){
+            robot.MoveBackward(MOVE_SPEED);
+            if (currentDistance < -distance) {
+                mode++;
+                resetClock();
+                resetEncoders();
+                robot.MoveStop();
+            }
+        }
+    }
+
     //mode 'stuff'
     //modes lists which steps and in what order to accomplish them
     int mode = 0;
-    int [] modesRAFI = {-3, 0, -20, -1, 0, 1, 0, 20, 0, 30, 0, 40, 0, 50, 0, -21, 0, 6, 0, 7, 0, 80, 0, 100};
-    int [] modesRABI = {-3, 0, -20, -1, 0, 1, 0, 20, 0, 31, 0, 41, 0, 51, 0, -21, 0, 6, 0, 7, 0, 81, 0, 100};
-    int [] modesBAFI = {-3, 0, -20, -1, 0, 1, 0, 21, 0, 30, 0, 42, 0, 50, 0, -21, 0, 6, 0, 7, 0, 80, 0, 100};
-    int [] modesBABI = {-3, 0, -20, -1, 0, 1, 0, 21, 0, 31, 0, 43, 0, 52, 0, -21, 0, 6, 0, 7, 0, 82, 0, 100};
+    int [] modesRAFI = {-3, 0, -20, -1, 0, 1, 0, 20, 0, 30, 0, 40, 0, 50, 0, -21, 0, 6, 0, 7, 0, 100};
+    int [] modesRABI = {-3, 0, -20, -1, 0, 1, 0, 20, 0, 31, 0, 41, 0, 51, 0, -21, 0, 6, 0, 7, 0, 100};
+    int [] modesBAFI = {-3, 0, -20, -1, 0, 1, 0, 21, 0, 30, 0, 42, 0, 50, 0, -21, 0, 6, 0, 7, 0, 100};
+    int [] modesBABI = {-3, 0, -20, -1, 0, 1, 0, 21, 0, 31, 0, 43, 0, 52, 0, -21, 0, 6, 0, 7, 0, 100};
     int[] modes = {};
     //-3 : Check Vumark
     //-20: Grab glyph
@@ -131,6 +164,7 @@ public class AllAuto extends LinearOpMode {
     //time based variables
     double lastReset = 0;
     double now = 0;
+    double currentDistance = 0;
 
     /* IMU objects */
     BNO055IMU imu;
@@ -142,26 +176,31 @@ public class AllAuto extends LinearOpMode {
         lastReset = runtime.seconds();
     }
 
+    public void resetEncoders() {
+        robot.FL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.BL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.FR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.BR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.FL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.FR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.BR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.BL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+
     @Override
     public void runOpMode() throws InterruptedException {
-        VoltageSensor vs = hardwareMap.voltageSensor.get("Lower hub 2");
-        double voltage = vs.getVoltage();
         telemetry.addData("Voltage", voltage);
-
-        //declaring all my variables in one place for my sake
-        final double MOVE_SPEED = 0.5 + ((13.2-voltage)/8);
-        final double STRAFFE_SPEED = 0.75 + ((13.2-voltage)/8);
-        final double ROTATE_SPEED = 0.4 + ((13.2-voltage)/8);
-        double          turnAngle;
-        double          currentAngle;
-
-        // Send telemetry message to signify robot waiting;
-        telemetry.addLine("RA_FI");    //
+        telemetry.update();
 
         /* Initialize the hardware variables.
          * The init() method of the hardware class does all the work here
          */
         robot.init(hardwareMap);
+
+        robot.FL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        robot.BL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        robot.FR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        robot.BR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         /* initialize IMU */
         // Send telemetry message to signify robot waiting;
@@ -203,6 +242,7 @@ public class AllAuto extends LinearOpMode {
         waitForStart();
 
         resetClock();
+        resetEncoders();
         startAngle = angles.firstAngle;
 
         // telling the code to run until you press that giant STOP button on RC
@@ -221,6 +261,12 @@ public class AllAuto extends LinearOpMode {
 
             //keeps now up to date
             now = runtime.seconds() - lastReset;
+
+            currentDistance = -(robot.FL.getCurrentPosition() + robot.BL.getCurrentPosition() +
+                                robot.FR.getCurrentPosition() + robot.BR.getCurrentPosition())/360;
+
+            telemetry.addData("currentDistance", currentDistance);
+            telemetry.update();
 
             switch (modes[mode]) {
 
@@ -284,7 +330,7 @@ public class AllAuto extends LinearOpMode {
                             resetClock();
                         }
                     } else {
-                        robot.Arm.MoveToPosition(0.2);
+                        robot.Arm.MoveToPosition(0.3);
                     }
                     break;
 
@@ -299,12 +345,7 @@ public class AllAuto extends LinearOpMode {
 
                 /* backup 24 inches */
                 case 1:
-                    robot.MoveBackward(MOVE_SPEED);
-                    if (now > 0.92) {
-                        mode++;
-                        resetClock();
-                        robot.MoveStop();
-                    }
+                    drive(24, false);
                     break;
 
                 /* turn left to -45 (red) */
@@ -329,22 +370,12 @@ public class AllAuto extends LinearOpMode {
 
                 /* move forward 50.9 inches (FI) */
                 case 30:
-                    robot.MoveForward(MOVE_SPEED);
-                    if (now > 1.46) {
-                        mode++;
-                        resetClock();
-                        robot.MoveStop();
-                    }
+                    drive(50.9, true);
                     break;
 
                 /* move forward 33.9 inches (BI) */
                 case 31:
-                    robot.MoveForward(MOVE_SPEED);
-                    if (now > 1.12) {
-                        mode++;
-                        resetClock();
-                        robot.MoveStop();
-                    }
+                    drive(33.9, true);
                     break;
 
                 /* turn right to 0 (RAFI) */
@@ -391,20 +422,28 @@ public class AllAuto extends LinearOpMode {
                 case 50:
                     if (vuMark == RelicRecoveryVuMark.LEFT){
                         robot.RotateLeft(ROTATE_SPEED);
-                        if (turnAngle < -25) {
+                        if (turnAngle < -10) {
                             mode++;
                             resetClock();
                             robot.MoveStop();
                         }
                     }
-                    if (vuMark == RelicRecoveryVuMark.CENTER){
-                        mode++;
-                        resetClock();
-                        robot.MoveStop();
+                    else if (vuMark == RelicRecoveryVuMark.CENTER){
+                        if (now < 1) {
+                            robot.MoveLeft(STRAFFE_SPEED);
+                        }
+                        else {
+                            robot.RotateRight(ROTATE_SPEED);
+                            if (turnAngle > 10) {
+                                mode++;
+                                resetClock();
+                                robot.MoveStop();
+                            }
+                        }
                     }
-                    if (vuMark == RelicRecoveryVuMark.RIGHT){
+                    else /* (vuMark == RelicRecoveryVuMark.RIGHT) */{
                         robot.RotateRight(ROTATE_SPEED);
-                        if (turnAngle > 25) {
+                        if (turnAngle > 10) {
                             mode++;
                             resetClock();
                             robot.MoveStop();
@@ -416,20 +455,28 @@ public class AllAuto extends LinearOpMode {
                 case 51:
                     if (vuMark == RelicRecoveryVuMark.LEFT){
                         robot.RotateLeft(ROTATE_SPEED);
-                        if (turnAngle < -115) {
+                        if (turnAngle < -100) {
                             mode++;
                             resetClock();
                             robot.MoveStop();
                         }
                     }
-                    if (vuMark == RelicRecoveryVuMark.CENTER){
-                        mode++;
-                        resetClock();
-                        robot.MoveStop();
+                    else if (vuMark == RelicRecoveryVuMark.CENTER){
+                        if (now < 1) {
+                            robot.MoveLeft(STRAFFE_SPEED);
+                        }
+                        else {
+                            robot.RotateRight(ROTATE_SPEED);
+                            if (turnAngle > -80) {
+                                mode++;
+                                resetClock();
+                                robot.MoveStop();
+                            }
+                        }
                     }
-                    if (vuMark == RelicRecoveryVuMark.RIGHT){
+                    else /* (vuMark == RelicRecoveryVuMark.RIGHT) */{
                         robot.RotateRight(ROTATE_SPEED);
-                        if (turnAngle > -65) {
+                        if (turnAngle > -80) {
                             mode++;
                             resetClock();
                             robot.MoveStop();
@@ -441,20 +488,28 @@ public class AllAuto extends LinearOpMode {
                 case 52:
                     if (vuMark == RelicRecoveryVuMark.LEFT){
                         robot.RotateLeft(ROTATE_SPEED);
-                        if (turnAngle < -65) {
+                        if (turnAngle < 80) {
                             mode++;
                             resetClock();
                             robot.MoveStop();
                         }
                     }
-                    if (vuMark == RelicRecoveryVuMark.CENTER){
-                        mode++;
-                        resetClock();
-                        robot.MoveStop();
+                    else if (vuMark == RelicRecoveryVuMark.CENTER){
+                        if (now < 1) {
+                            robot.MoveLeft(STRAFFE_SPEED);
+                        }
+                        else {
+                            robot.RotateRight(ROTATE_SPEED);
+                            if (turnAngle > 100) {
+                                mode++;
+                                resetClock();
+                                robot.MoveStop();
+                            }
+                        }
                     }
-                    if (vuMark == RelicRecoveryVuMark.RIGHT){
+                    else /* (vuMark == RelicRecoveryVuMark.RIGHT) */{
                         robot.RotateRight(ROTATE_SPEED);
-                        if (turnAngle > 115) {
+                        if (turnAngle > 100) {
                             mode++;
                             resetClock();
                             robot.MoveStop();
@@ -462,34 +517,15 @@ public class AllAuto extends LinearOpMode {
                     }
                     break;
 
-                /* move forward 12/8/12 inches into cryptobox */
+                /* move forward 12 inches into cryptobox */
                 case 6:
-                    robot.MoveForward(MOVE_SPEED);
-                    if (vuMark == RelicRecoveryVuMark.CENTER){
-                        if (now > 0.35) {
-                            mode++;
-                            resetClock();
-                            robot.MoveStop();
-                        }
-                    }
-                    else if (now > 0.45) {
-                        mode++;
-                        resetClock();
-                        robot.MoveStop();
-                    }
+                    drive(12, true);
                     break;
 
-                /* move backward 12/8/12 inches */
+                /* move backward 12 inches */
                 case 7:
                     robot.MoveBackward(MOVE_SPEED);
-                    if (vuMark == RelicRecoveryVuMark.CENTER){
-                        if (now > 0.3) {
-                            mode++;
-                            resetClock();
-                            robot.MoveStop();
-                        }
-                    }
-                    else if (now > 0.45) {
+                    if (now > 0.25) {
                         mode++;
                         resetClock();
                         robot.MoveStop();

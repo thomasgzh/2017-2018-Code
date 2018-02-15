@@ -40,30 +40,10 @@ public class RobotConfig
     * RotateLeft(speed)
     * RotateRight(speed)
     */
-    public DcMotor  FL   = null;
-    public DcMotor  FR  = null;
-    public DcMotor  BL   = null;
+    public DcMotor  FL = null;
+    public DcMotor  FR = null;
+    public DcMotor  BL = null;
     public DcMotor  BR = null;
-
-    /* Public members
-    * Devices
-    * -------
-    * Make sure to control both left and right arms in unison
-    * LR - lower right arm DC motor
-    * LL - lower left arm DC motor (must be reverse of LR)
-    * UR - upper right arm DC motor
-    * UL - upper left arm DC motor (must be same of UR)
-    */
-    public DcMotor  LR = null;
-    public DcMotor  LL = null;
-    private DcMotor  UR = null;
-    private DcMotor  UL = null;
-
-    /* Arm sensors */
-    public DigitalChannel ArmSwitch = null;         /* home switch */
-    public AnalogInput UpperArmPot = null;          /* potentiometers */
-    public AnalogInput LowerArmPot = null;
-
 
     /* Public members
     * Devices
@@ -82,8 +62,8 @@ public class RobotConfig
     /* Public
     * arm control class
     */
-    ArmControl  Arm = new ArmControl();
-
+    ArmControl  UpperArm = new ArmControl();
+    ArmControl  LowerArm = new ArmControl();
 
     /* Local OpMode members. */
     HardwareMap hwMap  = null;
@@ -118,31 +98,6 @@ public class RobotConfig
         BR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         BL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        // **** Arm motors ****
-        // Define and Initialize Motors
-        UL = hwMap.dcMotor.get("UL");
-        UR = hwMap.dcMotor.get("UR");
-        LL = hwMap.dcMotor.get("LL");
-        LR = hwMap.dcMotor.get("LR");
-        // reverse those motors
-        UR.setDirection(DcMotor.Direction.REVERSE);
-        LR.setDirection(DcMotor.Direction.REVERSE);
-        // Set all motors to zero power
-        LL.setPower(0);
-        LR.setPower(0);
-        UL.setPower(0);
-        UR.setPower(0);
-        // Set all motors to run with encoders.
-        LR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        LL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        UR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        UL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        // Set motors to brake on zero power
-        UR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        UL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        LR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        LL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
         // **** Gripper grabbers ****
         // Define and Initialize Motors
         GGR = hwMap.servo.get("GGR");
@@ -153,19 +108,9 @@ public class RobotConfig
         GGR.setPosition(GRABBER_RIGHT[0]);
         Claw.setPosition(CLAW[0]);
 
-        // **** Arm Switch ****
-        // Define and initialize switch
-        ArmSwitch = hwMap.digitalChannel.get("touch sensor");
-        // set the digital channel to input.
-        ArmSwitch.setMode(DigitalChannel.Mode.INPUT);
-        // false = pressed
-
-        // **** Arm Potentiometers ****
-        // Define and initialize potentiometers
-        UpperArmPot = hwMap.analogInput.get("upper pot");
-        LowerArmPot = hwMap.analogInput.get("lower pot");
         // **** Initialize arm control
-        Arm.init();
+        UpperArm.init(hwMap,true);
+        LowerArm.init(hwMap,false);
     }
 
     /* forward is positive speed, backward is negative speed */
@@ -211,255 +156,6 @@ public class RobotConfig
     }
     public void RotateRight(double speed) {
         RotateLeftRight(-speed);
-    }
-
-
-    /********** UPPER Arm Control class **********/
-    public class UpperArmControl {
-        //declaring all my variables in one place for my sake
-        private double UpperArmHomePosition = 0;        /* position value at home */
-        private double UpperArmPosition = 0;            /* current position relative to home */
-        private double UpperArmLastPosition = 0;
-        private double UpperArmVelocity = 0;
-        private double UpperArmFinalTarget = 0;         /* final target position */
-        private double UpperArmTarget = 0;              /* target position */
-        private boolean UpperHomed = false;
-        private ElapsedTime UpperTime = new ElapsedTime();
-
-        /* Constructor */
-        public UpperArmControl() {
-        }
-
-        /* Initialize standard Hardware interfaces */
-        public void init() {
-            UpperArmHomePosition = UpperArmPot.getVoltage();
-        }
-
-        public void MoveUp() {
-            UpperArmFinalTarget += 0.01;
-            if (UpperArmFinalTarget > 1.0) UpperArmFinalTarget = 1.0;
-        }
-
-        public void MoveDown() {
-            UpperArmFinalTarget -= 0.01;
-            if (UpperArmFinalTarget < 0.0) UpperArmFinalTarget = 0.0;
-        }
-
-        public void MoveHome() {
-            UpperArmFinalTarget = 0.0;
-        }
-
-        public void HoldCurrentPosition() {
-            UpperArmFinalTarget = UpperArmPosition;
-        }
-
-        public void MoveToPosition(double target) {
-            UpperArmFinalTarget = target;
-            if (UpperArmFinalTarget > 0.6) UpperArmFinalTarget = 0.6;
-            if (UpperArmFinalTarget < 0.0) UpperArmFinalTarget = 0.0;
-        }
-
-        /* Call this method when you want to update the arm motors */
-        public void Update(OpMode om) {
-            boolean at_home;                 /* home switch active */
-            double upper_arm;
-            double error;
-            final double UPPER_ARM_HOLD_POWER = 0.01;
-            final double LOWER_ARM_HOLD_POWER = 0.01;
-            final double UPPER_ARM_POWER = 0.2;
-
-            /* Check to see if on home switch */
-            at_home = false;
-            if (ArmSwitch.getState() == false) {
-                /* arm in home position */
-                at_home = true;
-                Homed = true;
-                UpperArmHomePosition = UpperArmPot.getVoltage();
-
-                //adds a lil' version thing to the telemetry so you know you're using the right version
-                om.telemetry.addLine("At Home");
-            }
-
-            /* determine current position relative to home */
-            UpperArmPosition = UpperArmPot.getVoltage() - UpperArmHomePosition;
-
-            /* determine velocity */
-            UpperArmVelocity = 1000 * (UpperArmPosition - UpperArmLastPosition) / Time.milliseconds();
-            UpperArmLastPosition = UpperArmPosition;
-            Time.reset();
-
-            /* incrementally change target value */
-            if (UpperArmTarget < UpperArmFinalTarget - 0.01)    UpperArmTarget += 0.02;
-            if (UpperArmTarget > UpperArmFinalTarget + 0.01)    UpperArmTarget -= 0.02;
-            if (UpperArmFinalTarget < 0.01) UpperArmTarget = 0.0;
-            if (UpperArmTarget > 0.6) UpperArmTarget = 0.6;
-            if (UpperArmTarget < 0.0) UpperArmTarget = 0.0;
-
-            /*********** control code **********/
-            error = UpperArmTarget - UpperArmPosition;
-            if (error > 0.2) error = 0.2;
-            if (error < -0.2) error = -0.2;
-
-            upper_arm = UPPER_ARM_POWER * 5 * error;
-
-            if ( (error>0.0) && (UpperArmVelocity<0.0)) {
-                /* dropping down, give power boost */
-                upper_arm += UPPER_ARM_POWER * (-2.0 * UpperArmVelocity);
-                om.telemetry.addLine("++++ Boost");
-            } else if ( (error<0.0) && (UpperArmVelocity>0.0)) {
-                /* passing by, reverse thrusters */
-                upper_arm += UPPER_ARM_POWER * (-0.5 * UpperArmVelocity);
-                om.telemetry.addLine("-- Reverse");
-            } else if ((UpperArmTarget > 0.0) && (Math.abs(upper_arm) < UPPER_ARM_HOLD_POWER) ) {
-                /* always use positive power when trying to hold */
-                upper_arm = UPPER_ARM_HOLD_POWER;
-                om.telemetry.addLine("..........");
-            }
-
-            /* prevent negative power when...
-                at home position or never homed
-            */
-            if (at_home || !Homed) {
-                if (upper_arm < 0.0) upper_arm = 0.0;
-            }
-
-            /* when target is zero ...
-            * kill power, let braking bring it down
-            */
-            if (UpperArmTarget < 0.01) {
-                upper_arm = 0.0;
-            }
-
-            om.telemetry.addData("Velocity", "%.3f", UpperArmVelocity);
-            om.telemetry.addData("Target Position", "%.2f %.2f", UpperArmTarget, UpperArmPosition);
-            om.telemetry.addData("Error  Power   ", "%.2f %.2f", error, upper_arm);
-
-            UR.setPower(upper_arm);
-            UL.setPower(upper_arm);
-        }
-    }
-    public class LowerArmControl {
-        //declaring all my variables in one place for my sake
-        private double LowerArmHomePosition = 0;        /* position value at home */
-        private double LowerArmPosition = 0;            /* current position relative to home */
-        private double LowerArmLastPosition = 0;
-        private double LowerArmVelocity = 0;
-        private double LowerArmFinalTarget = 0;         /* final target position */
-        private double LowerArmTarget = 0;              /* target position */
-        private boolean LowerHomed = false;
-        private ElapsedTime Time = new ElapsedTime();
-
-        /* Constructor */
-        public LowerArmControl() {
-        }
-
-        /* Initialize standard Hardware interfaces */
-        public void init() {
-            LowerArmHomePosition = UpperArmPot.getVoltage();
-        }
-
-        public void MoveUp() {
-            LowerArmFinalTarget += 0.01;
-            if (LowerArmFinalTarget > 1.0) LowerArmFinalTarget = 1.0;
-        }
-
-        public void MoveDown() {
-            LowerArmFinalTarget -= 0.01;
-            if (LowerArmFinalTarget < 0.0) LowerArmFinalTarget = 0.0;
-        }
-
-        public void MoveHome() {
-            LowerArmFinalTarget = 0.0;
-        }
-
-        public void HoldCurrentPosition() {
-            LowerArmFinalTarget = LowerArmPosition;
-        }
-
-        public void MoveToPosition(double target) {
-            LowerArmFinalTarget = target;
-            if (UpperArmFinalTarget > 0.6) UpperArmFinalTarget = 0.6;
-            if (UpperArmFinalTarget < 0.0) UpperArmFinalTarget = 0.0;
-        }
-
-        /* Call this method when you want to update the arm motors */
-        public void Update(OpMode om) {
-            boolean at_home;                 /* home switch active */
-            double upper_arm;
-            double error;
-            final double UPPER_ARM_HOLD_POWER = 0.01;
-            final double LOWER_ARM_HOLD_POWER = 0.01;
-            final double UPPER_ARM_POWER = 0.2;
-
-            /* Check to see if on home switch */
-            at_home = false;
-            if (ArmSwitch.getState() == false) {
-                /* arm in home position */
-                at_home = true;
-                Homed = true;
-                UpperArmHomePosition = UpperArmPot.getVoltage();
-
-                //adds a lil' version thing to the telemetry so you know you're using the right version
-                om.telemetry.addLine("At Home");
-            }
-
-            /* determine current position relative to home */
-            UpperArmPosition = UpperArmPot.getVoltage() - UpperArmHomePosition;
-
-            /* determine velocity */
-            UpperArmVelocity = 1000 * (UpperArmPosition - UpperArmLastPosition) / Time.milliseconds();
-            UpperArmLastPosition = UpperArmPosition;
-            Time.reset();
-
-            /* incrementally change target value */
-            if (UpperArmTarget < UpperArmFinalTarget - 0.01)    UpperArmTarget += 0.02;
-            if (UpperArmTarget > UpperArmFinalTarget + 0.01)    UpperArmTarget -= 0.02;
-            if (UpperArmFinalTarget < 0.01) UpperArmTarget = 0.0;
-            if (UpperArmTarget > 0.6) UpperArmTarget = 0.6;
-            if (UpperArmTarget < 0.0) UpperArmTarget = 0.0;
-
-            /*********** control code **********/
-            error = UpperArmTarget - UpperArmPosition;
-            if (error > 0.2) error = 0.2;
-            if (error < -0.2) error = -0.2;
-
-            upper_arm = UPPER_ARM_POWER * 5 * error;
-
-            if ( (error>0.0) && (UpperArmVelocity<0.0)) {
-                /* dropping down, give power boost */
-                upper_arm += UPPER_ARM_POWER * (-2.0 * UpperArmVelocity);
-                om.telemetry.addLine("++++ Boost");
-            } else if ( (error<0.0) && (UpperArmVelocity>0.0)) {
-                /* passing by, reverse thrusters */
-                upper_arm += UPPER_ARM_POWER * (-0.5 * UpperArmVelocity);
-                om.telemetry.addLine("-- Reverse");
-            } else if ((UpperArmTarget > 0.0) && (Math.abs(upper_arm) < UPPER_ARM_HOLD_POWER) ) {
-                /* always use positive power when trying to hold */
-                upper_arm = UPPER_ARM_HOLD_POWER;
-                om.telemetry.addLine("..........");
-            }
-
-            /* prevent negative power when...
-                at home position or never homed
-            */
-            if (at_home || !Homed) {
-                if (upper_arm < 0.0) upper_arm = 0.0;
-            }
-
-            /* when target is zero ...
-            * kill power, let braking bring it down
-            */
-            if (UpperArmTarget < 0.01) {
-                upper_arm = 0.0;
-            }
-
-            om.telemetry.addData("Velocity", "%.3f", UpperArmVelocity);
-            om.telemetry.addData("Target Position", "%.2f %.2f", UpperArmTarget, UpperArmPosition);
-            om.telemetry.addData("Error  Power   ", "%.2f %.2f", error, upper_arm);
-
-            UR.setPower(upper_arm);
-            UL.setPower(upper_arm);
-        }
     }
 
     /***

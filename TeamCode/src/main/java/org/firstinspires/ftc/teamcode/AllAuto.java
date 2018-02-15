@@ -277,14 +277,14 @@ public class AllAuto extends LinearOpMode {
                 /* raise arm */
                 case -1:
                     if (now > 0.9) {
-                        robot.Arm.MoveHome();
+                        robot.UpperArm.MoveHome();
                         // wait until home until next step
-                        if (robot.ArmSwitch.getState()==false) {
+                        if (robot.UpperArm.Limit.getState()==false) {
                             mode++;
                             resetClock();
                         }
                     } else {
-                        robot.Arm.MoveToPosition(0.2);
+                        robot.UpperArm.MoveToPosition(0.2);
                     }
                     break;
 
@@ -528,7 +528,7 @@ public class AllAuto extends LinearOpMode {
 
             }  // end of switch
 
-            robot.Arm.Update(this);
+            robot.UpperArm.Update(this);
         }
     }
 

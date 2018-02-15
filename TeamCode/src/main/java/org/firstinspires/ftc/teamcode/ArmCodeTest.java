@@ -32,8 +32,11 @@ public class ArmCodeTest extends LinearOpMode {
         egamepad2 = new GamepadEdge(gamepad2);
 
         //adds a lil' version thing to the telemetry so you know you're using the right version
-        telemetry.addData("Version", "3.0");
-        telemetry.addData("Lower arm potentiometer", robot.LowerArmPot);
+        telemetry.addData("Version", "Dual 1.0");
+        telemetry.addLine("gamepad 1 - lower");
+        telemetry.addLine("gamepad 2 - upper");
+        telemetry.addLine("x - up, y - down");
+        telemetry.addLine("dpad - set positions");
         telemetry.update();
 
         //waits for that giant PLAY button to be pressed on RC
@@ -47,41 +50,47 @@ public class ArmCodeTest extends LinearOpMode {
             egamepad1.UpdateEdge();
             egamepad2.UpdateEdge();
 
+            /* TeleOp code */
+            if (egamepad1.dpad_down.pressed) {
+                robot.LowerArm.MoveHome();
+            }
+            if (egamepad1.dpad_left.pressed) {
+                robot.LowerArm.MoveToPosition(0.20);
+            }
+            if (egamepad1.dpad_right.pressed) {
+                robot.LowerArm.MoveToPosition(0.30);
+            }
+            if (egamepad1.dpad_up.pressed) {
+                robot.LowerArm.MoveToPosition(0.40);
+            }
+            if (egamepad1.x.pressed) {
+                robot.LowerArm.MoveUp();
+            }
+            if (egamepad1.y.pressed) {
+                robot.LowerArm.MoveDown();
+            }
 
-            if (gamepad2.dpad_down) {
-                robot.LR.setPower(-0.1);
-                robot.LL.setPower(-0.1);
+            if (egamepad2.dpad_down.pressed) {
+                robot.UpperArm.MoveHome();
             }
-            else if (gamepad2.dpad_up) {
-                robot.LL.setPower(0.1);
-                robot.LR.setPower(0.1);
+            if (egamepad2.dpad_left.pressed) {
+                robot.UpperArm.MoveToPosition(0.20);
             }
-             else {
-                robot.LR.setPower(0);
-                robot.LL.setPower(0);
+            if (egamepad2.dpad_right.pressed) {
+                robot.UpperArm.MoveToPosition(0.30);
+            }
+            if (egamepad2.dpad_up.pressed) {
+                robot.UpperArm.MoveToPosition(0.40);
+            }
+            if (egamepad2.x.pressed) {
+                robot.UpperArm.MoveUp();
+            }
+            if (egamepad2.y.pressed) {
+                robot.UpperArm.MoveDown();
             }
 
-            /* TeleOp code
-            if (gamepad2.dpad_down) {
-                robot.Arm.MoveHome();
-            }
-            if (gamepad2.dpad_left) {
-                robot.Arm.MoveToPosition(0.20);
-            }
-            if (gamepad2.dpad_right) {
-                robot.Arm.MoveToPosition(0.30);
-            }
-            if (gamepad2.dpad_up) {
-                robot.Arm.MoveToPosition(0.40);
-            }
-            if (gamepad2.x) {
-                robot.Arm.MoveUp();
-            }
-            if (gamepad2.y) {
-                robot.Arm.MoveDown();
-            } */
-
-            robot.Arm.Update(this);
+            robot.LowerArm.Update(this);
+            robot.UpperArm.Update(this);
 
             telemetry.update();
 
